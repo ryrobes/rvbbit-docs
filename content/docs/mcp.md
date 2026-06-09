@@ -200,9 +200,10 @@ is therefore commit-safe — it carries no credential material.
 
 ### Servers That Ship By Default
 
-`github`, `firecrawl`, `time`, `iplocate`, `tavily`, `exa`, `apollo`, and `ipgeo`
-are baked into the catalog seed and browsable out of the box. `time` and
-`iplocate` are keyless; the rest declare a single API key you provide at install.
+`github`, `firecrawl`, `time`, `iplocate`, `tavily`, `exa`, `apollo`, `ipgeo`,
+`maps` (Google Maps), `brave`, and `openweather` are baked into the catalog seed
+and browsable out of the box. `time` and `iplocate` are keyless; the rest declare
+a single API key you provide at install.
 
 ## Observability
 
