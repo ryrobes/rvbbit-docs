@@ -187,20 +187,21 @@ export default function Home() {
                   <i />
                   <i />
                 </span>
-                <span className="hero-card-title">operators · triage + sentiment</span>
+                <span className="hero-card-title">operators + a semantic filter</span>
               </div>
-              <SqlCode ariaLabel="Several operators you define, called in one SQL query">
-                {`-- enrich each row with operators you define
+              <SqlCode ariaLabel="Operators you define plus a built-in semantic filter, in one SQL query">
+                {`-- your operators + a built-in semantic filter, one query
 SELECT ticket_id,
        triage(body)    AS priority,   -- your classifier
        sentiment(body) AS mood        -- another operator
 FROM   support_tickets
-WHERE  created_at > now() - interval '1 day';`}
+WHERE  created_at > now() - interval '1 day'
+  AND  rvbbit.means(body, 'a customer about to cancel');`}
               </SqlCode>
               <div className="hero-result">
                 <div className="hero-result-head">
-                  <span>2 rows</span>
-                  <span>4 operator calls</span>
+                  <span>2 matches</span>
+                  <span>semantic filter</span>
                   <span className="ok">receipts logged ✓</span>
                 </div>
                 <table className="hero-result-table">
