@@ -501,6 +501,12 @@ main > section {
   letter-spacing: 0.02em;
 }
 
+.hero-pill.cool {
+  border-color: #b6cdfa45;
+  background: #b6cdfa12;
+  color: var(--blue);
+}
+
 .button {
   display: inline-flex;
   align-items: center;

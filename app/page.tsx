@@ -187,29 +187,28 @@ export default function Home() {
                   <i />
                   <i />
                 </span>
-                <span className="hero-card-title">operator · triage</span>
+                <span className="hero-card-title">operators · triage + sentiment</span>
               </div>
-              <SqlCode ariaLabel="A user-defined operator called from SQL">
-                {`-- triage(): your fine-tune + a validator + a receipt,
--- wrapped as one SQL function you define.
+              <SqlCode ariaLabel="Several operators you define, called in one SQL query">
+                {`-- enrich each row with operators you define
 SELECT ticket_id,
-       triage(body) AS priority
+       triage(body)    AS priority,   -- your classifier
+       sentiment(body) AS mood        -- another operator
 FROM   support_tickets
-WHERE  triage(body) = 'urgent'
-ORDER  BY created_at DESC;`}
+WHERE  created_at > now() - interval '1 day';`}
               </SqlCode>
               <div className="hero-result">
                 <div className="hero-result-head">
                   <span>2 rows</span>
-                  <span>routed native</span>
-                  <span className="ok">receipt logged ✓</span>
-                  <span>6 ms</span>
+                  <span>4 operator calls</span>
+                  <span className="ok">receipts logged ✓</span>
                 </div>
                 <table className="hero-result-table">
                   <thead>
                     <tr>
                       <th>ticket_id</th>
                       <th>priority</th>
+                      <th>mood</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -218,11 +217,17 @@ ORDER  BY created_at DESC;`}
                       <td>
                         <span className="hero-pill">urgent</span>
                       </td>
+                      <td>
+                        <span className="hero-pill cool">angry</span>
+                      </td>
                     </tr>
                     <tr>
                       <td>1907</td>
                       <td>
                         <span className="hero-pill">urgent</span>
+                      </td>
+                      <td>
+                        <span className="hero-pill cool">frustrated</span>
                       </td>
                     </tr>
                   </tbody>
