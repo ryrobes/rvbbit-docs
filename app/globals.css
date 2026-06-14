@@ -146,7 +146,14 @@ pre {
   height: 100vh;
   object-fit: cover;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
+}
+
+/* Lift page content above the scroll-video backdrop. The video sits at z:0 and
+   blends (screen) with the body's near-black background painted beneath it. */
+main > section {
+  position: relative;
+  z-index: 1;
 }
 
 .hero {
