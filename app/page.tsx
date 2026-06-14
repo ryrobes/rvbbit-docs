@@ -429,6 +429,78 @@ ORDER BY stars DESC;`}</SqlCode>
         </Link>
       </section>
 
+      <section className="band mcp-band" id="act">
+        <div className="section-header mcp-header">
+          <p>SQL that acts</p>
+          <h2>A SELECT can change the outside world — and leave a receipt.</h2>
+          <span>
+            An operator is an ordinary SQL function, but inside it can call
+            models, MCP tools, and flows. So Postgres&apos;s own machinery —
+            triggers, <code>pg_cron</code>, Alerts — becomes an automation
+            engine. <code>SELECT do_stuff()</code> actually does stuff: opens
+            tickets, posts messages, kicks off analysis — with trackable SQL as
+            the glue.
+          </span>
+        </div>
+        <div className="mcp-showcase">
+          <div className="mcp-code-stack">
+            <SqlCode ariaLabel="A trigger that opens a Linear ticket">{`-- A plain Postgres trigger that now reaches the outside world:
+-- analyze the incident with your operator, file a Linear ticket.
+CREATE FUNCTION on_critical_incident() RETURNS trigger AS $$
+BEGIN
+  PERFORM rvbbit.mcp_call('linear', 'create_issue', jsonb_build_object(
+    'title',       'SEV1 · ' || NEW.service,
+    'description', summarize_incident(NEW.logs)   -- your LLM operator
+  ));
+  RETURN NEW;
+END $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER incident_to_linear
+  AFTER INSERT ON incidents
+  FOR EACH ROW WHEN (NEW.severity = 'critical')
+  EXECUTE FUNCTION on_critical_incident();`}</SqlCode>
+            <SqlCode ariaLabel="Declare the same thing as an Alert">{`-- Or declare it: a condition → an action, swept on a clock, edge-triggered.
+SELECT rvbbit.define_alert(
+  'revenue_drop',
+  '{"kind":"sql","metric_name":"daily_revenue"}'::jsonb,
+  '{"operator":"mcp_call","server":"linear","tool":"create_issue"}'::jsonb
+);`}</SqlCode>
+          </div>
+          <div className="mcp-points">
+            <article>
+              <Workflow aria-hidden="true" size={20} />
+              <h3>Operators have side effects</h3>
+              <p>
+                Compose a model call, an MCP tool, a validator, and a flow into
+                one function. Calling it doesn&apos;t just compute — it acts.
+              </p>
+            </article>
+            <article>
+              <Cable aria-hidden="true" size={20} />
+              <h3>Triggers, schedules, alerts</h3>
+              <p>
+                A trigger fires it on <code>INSERT</code>, <code>pg_cron</code>{" "}
+                on a clock, or declare an Alert: condition → action,
+                edge-triggered and fire-and-forget.
+              </p>
+            </article>
+            <article>
+              <ReceiptText aria-hidden="true" size={20} />
+              <h3>Every action is audited</h3>
+              <p>
+                Each side effect can leave a receipt — args, sub-calls, latency,
+                cost, errors — so automation stays replayable and reviewable,
+                not a black box.
+              </p>
+            </article>
+          </div>
+        </div>
+        <Link className="mcp-link" href="/docs/alerts">
+          Read about reactive Alerts
+          <ArrowRight aria-hidden="true" size={18} />
+        </Link>
+      </section>
+
       <section className="band">
         <div className="section-header">
           <p>What it is</p>
