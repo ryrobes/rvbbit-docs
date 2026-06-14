@@ -120,8 +120,9 @@ export default function Home() {
           <p className="eyebrow">Postgres extension for semantic and poly-engine SQL</p>
           <h1>RVBBIT</h1>
           <p className="hero-copy">
-            SQL functions that can run Cascades: gates, takes, model calls,
-            validation, retries, receipts, and optional Beaverdam acceleration.
+            Call models, embeddings, and tools straight from SQL — with columnar
+            acceleration, adaptive routing, and an audit trail for every call.
+            All inside Postgres, with the heap as the source of truth.
           </p>
           <div className="hero-actions">
             <Link className="button primary" href="/docs/cascades">
@@ -142,19 +143,19 @@ export default function Home() {
           <p>Operators become cascades</p>
           <h2>Multi-step model logic, called like SQL.</h2>
           <span>
-            A Cascade is the execution plan inside a semantic operator: gates,
-            takes, validators, retries, reducers, receipts, and tool calls,
-            still exposed as a typed Postgres function.
+            A Cascade is the execution plan inside a semantic operator — guards,
+            model calls, validators, retries, tool calls, and a receipt — still
+            exposed as a single typed Postgres function.
           </span>
         </div>
         <CascadeDiagram />
         <div className="cascade-copy">
           <div>
-            <h3>The hook for database people</h3>
+            <h3>The workflow lives next to the data</h3>
             <p>
-              Instead of shipping prompt orchestration into application code,
-              RVBBIT keeps the workflow near the data, observable in SQL, and
-              callable from ordinary queries.
+              Instead of scattering model orchestration across application code,
+              RVBBIT keeps it in the database — observable in SQL, versioned, and
+              callable from an ordinary query.
             </p>
           </div>
           <SqlCode ariaLabel="Cascade SQL example">{`SELECT ticket_id,
@@ -372,12 +373,11 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
       <section className="band home-benchmarks" id="benchmarks">
         <div className="section-header benchmark-home-header">
           <p>Beaverdam benchmark snapshot</p>
-          <h2>Fast paths are starting to show up in end-to-end runs.</h2>
+          <h2>Accelerated paths show up in end-to-end runs.</h2>
           <span>
-            Current work-in-progress runs compare the default RVBBIT router
-            against Postgres, Hydra, Citus, AlloyDB, and ClickHouse. These are
-            not final audited numbers, but they are useful shape-of-system
-            signals.
+            Work-in-progress runs compare the default RVBBIT router against
+            Postgres, Hydra, Citus, AlloyDB, and ClickHouse. Not final, audited
+            numbers — but real end-to-end measurements, and directionally honest.
           </span>
         </div>
         <div className="home-benchmark-grid">
@@ -474,11 +474,10 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
       <section className="band release-band">
         <div>
           <Sparkles aria-hidden="true" size={20} />
-          <h2>V1 docs are designed around the release surface.</h2>
+          <h2>Four ideas, one extension.</h2>
           <p>
-            The site keeps Beaverdam, Warren, routing, and semantic SQL as
-            separate mental models while still documenting how they work
-            together in production.
+            Storage, routing, Warren, and semantic SQL each get their own guide —
+            and the docs show how they fit together in production.
           </p>
         </div>
         <div className="release-metrics" aria-label="Documentation pillars">
