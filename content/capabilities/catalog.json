@@ -1,0 +1,4655 @@
+{
+  "generatedAt": "2026-06-01T13:33:48.508Z",
+  "sourcePath": "../rvbbit-sql/crates/pg_rvbbit/src/capability_catalog_seed.json",
+  "sourceSchemaVersion": 1,
+  "sourceCatalogLayout": "rvbbit.pack/v1",
+  "sourceCatalog": "curated",
+  "capabilities": [
+    {
+      "id": "rerank/bge-reranker-base",
+      "name": "bge_reranker_base",
+      "title": "BGE Reranker Base",
+      "description": "Smaller BGE cross-encoder reranker for query/document scoring and row ranking.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "cpu-friendly",
+        "relevance",
+        "rerank",
+        "retrieval",
+        "row"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "BAAI/bge-reranker-base",
+      "sourceUrl": "https://huggingface.co/BAAI/bge-reranker-base",
+      "backendName": "rerank_bge_base",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "sequence_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/rerank/bge-reranker-base",
+      "manifestPath": "capabilities/packs/rerank/bge-reranker-base/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 1390257675,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 1112206140,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "about",
+          "description": "Relevance score in [0,1] of text to a topic, backed by BGE reranker base.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text",
+            "topic"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-base",
+          "capabilityTitle": "BGE Reranker Base",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "means",
+          "description": "True when text semantically matches a criterion using BGE reranker base.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-base",
+          "capabilityTitle": "BGE Reranker Base",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "rerank_bge_base_row",
+          "description": "Score how relevant a JSONB row is to a query using BGE reranker base.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "query",
+            "row"
+          ],
+          "argTypes": [
+            "text",
+            "jsonb"
+          ],
+          "capabilityId": "rerank/bge-reranker-base",
+          "capabilityTitle": "BGE Reranker Base",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "rerank_bge_base_score",
+          "description": "Score how relevant text is to a query using BGE reranker base.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "query",
+            "text"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-base",
+          "capabilityTitle": "BGE Reranker Base",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_matches",
+          "description": "True when text semantically matches a criterion using BGE reranker base.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-base",
+          "capabilityTitle": "BGE Reranker Base",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_score",
+          "description": "Score how relevant text is to a semantic criterion.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-base",
+          "capabilityTitle": "BGE Reranker Base",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'rerank/bge-reranker-base',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "rerank/bge-reranker-v2-m3",
+      "name": "bge_reranker_v2_m3",
+      "title": "BGE Reranker v2 M3",
+      "description": "Cross-encoder relevance scoring for query/document pairs.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "gpu",
+        "relevance",
+        "rerank",
+        "retrieval",
+        "row"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "BAAI/bge-reranker-v2-m3",
+      "sourceUrl": "https://huggingface.co/BAAI/bge-reranker-v2-m3",
+      "backendName": "rerank_bge_m3",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "sequence_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/rerank/bge-reranker-v2-m3",
+      "manifestPath": "capabilities/packs/rerank/bge-reranker-v2-m3/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 2838839815,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 2271071852,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "about",
+          "description": "Relevance score in [0,1] of text to a topic, backed by the BGE reranker.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text",
+            "topic"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-v2-m3",
+          "capabilityTitle": "BGE Reranker v2 M3",
+          "capabilityTags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "means",
+          "description": "True when text semantically matches a criterion using the BGE reranker.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-v2-m3",
+          "capabilityTitle": "BGE Reranker v2 M3",
+          "capabilityTags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "rerank_row",
+          "description": "Score how relevant a JSONB row is to a query using BGE reranker v2 M3.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "query",
+            "row"
+          ],
+          "argTypes": [
+            "text",
+            "jsonb"
+          ],
+          "capabilityId": "rerank/bge-reranker-v2-m3",
+          "capabilityTitle": "BGE Reranker v2 M3",
+          "capabilityTags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "rerank_score",
+          "description": "Score how relevant text is to a query using BGE reranker v2 M3.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "query",
+            "text"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-v2-m3",
+          "capabilityTitle": "BGE Reranker v2 M3",
+          "capabilityTags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_matches",
+          "description": "True when text semantically matches a criterion using the BGE reranker.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-v2-m3",
+          "capabilityTitle": "BGE Reranker v2 M3",
+          "capabilityTags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_score",
+          "description": "Score how relevant text is to a semantic criterion.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/bge-reranker-v2-m3",
+          "capabilityTitle": "BGE Reranker v2 M3",
+          "capabilityTags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'rerank/bge-reranker-v2-m3',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "embeddings/bge-small-en-v1.5",
+      "name": "bge_small_en_v1_5",
+      "title": "BGE Small English Embeddings",
+      "description": "CPU-friendly English sentence embeddings exposed as an Rvbbit backend.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "cpu-friendly",
+        "embedding",
+        "retrieval"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "BAAI/bge-small-en-v1.5",
+      "sourceUrl": "https://huggingface.co/BAAI/bge-small-en-v1.5",
+      "backendName": "embed_bge_small",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "embedding",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/embeddings/bge-small-en-v1.5",
+      "manifestPath": "capabilities/packs/embeddings/bge-small-en-v1.5/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 166832880,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 133466304,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "embed_bge_small",
+          "description": "Return a bge-small-en-v1.5 embedding as JSON for exploratory use. Prefer rvbbit.embed for production retrieval workflows.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "embeddings/bge-small-en-v1.5",
+          "capabilityTitle": "BGE Small English Embeddings",
+          "capabilityTags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_bge_small",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_embed",
+          "description": "Return an embedding vector for semantic retrieval workflows, backed by BGE small.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "embeddings/bge-small-en-v1.5",
+          "capabilityTitle": "BGE Small English Embeddings",
+          "capabilityTags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_bge_small",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "similar_to",
+          "description": "Cosine similarity in [0,1] between two text strings using BGE small embeddings.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "left_text",
+            "right_text"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "embeddings/bge-small-en-v1.5",
+          "capabilityTitle": "BGE Small English Embeddings",
+          "capabilityTags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_bge_small",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'embeddings/bge-small-en-v1.5',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "embeddings/bge-m3",
+      "name": "bge_m3",
+      "title": "BGE-M3 Embeddings",
+      "description": "High-quality multilingual BGE-M3 sentence embeddings for retrieval and semantic search.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "embedding",
+        "gpu",
+        "multilingual",
+        "retrieval"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "BAAI/bge-m3",
+      "sourceUrl": "https://huggingface.co/BAAI/bge-m3",
+      "backendName": "embed_bge_m3",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "embedding",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/embeddings/bge-m3",
+      "manifestPath": "capabilities/packs/embeddings/bge-m3/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 2841562525,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 2273250020,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "embed_bge_m3",
+          "description": "Return a BGE-M3 embedding as JSON for exploratory use. Register this backend as `embed` if you want the built-in embedding SQL to use it.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "embeddings/bge-m3",
+          "capabilityTitle": "BGE-M3 Embeddings",
+          "capabilityTags": [
+            "embedding",
+            "gpu",
+            "multilingual",
+            "retrieval"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_embed",
+          "description": "Canonical semantic embedding operator backed by BGE-M3.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "embeddings/bge-m3",
+          "capabilityTitle": "BGE-M3 Embeddings",
+          "capabilityTags": [
+            "embedding",
+            "gpu",
+            "multilingual",
+            "retrieval"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "similar_to",
+          "description": "Cosine similarity between two text values using BGE-M3 embeddings.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "left_text",
+            "right_text"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "embeddings/bge-m3",
+          "capabilityTitle": "BGE-M3 Embeddings",
+          "capabilityTags": [
+            "embedding",
+            "gpu",
+            "multilingual",
+            "retrieval"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'embeddings/bge-m3',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "tabular/california-housing-sklearn",
+      "name": "california_housing_sklearn",
+      "title": "California Housing Regressor",
+      "description": "Scikit-learn tabular regression example that predicts median house value from California housing row features.",
+      "kind": "hf_backend",
+      "visibility": "example",
+      "tags": [
+        "demo",
+        "prediction",
+        "real-estate",
+        "regression",
+        "row",
+        "sklearn",
+        "tabular"
+      ],
+      "device": "cpu",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "B4S/california-housing-predictor",
+      "sourceUrl": "https://huggingface.co/B4S/california-housing-predictor",
+      "backendName": "predict_california_housing_sklearn",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "tabular_regression",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/tabular/california-housing-sklearn",
+      "manifestPath": "capabilities/packs/tabular/california-housing-sklearn/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [
+        {
+          "name": "house_value",
+          "description": "Return the numeric California housing value prediction for a JSONB feature row.",
+          "returnType": "float8",
+          "parser": "raw_text",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "tabular/california-housing-sklearn",
+          "capabilityTitle": "California Housing Regressor",
+          "capabilityTags": [
+            "demo",
+            "prediction",
+            "real-estate",
+            "regression",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "capabilityVisibility": "example",
+          "backendName": "predict_california_housing_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        },
+        {
+          "name": "predict_house_value",
+          "description": "Predict median house value from a JSONB row of California housing features.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "tabular/california-housing-sklearn",
+          "capabilityTitle": "California Housing Regressor",
+          "capabilityTags": [
+            "demo",
+            "prediction",
+            "real-estate",
+            "regression",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "capabilityVisibility": "example",
+          "backendName": "predict_california_housing_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'tabular/california-housing-sklearn',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "classify/deberta-v3-base-zero-shot",
+      "name": "deberta_v3_base_zero_shot",
+      "title": "DeBERTa v3 Base Zero-Shot Classifier",
+      "description": "Smaller NLI zero-shot classifier for classifying text or JSONB rows into caller-provided labels.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "classify",
+        "cpu-friendly",
+        "nli",
+        "row",
+        "zero-shot"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "MoritzLaurer/deberta-v3-base-zeroshot-v2.0",
+      "sourceUrl": "https://huggingface.co/MoritzLaurer/deberta-v3-base-zeroshot-v2.0",
+      "backendName": "classify_deberta_base_zero_shot",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "zero_shot_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/classify/deberta-v3-base-zero-shot",
+      "manifestPath": "capabilities/packs/classify/deberta-v3-base-zero-shot/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 461089885,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 368871908,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "bucket",
+          "description": "Bucket text into one of the caller-provided labels.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "buckets"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-base-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Base Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify",
+          "description": "Canonical semantic classifier backed by the smaller DeBERTa v3 zero-shot Warren.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "categories"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-base-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Base Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify_row_zero_shot_base",
+          "description": "Classify a JSONB row into comma-separated categories using a smaller DeBERTa v3 zero-shot model.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row",
+            "categories"
+          ],
+          "argTypes": [
+            "jsonb",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-base-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Base Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify_zero_shot_base",
+          "description": "Classify text into comma-separated categories using a smaller DeBERTa v3 zero-shot model.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text",
+            "categories"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-base-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Base Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "intent",
+          "description": "Classify communicative intent for support, CRM, social, and notes.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-base-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Base Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_classify",
+          "description": "Alias-style semantic classifier returning one caller-provided label.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "categories"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-base-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Base Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'classify/deberta-v3-base-zero-shot',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "classify/deberta-v3-zero-shot",
+      "name": "deberta_v3_zero_shot",
+      "title": "DeBERTa v3 Zero-Shot Classifier",
+      "description": "NLI-based zero-shot classification over caller-provided labels.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "classify",
+        "nli",
+        "row",
+        "zero-shot"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli",
+      "sourceUrl": "https://huggingface.co/MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli",
+      "backendName": "classify_deberta_zero_shot",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "zero_shot_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/classify/deberta-v3-zero-shot",
+      "manifestPath": "capabilities/packs/classify/deberta-v3-zero-shot/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 1087728258,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 870182606,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "audience",
+          "description": "Identify the likely intended audience for a text value.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "bucket",
+          "description": "Bucket text into one of the caller-provided labels.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "buckets"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify",
+          "description": "Canonical semantic classifier. Returns the selected category label as text.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "categories"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify_row_zero_shot",
+          "description": "Classify a JSONB row into comma-separated categories using DeBERTa v3 zero-shot NLI.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row",
+            "categories"
+          ],
+          "argTypes": [
+            "jsonb",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify_zero_shot",
+          "description": "Classify text into comma-separated categories using DeBERTa v3 zero-shot NLI.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text",
+            "categories"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "complexity",
+          "description": "Bucket text by conceptual complexity.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "contradicts",
+          "description": "Return true when statement A contradicts statement B.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "a",
+            "b"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "domain",
+          "description": "Classify the subject-matter domain of text.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "formality",
+          "description": "Bucket text by formality level.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "implies",
+          "description": "Return true when statement A entails statement B.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "a",
+            "b"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "intent",
+          "description": "Classify communicative intent for support, CRM, social, and notes.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "looks_like",
+          "description": "Return true when a value appears to match the requested type or category.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "type_name"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_classify",
+          "description": "Alias-style semantic classifier returning one caller-provided label.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "categories"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "stance",
+          "description": "Classify stance toward a supplied topic.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "topic"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "classify/deberta-v3-zero-shot",
+          "capabilityTitle": "DeBERTa v3 Zero-Shot Classifier",
+          "capabilityTags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'classify/deberta-v3-zero-shot',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "embeddings/e5-small-v2",
+      "name": "e5_small_v2",
+      "title": "E5 Small Embeddings",
+      "description": "Small, fast E5 embeddings useful for CPU-friendly retrieval experiments and lightweight semantic joins.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "cpu-friendly",
+        "embedding",
+        "retrieval",
+        "semantic-join"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "intfloat/e5-small-v2",
+      "sourceUrl": "https://huggingface.co/intfloat/e5-small-v2",
+      "backendName": "embed_e5_small",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "embedding",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/embeddings/e5-small-v2",
+      "manifestPath": "capabilities/packs/embeddings/e5-small-v2/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 166832880,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 133466304,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "embed_e5_small",
+          "description": "Return an E5-small embedding as JSON. For best retrieval quality, prefix inputs with `query:` or `passage:`.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "embeddings/e5-small-v2",
+          "capabilityTitle": "E5 Small Embeddings",
+          "capabilityTags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval",
+            "semantic-join"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_e5_small",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_embed",
+          "description": "Return an embedding vector for semantic retrieval workflows, backed by E5 small.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "embeddings/e5-small-v2",
+          "capabilityTitle": "E5 Small Embeddings",
+          "capabilityTags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval",
+            "semantic-join"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_e5_small",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "similar_to",
+          "description": "Cosine similarity in [0,1] between two text strings using E5 small embeddings.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "left_text",
+            "right_text"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "embeddings/e5-small-v2",
+          "capabilityTitle": "E5 Small Embeddings",
+          "capabilityTags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval",
+            "semantic-join"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed_e5_small",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'embeddings/e5-small-v2',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "classify/emotion-distilroberta",
+      "name": "emotion_distilroberta",
+      "title": "Emotion Classifier",
+      "description": "Classify text into emotion labels for support, survey, content, and conversation analytics.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "classify",
+        "emotion",
+        "row",
+        "tabular",
+        "text"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "j-hartmann/emotion-english-distilroberta-base",
+      "sourceUrl": "https://huggingface.co/j-hartmann/emotion-english-distilroberta-base",
+      "backendName": "classify_emotion_distilroberta",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "sequence_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/classify/emotion-distilroberta",
+      "manifestPath": "capabilities/packs/classify/emotion-distilroberta/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 410680452,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 328544361,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "classify_emotion",
+          "description": "Classify free text into emotion labels.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/emotion-distilroberta",
+          "capabilityTitle": "Emotion Classifier",
+          "capabilityTags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify_row_emotion",
+          "description": "Classify the emotional tone of a JSONB row.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "classify/emotion-distilroberta",
+          "capabilityTitle": "Emotion Classifier",
+          "capabilityTags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "emotion",
+          "description": "Return the top emotion label for free text.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/emotion-distilroberta",
+          "capabilityTitle": "Emotion Classifier",
+          "capabilityTags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "emotion_confidence",
+          "description": "Return the confidence score for the top emotion label.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/emotion-distilroberta",
+          "capabilityTitle": "Emotion Classifier",
+          "capabilityTags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'classify/emotion-distilroberta',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "extract/gliner-medium-v2.1",
+      "name": "gliner_medium_v2_1",
+      "title": "GLiNER Medium v2.1 Extraction",
+      "description": "Zero-shot entity extraction over arbitrary user-provided labels.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "business",
+        "entities",
+        "extract",
+        "ner",
+        "pii",
+        "row",
+        "zero-shot"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "urchade/gliner_medium-v2.1",
+      "sourceUrl": "https://huggingface.co/urchade/gliner_medium-v2.1",
+      "backendName": "extract_gliner",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "gliner",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/extract/gliner-medium-v2.1",
+      "manifestPath": "capabilities/packs/extract/gliner-medium-v2.1/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 975919620,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 780735696,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "contains_entity",
+          "description": "True when GLiNER finds at least one span for the requested entity label.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "label"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "extract/gliner-medium-v2.1",
+          "capabilityTitle": "GLiNER Medium v2.1 Extraction",
+          "capabilityTags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "extract",
+          "description": "Extract the first entity matching a requested label from text.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text",
+            "what"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "extract/gliner-medium-v2.1",
+          "capabilityTitle": "GLiNER Medium v2.1 Extraction",
+          "capabilityTags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "extract_business_entities",
+          "description": "Extract business-oriented entities from notes, tickets, contracts, and CRM records.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "extract/gliner-medium-v2.1",
+          "capabilityTitle": "GLiNER Medium v2.1 Extraction",
+          "capabilityTags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "extract_entities",
+          "description": "Extract entities from text using GLiNER with comma-separated labels.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text",
+            "labels"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "extract/gliner-medium-v2.1",
+          "capabilityTitle": "GLiNER Medium v2.1 Extraction",
+          "capabilityTags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "extract_pii",
+          "description": "Extract likely PII spans from text using a fixed label set.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "extract/gliner-medium-v2.1",
+          "capabilityTitle": "GLiNER Medium v2.1 Extraction",
+          "capabilityTags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "extract_row_entities",
+          "description": "Extract caller-selected entity labels from a JSONB row serialized as text.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row",
+            "labels"
+          ],
+          "argTypes": [
+            "jsonb",
+            "text"
+          ],
+          "capabilityId": "extract/gliner-medium-v2.1",
+          "capabilityTitle": "GLiNER Medium v2.1 Extraction",
+          "capabilityTags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "has_pii",
+          "description": "True when GLiNER finds likely PII spans in text.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "extract/gliner-medium-v2.1",
+          "capabilityTitle": "GLiNER Medium v2.1 Extraction",
+          "capabilityTags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'extract/gliner-medium-v2.1',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "runtimes/python-runtime",
+      "name": "python_runtime",
+      "title": "Managed CPython Runtime",
+      "description": "Warren-managed CPython runtime for rvbbit operator `kind: python` nodes.",
+      "kind": "runtime_sidecar",
+      "visibility": "public",
+      "tags": [
+        "code",
+        "cpu",
+        "python",
+        "runtime",
+        "warren"
+      ],
+      "device": "cpu",
+      "systemRuntime": true,
+      "capabilityRole": "operator_runtime",
+      "sourceProvider": "builtin",
+      "sourceModel": "rvbbit/python-runtime",
+      "sourceUrl": null,
+      "backendName": null,
+      "backendTransport": "rvbbit",
+      "runtimeName": "python_default",
+      "runtimeLanguage": "python",
+      "runtimeTemplate": "python-runtime",
+      "runtimeHandler": "python_runtime",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/runtimes/python-runtime",
+      "manifestPath": "capabilities/packs/runtimes/python-runtime/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [],
+      "deploySelector": {
+        "docker": true
+      },
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'runtimes/python-runtime',\n  target_selector => '{\"docker\":true}'::jsonb\n);"
+    },
+    {
+      "id": "runtimes/mcp-gateway",
+      "name": "mcp_gateway",
+      "title": "MCP Gateway Runtime",
+      "description": "Warren-managed MCP gateway for rvbbit operator `kind: mcp` nodes and SQL MCP calls.",
+      "kind": "runtime_sidecar",
+      "visibility": "public",
+      "tags": [
+        "code",
+        "cpu",
+        "mcp",
+        "operator-runtime",
+        "runtime",
+        "system-runtime",
+        "tools",
+        "warren"
+      ],
+      "device": "cpu",
+      "systemRuntime": true,
+      "capabilityRole": "operator_runtime",
+      "sourceProvider": "builtin",
+      "sourceModel": "rvbbit/mcp-gateway",
+      "sourceUrl": null,
+      "backendName": null,
+      "backendTransport": "rvbbit",
+      "runtimeName": "mcp_default",
+      "runtimeLanguage": "mcp",
+      "runtimeTemplate": "mcp-gateway",
+      "runtimeHandler": "mcp_gateway",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/runtimes/mcp-gateway",
+      "manifestPath": "capabilities/packs/runtimes/mcp-gateway/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [],
+      "deploySelector": {
+        "docker": true
+      },
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'runtimes/mcp-gateway',\n  target_selector => '{\"docker\":true}'::jsonb\n);"
+    },
+    {
+      "id": "rerank/ms-marco-minilm-l6-v2",
+      "name": "ms_marco_minilm_l6_v2",
+      "title": "MS MARCO MiniLM Reranker",
+      "description": "Lightweight cross-encoder reranker for query/document scoring and ranking table rows by relevance.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "cpu-friendly",
+        "relevance",
+        "rerank",
+        "retrieval",
+        "row"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "cross-encoder/ms-marco-MiniLM-L6-v2",
+      "sourceUrl": "https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2",
+      "backendName": "rerank_ms_marco_minilm",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "sequence_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/rerank/ms-marco-minilm-l6-v2",
+      "manifestPath": "capabilities/packs/rerank/ms-marco-minilm-l6-v2/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 113588248,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 90870598,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "about",
+          "description": "Relevance score in [0,1] of text to a topic, backed by MS MARCO MiniLM.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text",
+            "topic"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/ms-marco-minilm-l6-v2",
+          "capabilityTitle": "MS MARCO MiniLM Reranker",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "means",
+          "description": "True when text semantically matches a criterion using MS MARCO MiniLM.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/ms-marco-minilm-l6-v2",
+          "capabilityTitle": "MS MARCO MiniLM Reranker",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "rerank_ms_marco_row",
+          "description": "Score how relevant a JSONB row is to a query using a lightweight MS MARCO MiniLM cross-encoder.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "query",
+            "row"
+          ],
+          "argTypes": [
+            "text",
+            "jsonb"
+          ],
+          "capabilityId": "rerank/ms-marco-minilm-l6-v2",
+          "capabilityTitle": "MS MARCO MiniLM Reranker",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "rerank_ms_marco_score",
+          "description": "Score how relevant text is to a query using a lightweight MS MARCO MiniLM cross-encoder.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "query",
+            "text"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/ms-marco-minilm-l6-v2",
+          "capabilityTitle": "MS MARCO MiniLM Reranker",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_matches",
+          "description": "True when text semantically matches a criterion using MS MARCO MiniLM.",
+          "returnType": "bool",
+          "parser": "yes_no",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/ms-marco-minilm-l6-v2",
+          "capabilityTitle": "MS MARCO MiniLM Reranker",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "semantic_score",
+          "description": "Score how relevant text is to a semantic criterion.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text",
+            "criterion"
+          ],
+          "argTypes": [
+            "text",
+            "text"
+          ],
+          "capabilityId": "rerank/ms-marco-minilm-l6-v2",
+          "capabilityTitle": "MS MARCO MiniLM Reranker",
+          "capabilityTags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'rerank/ms-marco-minilm-l6-v2',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "classify/twitter-roberta-sentiment",
+      "name": "twitter_roberta_sentiment",
+      "title": "RoBERTa Sentiment Classifier",
+      "description": "Practical positive/neutral/negative sentiment classifier for reviews, tickets, social text, and notes.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "classify",
+        "row",
+        "sentiment",
+        "tabular",
+        "text"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "sourceUrl": "https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "backendName": "classify_twitter_roberta_sentiment",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "sequence_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/classify/twitter-roberta-sentiment",
+      "manifestPath": "capabilities/packs/classify/twitter-roberta-sentiment/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 626306914,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 501045531,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "classify_row_sentiment",
+          "description": "Classify the sentiment of a JSONB row serialized as text.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "classify/twitter-roberta-sentiment",
+          "capabilityTitle": "RoBERTa Sentiment Classifier",
+          "capabilityTags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify_sentiment",
+          "description": "Classify text as negative, neutral, or positive.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/twitter-roberta-sentiment",
+          "capabilityTitle": "RoBERTa Sentiment Classifier",
+          "capabilityTags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "sentiment",
+          "description": "Canonical sentiment label backed by the RoBERTa sentiment Warren.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/twitter-roberta-sentiment",
+          "capabilityTitle": "RoBERTa Sentiment Classifier",
+          "capabilityTags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "sentiment_confidence",
+          "description": "Confidence score for the top sentiment label.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/twitter-roberta-sentiment",
+          "capabilityTitle": "RoBERTa Sentiment Classifier",
+          "capabilityTags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'classify/twitter-roberta-sentiment',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "classify/toxic-bert",
+      "name": "toxic_bert",
+      "title": "Toxicity Classifier",
+      "description": "Multi-label toxicity classifier for moderation, support triage, and data quality workflows.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "classify",
+        "moderation",
+        "multilabel",
+        "row",
+        "tabular",
+        "toxicity"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "unitary/toxic-bert",
+      "sourceUrl": "https://huggingface.co/unitary/toxic-bert",
+      "backendName": "classify_toxic_bert",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "sequence_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/classify/toxic-bert",
+      "manifestPath": "capabilities/packs/classify/toxic-bert/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 547468920,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 437975136,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "classify_row_toxicity",
+          "description": "Return toxicity category scores for a JSONB row.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "classify/toxic-bert",
+          "capabilityTitle": "Toxicity Classifier",
+          "capabilityTags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "classify_toxicity",
+          "description": "Return toxicity category scores for text.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/toxic-bert",
+          "capabilityTitle": "Toxicity Classifier",
+          "capabilityTags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "toxicity",
+          "description": "Canonical toxicity label backed by toxic-bert.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/toxic-bert",
+          "capabilityTitle": "Toxicity Classifier",
+          "capabilityTags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "toxicity_score",
+          "description": "Confidence score for the top toxicity category.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/toxic-bert",
+          "capabilityTitle": "Toxicity Classifier",
+          "capabilityTags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'classify/toxic-bert',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "smoke/warren-echo",
+      "name": "warren_smoke_echo",
+      "title": "Warren Smoke Echo",
+      "description": "Deterministic no-model sidecar for validating Warren deployment, backend registration, probing, and operator wiring.",
+      "kind": "hf_backend",
+      "visibility": "internal",
+      "tags": [
+        "cpu",
+        "deterministic",
+        "no-model",
+        "smoke",
+        "warren"
+      ],
+      "device": "cpu",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "builtin",
+      "sourceModel": "rvbbit/warren-smoke-echo",
+      "sourceUrl": null,
+      "backendName": "warren_smoke_echo",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "echo",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/smoke/warren-echo",
+      "manifestPath": "capabilities/packs/smoke/warren-echo/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [
+        {
+          "name": "warren_smoke_echo",
+          "description": "Echo text through a Warren-managed sidecar.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "smoke/warren-echo",
+          "capabilityTitle": "Warren Smoke Echo",
+          "capabilityTags": [
+            "cpu",
+            "deterministic",
+            "no-model",
+            "smoke",
+            "warren"
+          ],
+          "capabilityVisibility": "internal",
+          "backendName": "warren_smoke_echo",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'smoke/warren-echo',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "tabular/wine-quality-sklearn",
+      "name": "wine_quality_sklearn",
+      "title": "Wine Quality Classifier",
+      "description": "Scikit-learn tabular classification example that predicts red wine quality classes from numeric row features.",
+      "kind": "hf_backend",
+      "visibility": "example",
+      "tags": [
+        "classify",
+        "demo",
+        "prediction",
+        "row",
+        "sklearn",
+        "tabular"
+      ],
+      "device": "cpu",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "julien-c/wine-quality",
+      "sourceUrl": "https://huggingface.co/julien-c/wine-quality",
+      "backendName": "predict_wine_quality_sklearn",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "tabular_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/tabular/wine-quality-sklearn",
+      "manifestPath": "capabilities/packs/tabular/wine-quality-sklearn/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [
+        {
+          "name": "predict_wine_quality",
+          "description": "Predict wine quality class from a JSONB row of numeric chemical properties.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "tabular/wine-quality-sklearn",
+          "capabilityTitle": "Wine Quality Classifier",
+          "capabilityTags": [
+            "classify",
+            "demo",
+            "prediction",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "capabilityVisibility": "example",
+          "backendName": "predict_wine_quality_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        },
+        {
+          "name": "wine_quality",
+          "description": "Return the predicted wine quality label from a JSONB feature row.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "tabular/wine-quality-sklearn",
+          "capabilityTitle": "Wine Quality Classifier",
+          "capabilityTags": [
+            "classify",
+            "demo",
+            "prediction",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "capabilityVisibility": "example",
+          "backendName": "predict_wine_quality_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        },
+        {
+          "name": "wine_quality_confidence",
+          "description": "Return the classifier confidence for the predicted wine quality label.",
+          "returnType": "float8",
+          "parser": "score_0_1",
+          "argNames": [
+            "row"
+          ],
+          "argTypes": [
+            "jsonb"
+          ],
+          "capabilityId": "tabular/wine-quality-sklearn",
+          "capabilityTitle": "Wine Quality Classifier",
+          "capabilityTags": [
+            "classify",
+            "demo",
+            "prediction",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "capabilityVisibility": "example",
+          "backendName": "predict_wine_quality_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'tabular/wine-quality-sklearn',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "classify/language-detection-xlm-roberta",
+      "name": "language_detection_xlm_roberta",
+      "title": "XLM-R Language Detection",
+      "description": "Detect the language of text for routing, normalization, and multilingual analytics.",
+      "kind": "hf_backend",
+      "visibility": "public",
+      "tags": [
+        "classify",
+        "language",
+        "multilingual",
+        "routing",
+        "tabular"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "huggingface",
+      "sourceModel": "papluca/xlm-roberta-base-language-detection",
+      "sourceUrl": "https://huggingface.co/papluca/xlm-roberta-base-language-detection",
+      "backendName": "detect_language_xlm_roberta",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "sequence_classification",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/classify/language-detection-xlm-roberta",
+      "manifestPath": "capabilities/packs/classify/language-detection-xlm-roberta/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": "single_gpu",
+      "vramRequiredBytes": 1390330730,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": 1112264584,
+      "resourceHeadroomPct": 25,
+      "resourceEstimateSource": "huggingface_weights",
+      "operators": [
+        {
+          "name": "detect_language",
+          "description": "Detect the language of a text value.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/language-detection-xlm-roberta",
+          "capabilityTitle": "XLM-R Language Detection",
+          "capabilityTags": [
+            "classify",
+            "language",
+            "multilingual",
+            "routing",
+            "tabular"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "detect_language_xlm_roberta",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "name": "language",
+          "description": "Canonical language label backed by the XLM-R language-detection Warren.",
+          "returnType": "text",
+          "parser": "strip",
+          "argNames": [
+            "text"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "classify/language-detection-xlm-roberta",
+          "capabilityTitle": "XLM-R Language Detection",
+          "capabilityTags": [
+            "classify",
+            "language",
+            "multilingual",
+            "routing",
+            "tabular"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "detect_language_xlm_roberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'classify/language-detection-xlm-roberta',\n  target_selector => '{}'::jsonb\n);"
+    }
+  ],
+  "operators": [
+    {
+      "name": "about",
+      "description": "Relevance score in [0,1] of text to a topic, backed by BGE reranker base.",
+      "returnType": "float8",
+      "parser": "score_0_1",
+      "argNames": [
+        "text",
+        "topic"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-base",
+          "title": "BGE Reranker Base",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/bge-reranker-v2-m3",
+          "title": "BGE Reranker v2 M3",
+          "visibility": "public",
+          "tags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/ms-marco-minilm-l6-v2",
+          "title": "MS MARCO MiniLM Reranker",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "audience",
+      "description": "Identify the likely intended audience for a text value.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "bucket",
+      "description": "Bucket text into one of the caller-provided labels.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text",
+        "buckets"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-base-zero-shot",
+          "title": "DeBERTa v3 Base Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify",
+      "description": "Canonical semantic classifier backed by the smaller DeBERTa v3 zero-shot Warren.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text",
+        "categories"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-base-zero-shot",
+          "title": "DeBERTa v3 Base Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_emotion",
+      "description": "Classify free text into emotion labels.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/emotion-distilroberta",
+          "title": "Emotion Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_row_emotion",
+      "description": "Classify the emotional tone of a JSONB row.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/emotion-distilroberta",
+          "title": "Emotion Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_row_sentiment",
+      "description": "Classify the sentiment of a JSONB row serialized as text.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/twitter-roberta-sentiment",
+          "title": "RoBERTa Sentiment Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_row_toxicity",
+      "description": "Return toxicity category scores for a JSONB row.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/toxic-bert",
+          "title": "Toxicity Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_row_zero_shot",
+      "description": "Classify a JSONB row into comma-separated categories using DeBERTa v3 zero-shot NLI.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row",
+        "categories"
+      ],
+      "argTypes": [
+        "jsonb",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_row_zero_shot_base",
+      "description": "Classify a JSONB row into comma-separated categories using a smaller DeBERTa v3 zero-shot model.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row",
+        "categories"
+      ],
+      "argTypes": [
+        "jsonb",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-base-zero-shot",
+          "title": "DeBERTa v3 Base Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_sentiment",
+      "description": "Classify text as negative, neutral, or positive.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/twitter-roberta-sentiment",
+          "title": "RoBERTa Sentiment Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_toxicity",
+      "description": "Return toxicity category scores for text.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/toxic-bert",
+          "title": "Toxicity Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_zero_shot",
+      "description": "Classify text into comma-separated categories using DeBERTa v3 zero-shot NLI.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text",
+        "categories"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "classify_zero_shot_base",
+      "description": "Classify text into comma-separated categories using a smaller DeBERTa v3 zero-shot model.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text",
+        "categories"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-base-zero-shot",
+          "title": "DeBERTa v3 Base Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "complexity",
+      "description": "Bucket text by conceptual complexity.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "contains_entity",
+      "description": "True when GLiNER finds at least one span for the requested entity label.",
+      "returnType": "bool",
+      "parser": "yes_no",
+      "argNames": [
+        "text",
+        "label"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "extract/gliner-medium-v2.1",
+          "title": "GLiNER Medium v2.1 Extraction",
+          "visibility": "public",
+          "tags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "contradicts",
+      "description": "Return true when statement A contradicts statement B.",
+      "returnType": "bool",
+      "parser": "yes_no",
+      "argNames": [
+        "a",
+        "b"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "detect_language",
+      "description": "Detect the language of a text value.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/language-detection-xlm-roberta",
+          "title": "XLM-R Language Detection",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "language",
+            "multilingual",
+            "routing",
+            "tabular"
+          ],
+          "backendName": "detect_language_xlm_roberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "domain",
+      "description": "Classify the subject-matter domain of text.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "embed_bge_m3",
+      "description": "Return a BGE-M3 embedding as JSON for exploratory use. Register this backend as `embed` if you want the built-in embedding SQL to use it.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "embeddings/bge-m3",
+          "title": "BGE-M3 Embeddings",
+          "visibility": "public",
+          "tags": [
+            "embedding",
+            "gpu",
+            "multilingual",
+            "retrieval"
+          ],
+          "backendName": "embed_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "embed_bge_small",
+      "description": "Return a bge-small-en-v1.5 embedding as JSON for exploratory use. Prefer rvbbit.embed for production retrieval workflows.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "embeddings/bge-small-en-v1.5",
+          "title": "BGE Small English Embeddings",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval"
+          ],
+          "backendName": "embed_bge_small",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "embed_e5_small",
+      "description": "Return an E5-small embedding as JSON. For best retrieval quality, prefix inputs with `query:` or `passage:`.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "embeddings/e5-small-v2",
+          "title": "E5 Small Embeddings",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval",
+            "semantic-join"
+          ],
+          "backendName": "embed_e5_small",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "emotion",
+      "description": "Return the top emotion label for free text.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/emotion-distilroberta",
+          "title": "Emotion Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "emotion_confidence",
+      "description": "Return the confidence score for the top emotion label.",
+      "returnType": "float8",
+      "parser": "score_0_1",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/emotion-distilroberta",
+          "title": "Emotion Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "emotion",
+            "row",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_emotion_distilroberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "extract",
+      "description": "Extract the first entity matching a requested label from text.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text",
+        "what"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "extract/gliner-medium-v2.1",
+          "title": "GLiNER Medium v2.1 Extraction",
+          "visibility": "public",
+          "tags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "extract_business_entities",
+      "description": "Extract business-oriented entities from notes, tickets, contracts, and CRM records.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "extract/gliner-medium-v2.1",
+          "title": "GLiNER Medium v2.1 Extraction",
+          "visibility": "public",
+          "tags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "extract_entities",
+      "description": "Extract entities from text using GLiNER with comma-separated labels.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text",
+        "labels"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "extract/gliner-medium-v2.1",
+          "title": "GLiNER Medium v2.1 Extraction",
+          "visibility": "public",
+          "tags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "extract_pii",
+      "description": "Extract likely PII spans from text using a fixed label set.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "extract/gliner-medium-v2.1",
+          "title": "GLiNER Medium v2.1 Extraction",
+          "visibility": "public",
+          "tags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "extract_row_entities",
+      "description": "Extract caller-selected entity labels from a JSONB row serialized as text.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row",
+        "labels"
+      ],
+      "argTypes": [
+        "jsonb",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "extract/gliner-medium-v2.1",
+          "title": "GLiNER Medium v2.1 Extraction",
+          "visibility": "public",
+          "tags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "formality",
+      "description": "Bucket text by formality level.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "has_pii",
+      "description": "True when GLiNER finds likely PII spans in text.",
+      "returnType": "bool",
+      "parser": "yes_no",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "extract/gliner-medium-v2.1",
+          "title": "GLiNER Medium v2.1 Extraction",
+          "visibility": "public",
+          "tags": [
+            "business",
+            "entities",
+            "extract",
+            "ner",
+            "pii",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "extract_gliner",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "house_value",
+      "description": "Return the numeric California housing value prediction for a JSONB feature row.",
+      "returnType": "float8",
+      "parser": "raw_text",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "tabular/california-housing-sklearn",
+          "title": "California Housing Regressor",
+          "visibility": "example",
+          "tags": [
+            "demo",
+            "prediction",
+            "real-estate",
+            "regression",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "backendName": "predict_california_housing_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "implies",
+      "description": "Return true when statement A entails statement B.",
+      "returnType": "bool",
+      "parser": "yes_no",
+      "argNames": [
+        "a",
+        "b"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "intent",
+      "description": "Classify communicative intent for support, CRM, social, and notes.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-base-zero-shot",
+          "title": "DeBERTa v3 Base Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "language",
+      "description": "Canonical language label backed by the XLM-R language-detection Warren.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/language-detection-xlm-roberta",
+          "title": "XLM-R Language Detection",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "language",
+            "multilingual",
+            "routing",
+            "tabular"
+          ],
+          "backendName": "detect_language_xlm_roberta",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "looks_like",
+      "description": "Return true when a value appears to match the requested type or category.",
+      "returnType": "bool",
+      "parser": "yes_no",
+      "argNames": [
+        "text",
+        "type_name"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "means",
+      "description": "True when text semantically matches a criterion using BGE reranker base.",
+      "returnType": "bool",
+      "parser": "yes_no",
+      "argNames": [
+        "text",
+        "criterion"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-base",
+          "title": "BGE Reranker Base",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/bge-reranker-v2-m3",
+          "title": "BGE Reranker v2 M3",
+          "visibility": "public",
+          "tags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/ms-marco-minilm-l6-v2",
+          "title": "MS MARCO MiniLM Reranker",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "predict_house_value",
+      "description": "Predict median house value from a JSONB row of California housing features.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "tabular/california-housing-sklearn",
+          "title": "California Housing Regressor",
+          "visibility": "example",
+          "tags": [
+            "demo",
+            "prediction",
+            "real-estate",
+            "regression",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "backendName": "predict_california_housing_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "predict_wine_quality",
+      "description": "Predict wine quality class from a JSONB row of numeric chemical properties.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "tabular/wine-quality-sklearn",
+          "title": "Wine Quality Classifier",
+          "visibility": "example",
+          "tags": [
+            "classify",
+            "demo",
+            "prediction",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "backendName": "predict_wine_quality_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "rerank_bge_base_row",
+      "description": "Score how relevant a JSONB row is to a query using BGE reranker base.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "query",
+        "row"
+      ],
+      "argTypes": [
+        "text",
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-base",
+          "title": "BGE Reranker Base",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "rerank_bge_base_score",
+      "description": "Score how relevant text is to a query using BGE reranker base.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "query",
+        "text"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-base",
+          "title": "BGE Reranker Base",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "rerank_ms_marco_row",
+      "description": "Score how relevant a JSONB row is to a query using a lightweight MS MARCO MiniLM cross-encoder.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "query",
+        "row"
+      ],
+      "argTypes": [
+        "text",
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/ms-marco-minilm-l6-v2",
+          "title": "MS MARCO MiniLM Reranker",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "rerank_ms_marco_score",
+      "description": "Score how relevant text is to a query using a lightweight MS MARCO MiniLM cross-encoder.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "query",
+        "text"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/ms-marco-minilm-l6-v2",
+          "title": "MS MARCO MiniLM Reranker",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "rerank_row",
+      "description": "Score how relevant a JSONB row is to a query using BGE reranker v2 M3.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "query",
+        "row"
+      ],
+      "argTypes": [
+        "text",
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-v2-m3",
+          "title": "BGE Reranker v2 M3",
+          "visibility": "public",
+          "tags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "rerank_score",
+      "description": "Score how relevant text is to a query using BGE reranker v2 M3.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "query",
+        "text"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-v2-m3",
+          "title": "BGE Reranker v2 M3",
+          "visibility": "public",
+          "tags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "semantic_classify",
+      "description": "Alias-style semantic classifier returning one caller-provided label.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text",
+        "categories"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-base-zero-shot",
+          "title": "DeBERTa v3 Base Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "cpu-friendly",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_base_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "semantic_embed",
+      "description": "Canonical semantic embedding operator backed by BGE-M3.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "embeddings/bge-m3",
+          "title": "BGE-M3 Embeddings",
+          "visibility": "public",
+          "tags": [
+            "embedding",
+            "gpu",
+            "multilingual",
+            "retrieval"
+          ],
+          "backendName": "embed_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "embeddings/bge-small-en-v1.5",
+          "title": "BGE Small English Embeddings",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval"
+          ],
+          "backendName": "embed_bge_small",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "embeddings/e5-small-v2",
+          "title": "E5 Small Embeddings",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval",
+            "semantic-join"
+          ],
+          "backendName": "embed_e5_small",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "semantic_matches",
+      "description": "True when text semantically matches a criterion using BGE reranker base.",
+      "returnType": "bool",
+      "parser": "yes_no",
+      "argNames": [
+        "text",
+        "criterion"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-base",
+          "title": "BGE Reranker Base",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/bge-reranker-v2-m3",
+          "title": "BGE Reranker v2 M3",
+          "visibility": "public",
+          "tags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/ms-marco-minilm-l6-v2",
+          "title": "MS MARCO MiniLM Reranker",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "semantic_score",
+      "description": "Score how relevant text is to a semantic criterion.",
+      "returnType": "float8",
+      "parser": "score_0_1",
+      "argNames": [
+        "text",
+        "criterion"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "rerank/bge-reranker-base",
+          "title": "BGE Reranker Base",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_base",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/bge-reranker-v2-m3",
+          "title": "BGE Reranker v2 M3",
+          "visibility": "public",
+          "tags": [
+            "gpu",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "rerank/ms-marco-minilm-l6-v2",
+          "title": "MS MARCO MiniLM Reranker",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "relevance",
+            "rerank",
+            "retrieval",
+            "row"
+          ],
+          "backendName": "rerank_ms_marco_minilm",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "sentiment",
+      "description": "Canonical sentiment label backed by the RoBERTa sentiment Warren.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/twitter-roberta-sentiment",
+          "title": "RoBERTa Sentiment Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "sentiment_confidence",
+      "description": "Confidence score for the top sentiment label.",
+      "returnType": "float8",
+      "parser": "score_0_1",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/twitter-roberta-sentiment",
+          "title": "RoBERTa Sentiment Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "row",
+            "sentiment",
+            "tabular",
+            "text"
+          ],
+          "backendName": "classify_twitter_roberta_sentiment",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "similar_to",
+      "description": "Cosine similarity between two text values using BGE-M3 embeddings.",
+      "returnType": "float8",
+      "parser": "score_0_1",
+      "argNames": [
+        "left_text",
+        "right_text"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "embeddings/bge-m3",
+          "title": "BGE-M3 Embeddings",
+          "visibility": "public",
+          "tags": [
+            "embedding",
+            "gpu",
+            "multilingual",
+            "retrieval"
+          ],
+          "backendName": "embed_bge_m3",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "embeddings/bge-small-en-v1.5",
+          "title": "BGE Small English Embeddings",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval"
+          ],
+          "backendName": "embed_bge_small",
+          "runtimeName": null,
+          "device": "auto"
+        },
+        {
+          "id": "embeddings/e5-small-v2",
+          "title": "E5 Small Embeddings",
+          "visibility": "public",
+          "tags": [
+            "cpu-friendly",
+            "embedding",
+            "retrieval",
+            "semantic-join"
+          ],
+          "backendName": "embed_e5_small",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "stance",
+      "description": "Classify stance toward a supplied topic.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text",
+        "topic"
+      ],
+      "argTypes": [
+        "text",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/deberta-v3-zero-shot",
+          "title": "DeBERTa v3 Zero-Shot Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "nli",
+            "row",
+            "zero-shot"
+          ],
+          "backendName": "classify_deberta_zero_shot",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "toxicity",
+      "description": "Canonical toxicity label backed by toxic-bert.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/toxic-bert",
+          "title": "Toxicity Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "toxicity_score",
+      "description": "Confidence score for the top toxicity category.",
+      "returnType": "float8",
+      "parser": "score_0_1",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "classify/toxic-bert",
+          "title": "Toxicity Classifier",
+          "visibility": "public",
+          "tags": [
+            "classify",
+            "moderation",
+            "multilabel",
+            "row",
+            "tabular",
+            "toxicity"
+          ],
+          "backendName": "classify_toxic_bert",
+          "runtimeName": null,
+          "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "warren_smoke_echo",
+      "description": "Echo text through a Warren-managed sidecar.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "text"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "smoke/warren-echo",
+          "title": "Warren Smoke Echo",
+          "visibility": "internal",
+          "tags": [
+            "cpu",
+            "deterministic",
+            "no-model",
+            "smoke",
+            "warren"
+          ],
+          "backendName": "warren_smoke_echo",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "wine_quality",
+      "description": "Return the predicted wine quality label from a JSONB feature row.",
+      "returnType": "text",
+      "parser": "strip",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "tabular/wine-quality-sklearn",
+          "title": "Wine Quality Classifier",
+          "visibility": "example",
+          "tags": [
+            "classify",
+            "demo",
+            "prediction",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "backendName": "predict_wine_quality_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "wine_quality_confidence",
+      "description": "Return the classifier confidence for the predicted wine quality label.",
+      "returnType": "float8",
+      "parser": "score_0_1",
+      "argNames": [
+        "row"
+      ],
+      "argTypes": [
+        "jsonb"
+      ],
+      "capabilities": [
+        {
+          "id": "tabular/wine-quality-sklearn",
+          "title": "Wine Quality Classifier",
+          "visibility": "example",
+          "tags": [
+            "classify",
+            "demo",
+            "prediction",
+            "row",
+            "sklearn",
+            "tabular"
+          ],
+          "backendName": "predict_wine_quality_sklearn",
+          "runtimeName": null,
+          "device": "cpu"
+        }
+      ]
+    }
+  ]
+}

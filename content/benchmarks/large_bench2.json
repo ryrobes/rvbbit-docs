@@ -1,0 +1,2751 @@
+{
+  "note": "Work-in-progress benchmark snapshot from local bench_history. Median latency in milliseconds; lower is better.",
+  "runs": [
+    {
+      "host": "50225a79a5ed",
+      "runId": "clickbench_20260601T014352Z",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "repeats": 3,
+      "systems": [
+        "pg_baseline",
+        "hydra",
+        "citus",
+        "alloydb",
+        "clickhouse",
+        "rvbbit"
+      ],
+      "gitDirty": false,
+      "rowCount": 10000000,
+      "gitCommit": "78e6bae02537",
+      "startedAt": "2026-06-01T01:43:52+00:00",
+      "queryCount": 43,
+      "recordedAt": "2026-06-01T03:00:56.393272+00:00",
+      "reportPath": "bench/clickbench/results/clickbench_10000000_20260601T014352Z.txt",
+      "resultsPath": "bench/clickbench/results/last_run.json"
+    },
+    {
+      "host": "50225a79a5ed",
+      "runId": "tpch_sf1_20260601T030104Z",
+      "scale": "1",
+      "suite": "TPC-H",
+      "repeats": 3,
+      "systems": [
+        "pg_baseline",
+        "hydra",
+        "citus",
+        "alloydb",
+        "clickhouse",
+        "rvbbit"
+      ],
+      "gitDirty": false,
+      "rowCount": null,
+      "gitCommit": "78e6bae02537",
+      "startedAt": "2026-06-01T03:01:04+00:00",
+      "queryCount": 22,
+      "recordedAt": "2026-06-01T03:16:03.722311+00:00",
+      "reportPath": "bench/tpch/results/tpch_sf1_20260601T030104Z.txt",
+      "resultsPath": "bench/tpch/results/last_run.json"
+    }
+  ],
+  "routes": [
+    {
+      "route": "duck_vortex",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "queries": 27,
+      "suiteMs": 3541.048,
+      "geomeanMs": 82.24,
+      "routeSource": "no-profile-variant"
+    },
+    {
+      "route": "native",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "queries": 12,
+      "suiteMs": 4764.814,
+      "geomeanMs": 27.09,
+      "routeSource": "hard-rule"
+    },
+    {
+      "route": "native",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "queries": 4,
+      "suiteMs": 361.869,
+      "geomeanMs": 47.135,
+      "routeSource": "no-profile-native"
+    },
+    {
+      "route": "duck_vortex",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 21,
+      "suiteMs": 1876.916,
+      "geomeanMs": 69.022,
+      "routeSource": "no-profile-variant"
+    },
+    {
+      "route": "native",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 1,
+      "suiteMs": 60.261,
+      "geomeanMs": 60.261,
+      "routeSource": "hard-rule"
+    }
+  ],
+  "queries": [
+    {
+      "qid": "Q0",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 0.785,
+      "rowCount": 10000000,
+      "bestSystem": "alloydb",
+      "description": "count(*)",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 348.897
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 24.597
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.09
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 0.785
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 1.641
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 656.396
+        }
+      },
+      "rvbbitRouteReason": "native count metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q1",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 1.962,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "count(*) with filter",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 294.883
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 27.19
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.962
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2.6
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 5.336
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 937.314
+        }
+      },
+      "rvbbitRouteReason": "native filtered count metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q2",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 1.677,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "sum/count/avg over big table",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 599.484
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 67.062
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.677
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 25.988
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 8.717
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1023.042
+        }
+      },
+      "rvbbitRouteReason": "native simple aggregate metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q3",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 1.541,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "avg(UserID)",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 443.392
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 47.972
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.541
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 10.258
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 9.81
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 764.716
+        }
+      },
+      "rvbbitRouteReason": "native simple aggregate metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q4",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 55.486,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "count distinct UserID",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1374.381
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1502.359
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 55.486
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1926.919
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 68.539
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2398.8
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q5",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 67.561,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "count distinct SearchPhrase",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 5653.948
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 6695.936
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 67.561
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 3932.803
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 108.097
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 7405.103
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q6",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 4.495,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "min/max EventDate",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 451.65
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 46.704
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 9.415
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 6.276
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 4.495
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 810.903
+        }
+      },
+      "rvbbitRouteReason": "native simple aggregate metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q7",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 1.722,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "AdvEngineID group + filter",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 319.064
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 24.358
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.722
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2.955
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 6.013
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1055.424
+        }
+      },
+      "rvbbitRouteReason": "native vector function rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q8",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 69.006,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "RegionID top 10 unique users",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3522.799
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 2007.876
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 80.59
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2616.212
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 69.006
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 4745.59
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q9",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 86.518,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "RegionID rollup",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3898.422
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 2094.479
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 113.734
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 3686.609
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 86.518
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 5767.044
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q10",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 24.211,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "MobilePhoneModel filter+groupby",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 662.677
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 158.225
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 24.211
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 171.026
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 29.452
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1224.086
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q11",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 32.484,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "MobilePhone+Model groupby",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 855.572
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 188.889
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 32.484
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 245.067
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 33.028
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1244.687
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q12",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 92.196,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "SearchPhrase top 10 count",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1050.497
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 641.053
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 92.196
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 722.226
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 144.005
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2882.969
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q13",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 139.542,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "SearchPhrase top 10 unique users",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 5461.54
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 4873.046
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 139.542
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1666.393
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 185.017
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3194.181
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q14",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 85.438,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "SearchEngineID+Phrase top 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1157.723
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 711.456
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 85.438
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1386.42
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 143.015
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1921.965
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q15",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 71.743,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "UserID top 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1451.846
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 755.287
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 71.743
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1635.699
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 80.809
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1404.011
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q16",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 192.786,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "UserID+SearchPhrase ordered top 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2746.519
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1282.909
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 192.786
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1963.95
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 241.691
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 4049.437
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q17",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 112.253,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "UserID+SearchPhrase any 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1801.981
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 380.268
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 112.253
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1338.593
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 139.231
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1533.223
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q18",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 291.813,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "UserID+minute+SearchPhrase groupby",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 6250.21
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 2664.193
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 291.813
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 4339.908
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 448.945
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 7052.542
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q19",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 0.32,
+      "rowCount": 10000000,
+      "bestSystem": "alloydb",
+      "description": "UserID point lookup",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 319.445
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 25.673
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 3.653
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 0.32
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 10
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 746.503
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; row-returning query stays on native path",
+      "rvbbitRouteSource": "no-profile-native"
+    },
+    {
+      "qid": "Q20",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 162.487,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "LIKE URL %google%",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1779.525
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 229.289
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 162.487
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1075.31
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 204.884
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 999.381
+        }
+      },
+      "rvbbitRouteReason": "native fixed LIKE count rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q21",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 68.975,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "LIKE URL + SearchPhrase top 10",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1895.216
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 252.992
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 68.975
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1274.875
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 265.774
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1282.8
+        }
+      },
+      "rvbbitRouteReason": "native vector function rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q22",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 543.104,
+      "rowCount": 10000000,
+      "bestSystem": "hydra",
+      "description": "LIKE Title + URL NOT LIKE rollup",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3134.51
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 543.104
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1856.721
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1472.988
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 669.795
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1384.559
+        }
+      },
+      "rvbbitRouteReason": "native vector function rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q23",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 771.996,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "SELECT * filter LIKE",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 9575.691
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 2794.598
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 906.806
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1070.335
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 771.996
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 999.351
+        }
+      },
+      "rvbbitRouteReason": "native vector function rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q24",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 26.041,
+      "rowCount": 10000000,
+      "bestSystem": "alloydb",
+      "description": "SearchPhrase order by EventTime",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 727.9
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 106.77
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 85.629
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 26.041
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 60.248
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1159.634
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; row-returning query stays on native path",
+      "rvbbitRouteSource": "no-profile-native"
+    },
+    {
+      "qid": "Q25",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 66.303,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "SearchPhrase order by SearchPhrase",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 563.506
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 92.849
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 189.15
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 75.883
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 66.303
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1120.187
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; row-returning query stays on native path",
+      "rvbbitRouteSource": "no-profile-native"
+    },
+    {
+      "qid": "Q26",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 25.37,
+      "rowCount": 10000000,
+      "bestSystem": "alloydb",
+      "description": "SearchPhrase order EventTime+Phrase",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 739.563
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 111.197
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 83.437
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 25.37
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 57.629
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1177.89
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; row-returning query stays on native path",
+      "rvbbitRouteSource": "no-profile-native"
+    },
+    {
+      "qid": "Q27",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 207.353,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "CounterID avg URL length",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2813.157
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 381.187
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 207.353
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1445.428
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 240.226
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1212.258
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q28",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 1154.525,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "regex_replace Referer",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 37364.173
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 7074.932
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1697.975
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 15374.733
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 1154.525
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 9870.31
+        }
+      },
+      "rvbbitRouteReason": "postgres regex semantics",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q29",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 54.445,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "90 sum exprs (wide tlist)",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3342.282
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 970.1
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 54.445
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1174.05
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 481.52
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1821.69
+        }
+      },
+      "rvbbitRouteReason": "native simple aggregate metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q30",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 64.02,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "SearchEngineID+ClientIP rollup",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1358.373
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 628.857
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 64.02
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 4075.127
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 130.488
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3191.988
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q31",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 97.135,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "WatchID+ClientIP rollup (filtered)",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1726.103
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 834.614
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 97.135
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 4383.502
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 173.509
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3366.093
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q32",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 368.966,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "WatchID+ClientIP rollup (full)",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 8660.832
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 4936.307
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 368.966
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 14108.544
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 707.354
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 15147.598
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q33",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 432.584,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "URL top 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 4541.221
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 12038.368
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 432.584
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 8226.212
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 792.68
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3628.094
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q34",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 454.303,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "literal 1 + URL top 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 4550.156
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 12345.29
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 454.303
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 8318.487
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 686.732
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3632.333
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q35",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 97.691,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "ClientIP+N rollups",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1992.858
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 883.957
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 303.01
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2688.597
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 97.691
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1513.699
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q36",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 50.063,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "selective filter date range",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 284.396
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 3616.842
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 50.063
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1674.352
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 69.023
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1947.994
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q37",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 26.086,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "Title selective filter",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 150.441
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 832.988
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 26.086
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1367.954
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 44.659
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1340.813
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q38",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 31.195,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "URL link clicks offset 1000",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 104.483
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 39.388
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 31.195
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1185.619
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 32.203
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1130.638
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q39",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 101.993,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "Src/Dst rollup",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 480.833
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 428.219
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 101.993
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1576.464
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 130.584
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1276.178
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q40",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 14.885,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "URLHash+EventDate IN filter",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 92.329
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 32.786
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 14.885
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1674.419
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 20.637
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1567.529
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q41",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 13.019,
+      "rowCount": 10000000,
+      "bestSystem": "rvbbit",
+      "description": "WindowClientWidth+Height filter",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 85.831
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 33.765
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 13.019
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1608.74
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 17.672
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1406.401
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q42",
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "bestMs": 14.768,
+      "rowCount": 10000000,
+      "bestSystem": "clickhouse",
+      "description": "DATE_TRUNC minute groupby",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 131.288
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 115.278
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 16.6
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1273.868
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 14.768
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1073.175
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q1",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 95.47,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 1",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1747.057
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 282.751
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 95.47
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 126.224
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 111.773
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 345.163
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q2",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 27.763,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 2",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 202.222
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 137.572
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 27.763
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 80.882
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 73.762
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 121.273
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q3",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 65.501,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 3",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 777.468
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 156.035
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 65.501
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 76.866
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 262.528
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 229.997
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q4",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 74.447,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 4",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1089.838
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 972.87
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 74.447
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1381.779
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 182.813
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1353.507
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q5",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 79.407,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 5",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 848.384
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 145.62
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 79.407
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 451.155
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 448.072
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 181.722
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q6",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 4.734,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 6",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 492.143
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 69.514
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 60.261
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 4.734
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 27.561
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 120.213
+        }
+      },
+      "rvbbitRouteReason": "native vector function rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q7",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 69.07,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 7",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 756.895
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 146.139
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 108.077
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 69.07
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 674.589
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 193.075
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q8",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 84.063,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 8",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 769.061
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 489.859
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 84.989
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 84.063
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 1067.15
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 223.49
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q9",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 153.078,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 9",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1711.366
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 571.057
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 153.078
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 503.532
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 3727.086
+        },
+        "pg_baseline": {
+          "status": "could not resize shared memory segment \"/PostgreSQL.2142356654\" to 16777216 bytes: No space left on device",
+          "medianMs": null
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q10",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 92.228,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 812.663
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 268.691
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 92.228
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 109.647
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 235.293
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 292.813
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q11",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 19.011,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 11",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 136.975
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 45.757
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 19.011
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 26.553
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 29.915
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 39.012
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q12",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 47.413,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 12",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 754.79
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 141.773
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 47.413
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 58.532
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 50.972
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 227.21
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q13",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 78.983,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 13",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1027.469
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 710.792
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 78.983
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 490.93
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 430.71
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 905.56
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q14",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 33.605,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 14",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 432.698
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 99.427
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 47.403
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 33.605
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 52.53
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 125.581
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q15",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 66.278,
+      "rowCount": null,
+      "bestSystem": "hydra",
+      "description": "TPC-H query 15",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 443.373
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 66.278
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 74.528
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 68.812
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 78.472
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 120.527
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q16",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 43.59,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 16",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 367.686
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 150.903
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 72.211
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 154.825
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 43.59
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 148.672
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q17",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 131.513,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 17",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2079.664
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1800.388
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 131.513
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1077.434
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 163.808
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3006.787
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q18",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 78.264,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 18",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1681.082
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 2611.758
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 83.698
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1112.862
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 78.264
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1306.605
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q19",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 18.376,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 19",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 811.613
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 142.024
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 28.989
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 18.376
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 96.422
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 160.682
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q20",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 55.032,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 20",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 754.218
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 411.059
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 55.032
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 485.098
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 174.45
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1731.079
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q21",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 434.645,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 21",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3473.919
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 3579.119
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 434.645
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2853.52
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 533.618
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3626.039
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    },
+    {
+      "qid": "Q22",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 22.124,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 22",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 356.617
+        },
+        "hydra": {
+          "status": "canceling statement due to statement timeout",
+          "medianMs": null
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 22.528
+        },
+        "alloydb": {
+          "status": "canceling statement due to statement timeout",
+          "medianMs": null
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 22.124
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 389.518
+        }
+      },
+      "rvbbitRouteReason": "no active route profile; variant-friendly analytical shape uses a parquet variant path",
+      "rvbbitRouteSource": "no-profile-variant"
+    }
+  ],
+  "systems": [
+    "rvbbit",
+    "clickhouse",
+    "alloydb",
+    "pg_baseline",
+    "hydra",
+    "citus"
+  ],
+  "testName": "large_bench2",
+  "summaries": [
+    {
+      "ok": 43,
+      "wins": 30,
+      "maxMs": 1856.721,
+      "p95Ms": 861.555,
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "system": "rvbbit",
+      "queries": 43,
+      "suiteMs": 8667.732,
+      "failures": 0,
+      "geomeanMs": 57.281,
+      "within5Pct": 30
+    },
+    {
+      "ok": 43,
+      "wins": 8,
+      "maxMs": 1154.525,
+      "p95Ms": 765.532,
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "system": "clickhouse",
+      "queries": 43,
+      "suiteMs": 8714.265,
+      "failures": 0,
+      "geomeanMs": 77.829,
+      "within5Pct": 10
+    },
+    {
+      "ok": 43,
+      "wins": 4,
+      "maxMs": 15374.733,
+      "p95Ms": 8309.259,
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "system": "alloydb",
+      "queries": 43,
+      "suiteMs": 100857.906,
+      "failures": 0,
+      "geomeanMs": 519.581,
+      "within5Pct": 4
+    },
+    {
+      "ok": 43,
+      "wins": 0,
+      "maxMs": 15147.598,
+      "p95Ms": 7369.847,
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "system": "pg_baseline",
+      "queries": 43,
+      "suiteMs": 112068.529,
+      "failures": 0,
+      "geomeanMs": 1863.866,
+      "within5Pct": 0
+    },
+    {
+      "ok": 43,
+      "wins": 1,
+      "maxMs": 12345.29,
+      "p95Ms": 7037.032,
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "system": "hydra",
+      "queries": 43,
+      "suiteMs": 73543.207,
+      "failures": 0,
+      "geomeanMs": 424.243,
+      "within5Pct": 1
+    },
+    {
+      "ok": 43,
+      "wins": 0,
+      "maxMs": 37364.173,
+      "p95Ms": 8419.769,
+      "scale": "10000000",
+      "suite": "ClickBench",
+      "system": "citus",
+      "queries": 43,
+      "suiteMs": 124759.594,
+      "failures": 0,
+      "geomeanMs": 1153.159,
+      "within5Pct": 0
+    },
+    {
+      "ok": 22,
+      "wins": 13,
+      "maxMs": 434.645,
+      "p95Ms": 151.999,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "rvbbit",
+      "queries": 22,
+      "suiteMs": 1937.177,
+      "failures": 0,
+      "geomeanMs": 68.597,
+      "within5Pct": 15
+    },
+    {
+      "ok": 22,
+      "wins": 3,
+      "maxMs": 3727.086,
+      "p95Ms": 1047.522,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "clickhouse",
+      "queries": 22,
+      "suiteMs": 8565.502,
+      "failures": 0,
+      "geomeanMs": 151.467,
+      "within5Pct": 3
+    },
+    {
+      "ok": 21,
+      "wins": 5,
+      "maxMs": 2853.52,
+      "p95Ms": 1381.779,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "alloydb",
+      "queries": 22,
+      "suiteMs": 9268.5,
+      "failures": 1,
+      "geomeanMs": 151.546,
+      "within5Pct": 6
+    },
+    {
+      "ok": 21,
+      "wins": 0,
+      "maxMs": 3626.039,
+      "p95Ms": 3006.787,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "pg_baseline",
+      "queries": 22,
+      "suiteMs": 14848.524,
+      "failures": 1,
+      "geomeanMs": 334.091,
+      "within5Pct": 0
+    },
+    {
+      "ok": 21,
+      "wins": 1,
+      "maxMs": 3579.119,
+      "p95Ms": 2611.758,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "hydra",
+      "queries": 22,
+      "suiteMs": 12999.386,
+      "failures": 1,
+      "geomeanMs": 282.487,
+      "within5Pct": 1
+    },
+    {
+      "ok": 22,
+      "wins": 0,
+      "maxMs": 3473.919,
+      "p95Ms": 2063.034,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "citus",
+      "queries": 22,
+      "suiteMs": 21527.2,
+      "failures": 0,
+      "geomeanMs": 754.084,
+      "within5Pct": 0
+    }
+  ],
+  "exportedAt": "2026-06-01T04:55:58.564199+00:00",
+  "sourceQuery": "select * from bench_history.query_results where test_name = 'large_bench2'"
+}
