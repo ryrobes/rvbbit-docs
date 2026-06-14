@@ -136,25 +136,85 @@ export default function Home() {
     <main>
       <section className="hero">
         <RabbitHero />
-        <div className="hero-content">
-          <p className="eyebrow">Open-source Postgres extension</p>
-          <h1>RVBBIT</h1>
-          <p className="hero-copy">
-            Build your own AI operators in Postgres. Compose models, your own
-            fine-tunes, and MCP tools — with retries, validation, and a cost
-            receipt — into one SQL function over the tables you already have.
-            Your hardware, your data, no lock-in.
-          </p>
-          <div className="hero-actions">
-            <Link className="button primary" href="/docs/quickstart">
-              <TerminalSquare aria-hidden="true" size={18} />
-              Start with SQL
-            </Link>
-            <Link className="button secondary" href="/docs">
-              Read the docs
-              <ArrowRight aria-hidden="true" size={18} />
-            </Link>
+        <div className="hero-content hero-split">
+          <div className="hero-lede">
+            <p className="eyebrow">Open-source Postgres extension</p>
+            <h1 className="hero-title">
+              Build your own <span className="accent">AI operators</span> in
+              Postgres.
+            </h1>
+            <p className="hero-copy">
+              Compose models, your own fine-tunes, and MCP tools — with retries,
+              validation, and a cost receipt — into one SQL function over the
+              tables you already have.
+            </p>
+            <div className="hero-actions">
+              <Link className="button primary" href="/docs/quickstart">
+                <TerminalSquare aria-hidden="true" size={18} />
+                Start with SQL
+              </Link>
+              <Link className="button secondary" href="/docs">
+                Read the docs
+                <ArrowRight aria-hidden="true" size={18} />
+              </Link>
+            </div>
+            <p className="hero-foot">Your hardware · your data · no lock-in.</p>
           </div>
+
+          <aside
+            className="hero-demo"
+            aria-label="An operator you define, called from ordinary SQL"
+          >
+            <div className="hero-card">
+              <div className="hero-card-bar">
+                <span className="hero-card-dots" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span className="hero-card-title">operator · triage</span>
+              </div>
+              <SqlCode ariaLabel="A user-defined operator called from SQL">
+                {`-- triage(): your fine-tune + a validator + a receipt,
+-- wrapped as one SQL function you define.
+SELECT ticket_id,
+       triage(body) AS priority
+FROM   support_tickets
+WHERE  triage(body) = 'urgent'
+ORDER  BY created_at DESC;`}
+              </SqlCode>
+              <div className="hero-result">
+                <div className="hero-result-head">
+                  <span>2 rows</span>
+                  <span>routed native</span>
+                  <span className="ok">receipt logged ✓</span>
+                  <span>6 ms</span>
+                </div>
+                <table className="hero-result-table">
+                  <thead>
+                    <tr>
+                      <th>ticket_id</th>
+                      <th>priority</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1842</td>
+                      <td>
+                        <span className="hero-pill">urgent</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1907</td>
+                      <td>
+                        <span className="hero-pill">urgent</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
 
