@@ -5,11 +5,13 @@ import {
   BarChart3,
   BrainCircuit,
   Cable,
+  Cpu,
   Database,
   FileSearch,
   GitBranch,
   Layers3,
   ListChecks,
+  Lock,
   Network,
   PlugZap,
   ReceiptText,
@@ -22,7 +24,7 @@ import {
   Workflow
 } from "lucide-react";
 import { RabbitHero } from "@/components/RabbitHero";
-import { CascadeDiagram } from "@/components/CascadeDiagram";
+import { Screenshot } from "@/components/Screenshot";
 import { SqlCode } from "@/components/SqlCode";
 import {
   formatMs,
@@ -52,6 +54,24 @@ const capabilities = [
     icon: ShieldCheck,
     title: "Postgres Contract",
     text: "Heap remains the source of truth, with fallbacks for correctness and pg_dump/restore."
+  }
+];
+
+const differentiators = [
+  {
+    icon: Workflow,
+    title: "You build the operators",
+    text: "Not a sealed list of AI functions. Compose model calls, your own validators, retries, and tool calls into one typed SQL function — your operator, your logic."
+  },
+  {
+    icon: Cpu,
+    title: "Bring your own models",
+    text: "Spin up a HuggingFace specialist or your own fine-tune on your GPU and call it from SQL like any other function. Not a vendor's frontier-model menu."
+  },
+  {
+    icon: Lock,
+    title: "Open, local, no lock-in",
+    text: "It's a Postgres extension you run yourself. Heap stays the source of truth — drop the extension and your data is still ordinary rows."
   }
 ];
 
@@ -117,24 +137,58 @@ export default function Home() {
       <section className="hero">
         <RabbitHero />
         <div className="hero-content">
-          <p className="eyebrow">Postgres extension for semantic and poly-engine SQL</p>
+          <p className="eyebrow">Open-source Postgres extension</p>
           <h1>RVBBIT</h1>
           <p className="hero-copy">
-            Call models, embeddings, and tools straight from SQL — with columnar
-            acceleration, adaptive routing, and an audit trail for every call.
-            All inside Postgres, with the heap as the source of truth.
+            Build your own AI operators in Postgres. Compose models, your own
+            fine-tunes, and MCP tools — with retries, validation, and a cost
+            receipt — into one SQL function over the tables you already have.
+            Your hardware, your data, no lock-in.
           </p>
           <div className="hero-actions">
-            <Link className="button primary" href="/docs/cascades">
-              <Workflow aria-hidden="true" size={18} />
-              See Cascades
-            </Link>
-            <Link className="button secondary" href="/docs/quickstart">
+            <Link className="button primary" href="/docs/quickstart">
               <TerminalSquare aria-hidden="true" size={18} />
               Start with SQL
+            </Link>
+            <Link className="button secondary" href="/docs">
+              Read the docs
               <ArrowRight aria-hidden="true" size={18} />
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="band" id="lens-proof">
+        <Screenshot
+          src="shots/lens-desktop.png"
+          alt="The rvbbit Lens desktop — windows for adaptive routing, metrics, the knowledge graph, and operators over a live database."
+          caption="The Lens — a desktop over the whole extension. Everything it shows is plain SQL underneath."
+          wide
+        />
+      </section>
+
+      <section className="band" id="why">
+        <div className="section-header">
+          <p>Why it&apos;s different</p>
+          <h2>Not a fixed menu of AI functions — a layer you program.</h2>
+          <span>
+            Cortex and Databricks hand you a sealed set of AI SQL calls on their
+            cloud. RVBBIT hands you the building blocks: compose models, your own
+            fine-tunes, tools, retries, and receipts into operators you define —
+            open source, on Postgres, over your own data.
+          </span>
+        </div>
+        <div className="capability-grid">
+          {differentiators.map((item) => {
+            const Icon = item.icon;
+            return (
+              <article className="feature-card" key={item.title}>
+                <Icon aria-hidden="true" size={22} />
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -148,7 +202,11 @@ export default function Home() {
             exposed as a single typed Postgres function.
           </span>
         </div>
-        <CascadeDiagram />
+        <Screenshot
+          src="shots/operator-lens.png"
+          alt="An operator's cascade in the Lens — its steps (guard, model call, validator, retry, tool call) and a live receipt for one row."
+          caption="One operator's cascade, running in the Lens — every step and its receipt."
+        />
         <div className="cascade-copy">
           <div>
             <h3>The workflow lives next to the data</h3>
@@ -452,6 +510,43 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
               <p>{text}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="band" id="lens">
+        <div className="section-header">
+          <p>The Lens</p>
+          <h2>A desktop over your warehouse — and it&apos;s all just SQL.</h2>
+          <span>
+            The optional Lens makes the extension tangible: watch the planner pick
+            an engine, spin up a specialist model, explore your data&apos;s
+            knowledge graph, and read live receipts. Nothing it does that you
+            can&apos;t do from a query.
+          </span>
+        </div>
+        <div className="shot-row">
+          <Screenshot
+            src="shots/routing-cockpit.png"
+            alt="The Adaptive Routing cockpit in the Lens — the planner choosing among native, DataFusion, Duck, and heap per query shape, with live timings."
+            caption="Adaptive Routing — watch the planner pick an engine per query."
+          />
+          <Screenshot
+            src="shots/model-studio.png"
+            alt="Model Studio in the Lens — spinning up a HuggingFace specialist model and wiring it to a SQL operator."
+            caption="Model Studio — spin up a specialist model, call it from SQL."
+          />
+        </div>
+        <div className="shot-row">
+          <Screenshot
+            src="shots/scry.png"
+            alt="Scry in the Lens — a graph explorer over the data knowledge graph, spidering from a table to its columns and related entities."
+            caption="Scry — explore your data's knowledge graph."
+          />
+          <Screenshot
+            src="shots/data-search.png"
+            alt="Data Search in the Lens — free-text semantic search over the catalog, ranking tables and columns by what their data is about."
+            caption="Data Search — find tables by what their data is about."
+          />
         </div>
       </section>
 
