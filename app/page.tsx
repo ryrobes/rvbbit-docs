@@ -93,10 +93,23 @@ const semanticPillars = [
     text: "Extract triples, preserve evidence, merge aliases, and retrieve KG context for RAG."
   },
   {
-    icon: ReceiptText,
-    title: "Receipts and costs",
-    text: "Every serious model/tool path can leave an audit record with sub-calls, latency, errors, and cost state."
+    icon: Sparkles,
+    title: "Bring your own operators",
+    text: "When the built-ins aren't enough, compose your own from models, tools, and validators — same SQL call shape."
   }
+];
+
+const receiptDims = [
+  "operator",
+  "model",
+  "inputs",
+  "sub-calls",
+  "tokens in / out",
+  "cost · USD",
+  "latency · ms",
+  "error",
+  "take / verdict",
+  "query_id"
 ];
 
 const architecture = [
@@ -361,11 +374,12 @@ LIMIT 10;`}</SqlCode>
       <section className="band mcp-band" id="mcp">
         <div className="section-header mcp-header">
           <p>MCP as a SQL primitive</p>
-          <h2>External tools become relational building blocks.</h2>
+          <h2>Call any tool from SQL — as a data source, or an action.</h2>
           <span>
-            Register MCP servers in Postgres, discover their tools, call them as
-            JSON or row sources, audit every invocation, and use them as nodes
-            inside Cascades.
+            Register MCP servers in Postgres and discover their tools. Read them
+            as JSON or row sources to join beside your data — or call them to
+            make something happen (next section). Every invocation is cataloged
+            and audited, and any tool can be a node inside a Cascade.
           </span>
         </div>
         <div className="mcp-showcase">
@@ -497,6 +511,43 @@ SELECT rvbbit.define_alert(
         </div>
         <Link className="mcp-link" href="/docs/alerts">
           Read about reactive Alerts
+          <ArrowRight aria-hidden="true" size={18} />
+        </Link>
+      </section>
+
+      <section className="band mcp-band" id="receipts">
+        <div className="section-header mcp-header">
+          <p>Receipts</p>
+          <h2>Every model call and side effect is logged, costed, replayable.</h2>
+          <span>
+            Each operator and action can write a receipt — its inputs, the
+            model, the sub-calls it fanned out to, tokens, cost, latency, and
+            any error. Governance isn&apos;t a bolt-on: it&apos;s a row in a
+            table you can query, join, and audit like anything else.
+          </span>
+        </div>
+        <div className="mcp-showcase">
+          <ul className="receipt-dims" aria-label="Columns captured on every receipt">
+            {receiptDims.map((dim) => (
+              <li key={dim}>{dim}</li>
+            ))}
+          </ul>
+          <div className="mcp-code-stack">
+            <SqlCode ariaLabel="Roll up AI and action cost from the receipts table">{`-- what did the last day of AI + actions cost, and where?
+SELECT operator,
+       model,
+       count(*)                                  AS calls,
+       round(sum(cost_usd)::numeric, 4)          AS cost_usd,
+       round(avg(latency_ms))                    AS avg_ms,
+       count(*) FILTER (WHERE error IS NOT NULL) AS errors
+FROM   rvbbit.receipts
+WHERE  invocation_at > now() - interval '1 day'
+GROUP  BY operator, model
+ORDER  BY cost_usd DESC;`}</SqlCode>
+          </div>
+        </div>
+        <Link className="mcp-link" href="/docs/receipts-costs">
+          Read about receipts and costs
           <ArrowRight aria-hidden="true" size={18} />
         </Link>
       </section>

@@ -156,6 +156,28 @@ main > section {
   z-index: 1;
 }
 
+/* Receipt dimension chips (the "every action is a row" band). */
+.receipt-dims {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.receipt-dims li {
+  padding: 5px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: #080808;
+  color: var(--soft);
+  font-size: 13px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  letter-spacing: 0.01em;
+}
+
 .hero {
   position: relative;
   display: flex;
