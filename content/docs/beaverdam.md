@@ -14,12 +14,12 @@ Beaverdam is RVBBIT's optional storage acceleration layer. It stores additional
 representations of table data beside the heap so analytical queries can take
 faster paths while ordinary Postgres remains correct and available.
 
-The intended contract is simple:
+The contract is simple:
 
 - heap is the source of truth,
 - accelerator files are rebuildable,
-- missing or stale files should not make normal SQL incorrect,
-- the router may choose a faster path only when it can preserve SQL semantics.
+- missing or stale files do not make normal SQL incorrect,
+- the router chooses a faster path only when it can preserve SQL semantics.
 
 ## What It Builds
 
@@ -50,16 +50,18 @@ Use these words precisely:
 | Rebuild | Recreate accelerator state from heap. |
 | Compact | Rewrite/coalesce accelerator files and tombstones. This is maintenance, not the normal write path. |
 
-Intended v1 API:
+API:
 
 ```sql
-SELECT rvbbit.beaverdam_refresh('events'::regclass);
-SELECT rvbbit.beaverdam_rebuild('events'::regclass, refresh_variants => true);
-SELECT rvbbit.beaverdam_compact('events'::regclass);
-```
+-- Refresh: incrementally write accelerator files after the watermark.
+SELECT rvbbit.refresh_acceleration('events'::regclass);
 
-Current pre-release builds may still expose `refresh_acceleration` or
-`compact`. The rename plan tracks the migration to the Beaverdam API.
+-- Rebuild: recreate accelerator state, including layout variants.
+SELECT rvbbit.refresh_acceleration('events'::regclass, refresh_variants => true);
+
+-- Compact: rewrite/coalesce accelerator files and tombstones.
+SELECT rvbbit.compact('events'::regclass);
+```
 
 To automate *when* these run — as a value-vs-cost policy with per-table SLOs,
 budgets, and the `accel_tick` heartbeat — see
@@ -67,11 +69,11 @@ budgets, and the `accel_tick` heartbeat — see
 
 ## Observability
 
-Beaverdam operations should be visible from SQL:
+Beaverdam operations are visible from SQL:
 
 ```sql
 SELECT *
-FROM rvbbit.beaverdam_status
+FROM rvbbit.acceleration_status
 ORDER BY table_schema, table_name;
 ```
 
@@ -79,7 +81,7 @@ Inspect recent work:
 
 ```sql
 SELECT *
-FROM rvbbit.beaverdam_operations
+FROM rvbbit.acceleration_operations
 ORDER BY started_at DESC
 LIMIT 20;
 ```
@@ -88,29 +90,29 @@ Phase-level timings:
 
 ```sql
 SELECT *
-FROM rvbbit.beaverdam_operation_phases
+FROM rvbbit.acceleration_operation_phases
 ORDER BY started_at DESC
 LIMIT 50;
 ```
 
 ## Layouts
 
-A table can have more than one physical layout. The router should prefer the
+A table can have more than one physical layout. The router prefers the
 layout that matches the query shape, available files, and correctness state.
 
 ```sql
 SELECT *
-FROM rvbbit.beaverdam_layout_status
+FROM rvbbit.layout_variant_status
 WHERE table_oid = 'events'::regclass;
 ```
 
 Vortex plus Duck has been the strongest large-table path in benchmark runs, but
-DataFusion/native paths still win edge cases. Beaverdam should expose those
-paths as first-class candidates instead of pretending one engine is always best.
+DataFusion/native paths still win edge cases. Beaverdam exposes those paths as
+first-class candidates so the router can pick the best engine per query.
 
 ## Heap Fallback
 
-Beaverdam should never require truncating the heap. Keeping heap as gold source
+Beaverdam never requires truncating the heap. Keeping heap as gold source
 matters for:
 
 - ordinary Postgres reads and writes,
@@ -125,19 +127,17 @@ tables can fall back to heap until the accelerator catches up.
 
 ## Knobs
 
-The final names are expected to move under `rvbbit.beaverdam_*` and
-`RVBBIT_BEAVERDAM_*`. The current implementation still has some `compact_*`
-names.
-
 Common knobs:
 
 | Knob | Purpose |
 | --- | --- |
-| `beaverdam_vortex_layout` | Build Vortex files. |
-| `beaverdam_hive_layout` | Build Hive-style segmented layouts. |
-| `beaverdam_refresh_variants` | Refresh layout variants after canonical refresh. |
-| `beaverdam_hot_budget_mb` | Per-backend memory budget for hot decoded batches. |
-| `beaverdam_hot_route_max_rows` | Maximum rows for automatic hot-memory routing. |
+| `rvbbit.compact_vortex_layout` | Build Vortex files. |
+| `rvbbit.compact_hive_layout` | Build Hive-style segmented layouts. |
+| `rvbbit.hot_store_budget_mb` | Per-backend memory budget for hot decoded batches. |
+| `rvbbit.hot_store_route_max_rows` | Maximum rows for automatic hot-memory routing. |
+
+Layout variants are (re)built after a canonical refresh by passing
+`refresh_variants => true` to `rvbbit.refresh_acceleration`.
 
 Keep variant builds bounded. Hive can be useful, but poor key choices can
 increase file count and load time without helping query plans.

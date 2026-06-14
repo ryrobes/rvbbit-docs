@@ -16,8 +16,8 @@ narrow blessed [metrics](/docs/metrics-kpis) on the other. Instead of searching
 2,000 source tables, you search ~15 documented cubes by subject ("Salesforce
 opportunities", "support tickets"), read clear column semantics, and query an
 accelerated table. And because a cube is just a `USING rvbbit` table, it gets
-[time travel](/docs/time-travel), [drift detection](/docs/catalog), and
-columnar acceleration for free.
+[drift detection](/docs/catalog) and columnar acceleration for free, plus
+experimental [time travel](/docs/time-travel).
 
 ## Define A Cube
 
@@ -66,8 +66,8 @@ dropped columns) needs `drop_cube` first.
 
 `refresh_cube` re-runs the cube's stored `SELECT` and rebuilds its acceleration
 files. Internally it uses `snapshot_load`: `TRUNCATE` → `INSERT … <the SELECT>` →
-`compact()`. Each refresh is a snapshot, so old generations stay queryable via
-[`AS OF`](/docs/time-travel).
+`compact()`. Each refresh is a snapshot, so old generations can be queried via
+[`AS OF`](/docs/time-travel) (experimental).
 
 ```sql
 SELECT rvbbit.refresh_cube('opportunities');   -- returns the new row count
@@ -172,8 +172,8 @@ SELECT * FROM rvbbit.category_options('cube');
 ## Promote A Cube To A Metric
 
 A cube is often the perfect base for a metric. `promote_cube_to_metric` defines
-a zero-copy metric (`SELECT * FROM cubes.<name>`); the cube's acceleration and
-`AS OF` flow straight through:
+a zero-copy metric (`SELECT * FROM cubes.<name>`); the cube's acceleration flows
+straight through, as does `AS OF` where supported (experimental):
 
 ```sql
 SELECT rvbbit.promote_cube_to_metric(
@@ -184,7 +184,7 @@ SELECT rvbbit.promote_cube_to_metric(
 ```
 
 From there it's an ordinary [metric](/docs/metrics-kpis): versioned, checkable,
-materializable, time-travelable. Derived/aggregated metrics are still hand-written
+and materializable. Derived/aggregated metrics are still hand-written
 with `define_metric` over the cube.
 
 ## Dimensional Metrics Over Cubes
@@ -208,7 +208,7 @@ WHERE  groupable;
 | `rvbbit.cube_catalog` | View: the latest definition per cube (+ category/subcategory from the shared taxonomy). |
 | `rvbbit.cube_control` | One mutable row per cube: `refreshed_at, last_rows, last_error, enabled`, plus auto-enrichment state. |
 | `rvbbit.cube_columns` | The semantic layer: per-column `doc, semantics, source_ref, confidence, edited_by`. |
-| `cubes.<name>` | The materialized `USING rvbbit` table — accelerated, time-travelable, drift-tracked. |
+| `cubes.<name>` | The materialized `USING rvbbit` table — accelerated and drift-tracked (with experimental time-travel). |
 
 ## Manage
 
@@ -218,8 +218,10 @@ SELECT rvbbit.drop_cube('opportunities');   -- table + definition + docs + catal
 
 ## Notes
 
-- **Refreshes are full** in v1 (`TRUNCATE` + reload). `cube_health` already emits
-  a `skip`/`delta`/`full` recommendation from drift for when incremental lands.
+- **Refreshes are full** currently (`TRUNCATE` + reload). `cube_health` already
+  emits a `skip`/`delta`/`full` recommendation from drift, but that recommendation
+  is advisory only today — incremental/delta refresh is not yet implemented, so
+  every refresh rebuilds the whole cube regardless of the hint.
 - **Lineage is best-effort** — derived by `EXPLAIN`-ing the cube SQL; if it won't
   plan, lineage is empty.
 - **The LLM model** for `enrich_cube` is runtime-configurable via

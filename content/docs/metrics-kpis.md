@@ -12,22 +12,29 @@ Metrics are a small BI layer that comes with rvbbit tables — and you never hav
 to use it. A metric is a row in a plain table and a `SELECT`. A KPI is that plus
 one more `SELECT` that returns a boolean. There is no separate metric store, no
 metric DSL, and no service to run. If you define one, you get systematic,
-versioned, time-travelable reporting over the rvbbit tables you already have. If
+versioned reporting (with experimental time-travel queries) over the rvbbit
+tables you already have. If
 you drop the extension, you keep every definition and every recorded observation
 as ordinary Postgres rows. **All your data, no lock-in.**
 
 ## Two Time Axes
 
 Classic metrics tools struggle with three things: latency, "as of now vs. as of
-then," and the metric *definition* shifting over time. rvbbit already handles the
-first two with its OLAP layer and [time travel](/docs/time-travel). The metrics
-layer handles the third by storing definitions as **plain, append-versioned
-rows** — so every run is parameterized by two *independent* axes:
+then," and the metric *definition* shifting over time. The metrics layer's core
+contribution is the third axis: it stores definitions as **plain, append-versioned
+rows**, so every run is parameterized by two *independent* axes:
 
 | Axis | Controlled by | Means |
 | --- | --- | --- |
 | **def-time** | `def_as_of` (a `created_at` filter) | which version of the definition |
 | **data-time** | `data_as_of` (rvbbit AS OF) | the data as of which moment |
+
+The **def-time** axis is stable: definitions are immutable, versioned rows, so
+"which definition" is always exact. The **data-time** axis rides on rvbbit
+[time travel](/docs/time-travel), which is experimental and intended primarily
+for audit and reproducibility — treat data-time results as best-effort and
+validate them before relying on them. Def-time alone (over live data) is the
+solid, everyday path.
 
 ```sql
 SELECT * FROM rvbbit.metric('revenue', '{}'::jsonb,
@@ -36,7 +43,8 @@ SELECT * FROM rvbbit.metric('revenue', '{}'::jsonb,
 ```
 
 "Today's definition over last quarter's data" and "last quarter's definition over
-today's data" are both one call.
+today's data" are both one call. The def-time direction is exact; the data-time
+direction (`data_as_of` in the past) is best-effort and still being validated.
 
 ## Define A Metric
 
@@ -110,15 +118,19 @@ data-time, so rolling, delta, and week-over-week become single tokens:
 
 `OFFSET` is a signed amount + unit (`-1day`, `-12hours`, `+1week`, `-1month`) or
 an alias (`yesterday`, `lastweek`). Only the data-time shifts; the definition
-stays current.
+stays current. Because the shifted value is reconstructed by re-reading earlier
+generations via AS OF, treat these rolling/delta figures as best-effort
+(experimental) — they depend on the data-time path that is still being hardened.
 
 ## A Durable, Verdict-Stamped History
 
-Live reads stay live — the past is reconstructable by re-running AS OF, because
-the generations *are* the history. So rvbbit materializes not to *have* a history,
-but as a durable **log of what was reported**: `(value, verdict, threshold-version,
-def-time, data-time, generation, trigger)`. It outlives generation reaping and
-records the KPI verdict *as decided*.
+Live reads stay live, and earlier generations can be re-read with AS OF to
+*approximate* a historical value (experimental — see
+[time travel](/docs/time-travel)). Rather than lean on that for the record of
+record, rvbbit materializes a durable **log of what was reported**: `(value,
+verdict, threshold-version, def-time, data-time, generation, trigger)`. It
+outlives generation reaping and records the KPI verdict *as decided* — so the
+authoritative history is the materialized log, not a replayed reconstruction.
 
 The default cadence is not a clock — **compaction is the trigger.** A new
 generation enqueues itself (if a metric depends on the table) and

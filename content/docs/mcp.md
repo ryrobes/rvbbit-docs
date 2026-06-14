@@ -52,7 +52,7 @@ SELECT rvbbit.register_mcp_server(
 SELECT rvbbit.refresh_mcp_server('github');
 ```
 
-Secrets should usually be referenced with `${VAR}` placeholders. The value is
+Secrets are referenced with `${VAR}` placeholders. The value is
 resolved from the gateway runtime environment and is not persisted in the SQL
 catalog.
 
@@ -207,7 +207,8 @@ a single API key you provide at install.
 
 ## Observability
 
-The UI should read the catalog instead of talking to the gateway directly:
+These catalog views expose gateway state — discovery, health, usage — without a
+direct gateway connection:
 
 ```sql
 SELECT name, endpoint_url, status, health, updated_at

@@ -50,7 +50,9 @@ be misquoted. `validate_sql`/`run_sql` (free exploration) are analyst+.
   reproducible, not re-derived ad hoc.
 - **Audited + reproducible.** Each call writes a receipt
   (`{caller, tool, sql, engine, rows, elapsed_ms, ts}`); `as_of` flows through the
-  engine's [time-travel](/docs/time-travel) path, so any answer can be replayed.
+  engine's [time-travel](/docs/time-travel) path, so answers can generally be
+  replayed. Historical (`as_of`) replay rides the experimental time-travel path
+  and is still maturing — treat it as best-effort.
 
 The same `metric` and `search_data` you'd call in SQL are what the tools wrap:
 
@@ -90,9 +92,9 @@ want exposed; everything else stays invisible.
 
 ## Notes
 
-- **Phase 0** is the safe 80% — no writes, no DDL, a single scoped role.
-  Per-user roles, PII redaction, an `ask`/text-to-SQL tool, and a richer
-  bitemporal demo are the next phase.
+- **Deliberately read-only today** — no writes, no DDL, and a single scoped
+  role. Per-user roles, PII redaction, an `ask`/text-to-SQL tool, and a richer
+  bitemporal demo are not yet available.
 - The serve layer extends `rvbbit-mcp-gateway`; the backing functions are the
   ordinary rvbbit SQL surfaces documented elsewhere, so anything you can do in
   SQL the warehouse can expose (and gate) through MCP.

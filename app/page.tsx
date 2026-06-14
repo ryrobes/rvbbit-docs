@@ -123,7 +123,7 @@ const metricsFeatures = [
   {
     icon: GitBranch,
     title: "Versioned definitions",
-    text: "Every metric is an append-versioned row. The definition — including the KPI threshold — is part of the record, so you can run today's metric over old data, or last quarter's definition over today's."
+    text: "Every metric is an append-versioned row. The definition — including the KPI threshold — is part of the record, so you can re-run exactly the rule you shipped last quarter, or apply today's definition going forward."
   },
   {
     icon: ShieldCheck,
@@ -133,12 +133,12 @@ const metricsFeatures = [
   {
     icon: Database,
     title: "Durable, verdict-stamped history",
-    text: "Observations are written when the data changes — compaction is the trigger — and outlive generation reaping. One immutable row per snapshot: value, verdict, and the as-of it ran at."
+    text: "Observations are written when the data changes — compaction is the trigger — and outlive generation reaping. One immutable row per snapshot: value, verdict, and the threshold it ran against."
   },
   {
-    icon: Activity,
-    title: "Rolling baselines in one line",
-    text: "{metric:self.-1day} resolves to this metric at a shifted instant, so deltas and week-over-week are a single token over the snapshot history."
+    icon: Cable,
+    title: "Parameterized and composable",
+    text: "Inject params and reference other metrics inline — {param}, {metric:NAME} — so one definition builds on another instead of copy-pasted SQL."
   }
 ];
 
@@ -574,12 +574,13 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
       <section className="band" id="metrics">
         <div className="section-header">
           <p>Metrics &amp; KPIs</p>
-          <h2>A versioned, bitemporal BI layer — built in, never required.</h2>
+          <h2>A versioned BI layer — built in, never required.</h2>
           <span>
             A metric is a name and a SELECT. Add one more SELECT that returns a
-            boolean and it is a KPI. Run it across two independent time axes —
-            which definition, and as of when. It is all plain RVBBIT tables and
-            your own data: no metric store, no DSL, no lock-in.
+            boolean and it is a KPI. Every definition is versioned, so you can
+            re-run exactly the rule you shipped last quarter. It is all plain
+            RVBBIT tables and your own data: no metric store, no DSL, no
+            lock-in.
           </span>
         </div>
         <div className="capability-grid">
@@ -594,7 +595,7 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
             );
           })}
         </div>
-        <SqlCode ariaLabel="Define a KPI and check it across def-time and data-time">{`-- a metric is a name + SELECT; the 8th arg makes it a KPI
+        <SqlCode ariaLabel="Define a KPI and check it under a past definition">{`-- a metric is a name + SELECT; the 8th arg makes it a KPI
 SELECT rvbbit.define_metric(
   'daily_revenue',
   'SELECT sum(amount) AS total FROM orders',
@@ -602,10 +603,9 @@ SELECT rvbbit.define_metric(
   '{}'::jsonb,
   'SELECT total >= {target} AS ok, total AS value FROM metric');
 
--- green under last quarter's definition, over last quarter's data?
+-- evaluate it under the exact definition we shipped on 2025-01-01
 SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
-  def_as_of  => '2025-01-01',
-  data_as_of => '2025-01-01');
+  def_as_of => '2025-01-01');
 -- => {"ok": true, "value": 1180000, "status": "pass"}`}</SqlCode>
         <Link className="mcp-link" href="/docs/metrics-kpis">
           Read the Metrics &amp; KPIs surface
@@ -756,8 +756,8 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
           <Sparkles aria-hidden="true" size={20} />
           <h2>Four ideas, one extension.</h2>
           <p>
-            Storage, routing, Warren, and semantic SQL each get their own guide —
-            and the docs show how they fit together in production.
+            Storage, routing, operators, and operations each get their own guide
+            — and the docs show how they fit together in production.
           </p>
         </div>
         <div className="release-metrics" aria-label="Documentation pillars">
