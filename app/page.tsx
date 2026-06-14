@@ -24,6 +24,7 @@ import {
   Workflow
 } from "lucide-react";
 import { RabbitHero } from "@/components/RabbitHero";
+import { ScrollVideo } from "@/components/ScrollVideo";
 import { Screenshot } from "@/components/Screenshot";
 import { SqlCode } from "@/components/SqlCode";
 import {
@@ -134,6 +135,7 @@ export default function Home() {
 
   return (
     <main>
+      <ScrollVideo />
       <section className="hero">
         <RabbitHero />
         <div className="hero-content hero-split">
