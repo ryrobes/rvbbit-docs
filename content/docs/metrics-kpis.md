@@ -138,6 +138,95 @@ SELECT rvbbit.schedule_materialize_tick('* * * * *');   -- or call materialize_t
 Observations are **immutable** — they are the record of what you reported.
 "What it *would* have been under a newer definition" stays a live query.
 
+## Materialize Everything
+
+`materialize_tick()` only touches metrics whose tables just compacted. To take
+**one timestamped snapshot of every metric on demand** — the natural shape for a
+scheduled batch — use `materialize_all_metrics`. It records one observation per
+metric at a single captured `def`/`data` timestamp (a consistent snapshot), and a
+failing metric is reported, never aborting the rest:
+
+```sql
+SELECT * FROM rvbbit.materialize_all_metrics();                  -- everything, now
+SELECT * FROM rvbbit.materialize_all_metrics(p_category => 'Finance');
+-- → one row per metric: (metric_name, observation_id, status, error)
+```
+
+```sql
+rvbbit.materialize_all_metrics(
+    p_category    text DEFAULT NULL,
+    p_subcategory text DEFAULT NULL,
+    p_def_as_of   timestamptz DEFAULT NULL,   -- NULL = now()
+    p_data_as_of  timestamptz DEFAULT NULL,   -- NULL = now(); set for a backfill
+    p_trigger     text DEFAULT 'bulk'
+) RETURNS TABLE(metric_name text, observation_id bigint, status text, error text)
+```
+
+Schedule it as a [maintenance job](/docs/accelerator-freshness#scheduled-maintenance-entrypoints):
+
+```sql
+SELECT cron.schedule('rvbbit_materialize_all', '0 * * * *',
+                     $$SELECT rvbbit.materialize_all_metrics()$$);
+```
+
+A broken check (e.g. an unbound `{param}`) is **isolated** — the verdict comes
+back `{"status": "error", ...}` and the metric *value* is still recorded, so one
+typo never wedges a batch. Give every `{param}` a default in the metric's `params`
+to be safe.
+
+## Categories
+
+Metrics, [cubes](/docs/cubes), and [alerts](/docs/alerts) share one optional
+two-level taxonomy. Categories organize the catalog and drive the `p_category`
+filter on `materialize_all_metrics`:
+
+```sql
+SELECT rvbbit.set_category('metric', 'daily_revenue', 'Finance', 'Revenue');
+SELECT name, category, subcategory FROM rvbbit.metric_catalog WHERE category = 'Finance';
+```
+
+## Dimensional Metrics
+
+A metric defined over a [cube](/docs/cubes) can be **sliced** by the cube's
+dimensions without redefining it — declare the source in `labels`, then call
+`metric_by`:
+
+```sql
+-- A scalar headline over a cube.
+SELECT rvbbit.define_metric('pipeline_value',
+    'SELECT sum(amount) AS pipeline_value FROM cubes.opportunities',
+    '{}', 'scalar', 'Total open + won pipeline', 'sales',
+    '{"cube_source": "cubes.opportunities"}'::jsonb);
+
+SELECT * FROM rvbbit.metric('pipeline_value');     -- [{"pipeline_value": 5000000}]
+SELECT * FROM rvbbit.metric_by('pipeline_value', ARRAY['stage_name', 'region']);
+-- [{"stage_name": "Closed Won", "region": "AMER", "pipeline_value": 2000000}, ...]
+```
+
+What can you slice by?
+
+```sql
+SELECT * FROM rvbbit.metric_dimensions('pipeline_value');   -- groupable columns + semantics
+SELECT * FROM rvbbit.cube_dimensions('cubes.opportunities') WHERE groupable;
+```
+
+## Boards & Monitoring
+
+`metric_board` pivots the observation log into a time-bucketed grid for trend
+charts; `breaching_kpis` lists the KPIs failing right now; `metric_lineage` shows
+which tables a metric reads (impact analysis):
+
+```sql
+SELECT * FROM rvbbit.metric_board(p_metrics => ARRAY['daily_revenue'], p_bucket => 'day');
+
+SELECT metric_name, status, verdict, observed_at FROM rvbbit.breaching_kpis();
+
+SELECT rvbbit.metric_lineage('daily_revenue');   -- {"public.orders"}
+```
+
+A breaching KPI is the natural trigger for an [alert](/docs/alerts)
+(`{"kind": "metric", "metric": "daily_revenue"}`).
+
 ## Function Reference
 
 | Function | |
@@ -148,12 +237,21 @@ Observations are **immutable** — they are the record of what you reported.
 | `preview_metric_sql(draft_sql, params, def_as_of)` → `text` | compose an unsaved draft |
 | `check_metric(name, params, def_as_of, data_as_of)` → `jsonb` | the KPI verdict (`NULL` if not a KPI) |
 | `materialize_metric(name, params, def_as_of, data_as_of, generation, trigger)` → `bigint` | append one observation |
-| `metric_history(name, limit)` → `TABLE` | the durable series |
-| `set_materialize(name, on_compaction, cron, enabled)` → `void` | per-metric policy |
+| `materialize_all_metrics(category, subcategory, def_as_of, data_as_of, trigger)` → `TABLE` | snapshot every metric, now |
 | `materialize_tick(max)` → `int` | drain the compaction queue (pg_cron) |
+| `metric_history(name, limit)` → `TABLE` | the durable series |
+| `metric_board(metrics, from, to, bucket)` → `SETOF jsonb` | time-bucketed grid for trends |
+| `metric_by(name, slice[], params, def_as_of, data_as_of)` → `SETOF jsonb` | slice a cube-backed metric |
+| `metric_dimensions(name)` / `cube_dimensions(cube)` → `TABLE` | groupable dimensions |
+| `breaching_kpis()` → `TABLE` | KPIs currently failing |
+| `metric_lineage(name)` → `text[]` | tables the metric reads |
+| `set_materialize(name, on_compaction, cron, enabled)` → `void` | per-metric materialize policy |
+| `set_category('metric', name, category, subcategory)` → `void` | tag for organization + filtering |
 
 Tables and views — all plain and `SELECT`-able: `rvbbit.metric_defs`,
-`rvbbit.metric_catalog`, `rvbbit.metric_observations`, `rvbbit.metric_materialize`,
+`rvbbit.metric_catalog` (latest def per metric + `category`/`subcategory`),
+`rvbbit.metric_observations` (the immutable log: `value`, `verdict`, `metric_version`,
+`def_as_of`, `data_as_of`, `data_generation`, `trigger`), `rvbbit.metric_materialize`,
 `rvbbit.metric_dependencies`.
 
 In the [lens](/docs/overview), a **Metrics** desktop folder adds three apps — a
