@@ -847,15 +847,22 @@ pipes the whole resultset through a chain of operators with `THEN`, each produci
 a new resultset. See [Pipelines](/docs/pipelines) for the full surface; here it is
 on the BFRO data.
 
+`THEN` is not valid SQL, so the pipeline lives inside `rvbbit.flow($$ … $$)` — the
+`THEN`s are parsed by the engine, not Postgres. That is the form used here, since
+this notebook runs from `psql`. (In Data Rabbit you can drop the wrapper and type
+the bare `select … then …` form; the editor wraps it for you.)
+
 A structural stage like `pivot` is compiled to SQL once (the model writes standard
 PostgreSQL keyed by the input's shape) and then runs natively:
 
 ```sql
-select state, class
-from bigfoot.sightings_all
-where class in ('Class A', 'Class B')
-  and state in ('Washington', 'California', 'Ohio', 'Florida')
-then pivot('count of each class for each state');
+SELECT * FROM rvbbit.flow($$
+  select state, class
+  from bigfoot.sightings_all
+  where class in ('Class A', 'Class B')
+    and state in ('Washington', 'California', 'Ohio', 'Florida')
+  then pivot('count of each class for each state')
+$$);
 ```
 
 | class | washington | california | ohio | florida |
@@ -867,11 +874,13 @@ A generative stage like `enrich` sends the rows to the model and gets them back
 with new columns, the originals preserved:
 
 ```sql
-select title
-from bigfoot.sighting_docs
-order by bfroid
-limit 4
-then enrich('add a one-word terrain column and an encounter_type column (visual, auditory, or track)');
+SELECT * FROM rvbbit.flow($$
+  select title
+  from bigfoot.sighting_docs
+  order by bfroid
+  limit 4
+  then enrich('add a one-word terrain column and an encounter_type column (visual, auditory, or track)')
+$$);
 ```
 
 | title | terrain | encounter_type |
@@ -885,11 +894,13 @@ Stages chain. Here we take a representative `sample` of the reports (to bound th
 model cost), then `analyze` the whole sample into a findings table:
 
 ```sql
-select report_text
-from bigfoot.sighting_docs
-order by bfroid
-then sample(25)
-then analyze('what are the most common kinds of encounters and settings? give 4 findings');
+SELECT * FROM rvbbit.flow($$
+  select report_text
+  from bigfoot.sighting_docs
+  order by bfroid
+  then sample(25)
+  then analyze('what are the most common kinds of encounters and settings? give 4 findings')
+$$);
 ```
 
 | finding | detail |

@@ -18,10 +18,14 @@ workflow nodes visible as SQL functions with catalog-backed configuration.
 ## Cascades
 
 Operators are the SQL surface. **Cascades** are the multi-step execution logic
-inside an operator.
+inside an operator. There is no separate cascade object: a Cascade is just an
+operator whose `steps` (set via `create_operator(... op_steps => …)`) are
+non-null. Each step has a `kind` — `llm`, `specialist`, `python`, `code`, `sql`,
+or `mcp` — and later steps can reference earlier ones with
+`{{ steps.<name>.<field> }}`.
 
-A Cascade can combine gates, takes, validators, retries, reducers, tool calls,
-and receipts while still looking like a typed SQL function to the query:
+A Cascade can chain those steps with gates, validators, retries, and ensembles
+while still looking like a typed SQL function to the query:
 
 ```sql
 SELECT ticket_id,
@@ -61,14 +65,29 @@ FROM support_tickets
 WHERE rvbbit.is_escalation(body);
 ```
 
+The core extension seeds LLM-backed versions of `means`, `about`, `classify`,
+`extract`, `summarize`, and a few others as editable rows, so they work before
+you install anything. [Capability packs](/docs/capability-packs) add
+local-specialist-backed versions of some of those same names (a reranker behind
+`means`/`about`, DeBERTa behind `classify`, GLiNER behind `extract`) plus
+pack-only names like `extract_pii()` and `semantic_score()` that exist only after
+the pack is installed. See
+[Capability Packs](/docs/capability-packs#where-the-familiar-operators-come-from)
+for which name comes from where. The default `op_model` literal is
+`'openai/gpt-5.4-mini'`.
+
 ## Flow Control
 
-Operators can add guardrails without leaving SQL:
+Operators can add guardrails without leaving SQL. Flow control is attached
+separately from `create_operator`, with one call per concern (pass `NULL` to
+clear, then run `rvbbit.judgment_purge('<op>')`):
 
-- retries for model failures or invalid outputs,
-- wards for pre/post validation,
-- multi-take ensembles for higher confidence,
-- tests stored with the operator definition.
+- `rvbbit.set_operator_retry(op_name, retry_config)` — re-run on model failures
+  or invalid outputs,
+- `rvbbit.set_operator_wards(op_name, wards_config)` — pre/post validation gates,
+- `rvbbit.set_operator_takes(op_name, takes_config)` — multi-take ensembles for
+  higher confidence,
+- `op_tests` stored with the operator definition (run with `rvbbit.run_tests`).
 
 The important operational idea is that prompts are not hidden in application
 code. They are inspectable and editable in Postgres.
@@ -104,8 +123,11 @@ FROM rvbbit.knn_text(
 );
 ```
 
-Beaverdam/Lance can accelerate some table-local vector paths, but embeddings
-remain a semantic SQL feature first.
+The optional Lance vector tier (part of Beaverdam storage acceleration) can speed
+up some table-local vector paths, but embeddings remain a semantic SQL feature
+first; the heap stays the source of truth. See
+[Semantic Functions](/docs/semantic-functions) for the full set of retrieval,
+clustering, and extraction primitives.
 
 ## Knowledge Graph
 
@@ -114,11 +136,11 @@ The KG gives semantic work a durable memory surface:
 ```sql
 SELECT rvbbit.kg_assert_node('customer', 'Acme Corp');
 SELECT rvbbit.kg_assert_edge(
-  src_kind => 'customer',
-  src_label => 'Acme Corp',
-  edge_type => 'reported',
-  dst_kind => 'issue',
-  dst_label => 'late shipment'
+  subject_kind  => 'customer',
+  subject_label => 'Acme Corp',
+  predicate     => 'reported',
+  object_kind   => 'issue',
+  object_label  => 'late shipment'
 );
 ```
 
@@ -126,8 +148,15 @@ Then retrieve context:
 
 ```sql
 SELECT *
-FROM rvbbit.kg_context('customer', 'Acme Corp', max_depth => 2);
+FROM rvbbit.kg_context(
+  node_kind  => 'customer',
+  node_label => 'Acme Corp',
+  max_depth  => 2
+);
 ```
+
+See [Knowledge Graph](/docs/knowledge-graph) for entity resolution, triple
+extraction, and the full helper set.
 
 ## MCP Tools
 
@@ -154,6 +183,9 @@ SELECT rvbbit.mcp_call(
 );
 ```
 
+MCP servers run through the `mcp-gateway` Warren runtime. See [MCP](/docs/mcp)
+for registration, gateway setup, and generating per-tool SQL wrappers.
+
 ## Costs And Receipts
 
 Semantic SQL needs production accounting. RVBBIT records receipts and cost
@@ -164,6 +196,12 @@ SELECT rvbbit.receipt_queue_pending();
 SELECT rvbbit.flush_receipt_queue(1000);
 SELECT rvbbit.cost_audit_summary();
 ```
+
+Every operator call writes a row to `rvbbit.receipts` (one receipt can span
+several sub-calls); cost facts land in `rvbbit.cost_events`. Per-operator
+rollups are available via `rvbbit.judgment_stats('<op>')`. See
+[Receipts & Costs](/docs/receipts-costs) for the full ledger, views, and rate
+configuration.
 
 Cost policy belongs near operator design. A powerful operator that is cheap on
 one model can become dangerous if a backend default changes silently.

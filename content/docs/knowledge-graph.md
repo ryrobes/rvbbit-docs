@@ -38,12 +38,14 @@ SELECT rvbbit.kg_assert_node('customer', 'Acme Corp');
 SELECT rvbbit.kg_assert_node('issue', 'late shipment');
 
 SELECT rvbbit.kg_assert_edge(
-  src_kind  => 'customer',
-  src_label => 'Acme Corp',
-  edge_type => 'reported',
-  dst_kind  => 'issue',
-  dst_label => 'late shipment',
-  evidence_text => 'Acme reported late shipments after the warehouse move.'
+  'customer',
+  'Acme Corp',
+  'reported',
+  'issue',
+  'late shipment',
+  confidence => 0.92,
+  evidence => '{"text":"Acme reported late shipments after the warehouse move.",
+                "source":"support_ticket"}'::jsonb
 );
 ```
 
@@ -106,15 +108,15 @@ reviewed.
 SELECT *
 FROM rvbbit.kg_suggest_merges('customer', threshold => 0.86, limit_count => 100);
 
-SELECT rvbbit.kg_accept_merge(candidate_id => 42);
+SELECT rvbbit.kg_accept_merge(42);
 SELECT rvbbit.kg_reject_merge(43);
 ```
 
 For fuzzy resolution, enable a Lance index per graph/kind:
 
 ```sql
-SELECT rvbbit.kg_lance_enable(kind => 'customer', graph => 'support');
-SELECT rvbbit.kg_lance_refresh(kind => 'customer', graph => 'support');
+SELECT rvbbit.kg_lance_enable('customer', graph => 'support', specialist => 'embed');
+SELECT rvbbit.kg_lance_refresh('customer', graph => 'support');
 ```
 
 Resolution order is exact alias, ready Lance index, then slower embedding scan.

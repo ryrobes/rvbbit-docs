@@ -24,6 +24,13 @@ SELECT * FROM rvbbit.operators ORDER BY name;
 SELECT rvbbit.<operator_name>(...);
 ```
 
+The core extension seeds LLM-backed operators (`means`, `about`, `classify`,
+`extract`, `summarize`, `sentiment`, `triples`, …). Reranker-backed `means` /
+`about` and pack-only operators like `extract_pii` arrive when you install the
+matching [capability pack](/docs/capability-packs#where-the-familiar-operators-come-from).
+Trained scikit-learn models register as `predict_<model>` operators the same way
+— see [Predictive Models](/docs/predictive-models).
+
 Cascade inspection:
 
 ```sql
@@ -36,6 +43,10 @@ SELECT name,
 FROM rvbbit.operators
 ORDER BY name;
 ```
+
+A Cascade is just an operator with non-null `steps` (created via
+`create_operator(..., op_steps => ...)`); there is no separate `create_cascade`.
+See [Cascades](/docs/cascades).
 
 ## Embeddings
 
@@ -87,7 +98,16 @@ SELECT rvbbit.mcp_call('github', 'tool_name', '{"arg":"value"}'::jsonb);
 SELECT * FROM rvbbit.mcp_rows('github', 'tool_name', '{}'::jsonb);
 ```
 
+The registration function is `register_mcp_server` and the rediscovery function
+is `refresh_mcp_server` (probe a server with `rvbbit.mcp_probe(server)`). See
+[MCP Servers](/docs/mcp).
+
 ## Beaverdam
+
+Beaverdam is the optional columnar acceleration tier — the heap stays the source
+of truth, so these are accelerators you opt into. The SQL identifiers use
+`acceleration` / `hot` / `lance` / `duck`, not the word "beaverdam". See
+[Beaverdam Storage](/docs/beaverdam).
 
 ```sql
 SELECT rvbbit.refresh_acceleration('events'::regclass);
@@ -111,12 +131,18 @@ SELECT rvbbit.hot_evict('events'::regclass);
 ## Time Travel
 
 ```sql
-/* rvbbit.as_of: 2026-05-31 14:30:00-04 */
+/* rvbbit: as_of = '2026-05-31 14:30:00-04' */
 SELECT count(*) FROM events;
+
+SELECT rvbbit.set_as_of('events'::regclass, '2026-05-31 14:30:00-04');
 
 SELECT *
 FROM rvbbit.time_travel_timeline('events'::regclass);
 ```
+
+The comment directive (`/* rvbbit: as_of = '...' */`) pins one statement; the
+GUC `rvbbit.as_of_timestamp` (or `rvbbit.set_as_of`) pins a session. See
+[Time Travel](/docs/time-travel).
 
 ## Worker Telemetry
 
@@ -124,7 +150,7 @@ FROM rvbbit.time_travel_timeline('events'::regclass);
 SELECT * FROM rvbbit.duck_sidecar_latest;
 SELECT * FROM rvbbit.duck_sidecar_query_events ORDER BY observed_at DESC LIMIT 100;
 SELECT * FROM rvbbit.duck_sidecar_fallback_events ORDER BY observed_at DESC LIMIT 50;
-SELECT * FROM rvbbit.duck_sidecar_query_summary ORDER BY bucket DESC LIMIT 100;
+SELECT * FROM rvbbit.duck_sidecar_query_summary ORDER BY minute DESC LIMIT 100;
 ```
 
 ## Costs
@@ -144,6 +170,9 @@ SELECT rvbbit.flush_receipt_queue(1000);
 SELECT rvbbit.backfill_cost_events_from_receipts(10000);
 SELECT rvbbit.cost_audit_summary();
 ```
+
+Each operator call writes one row to `rvbbit.receipts`. See
+[Receipts And Costs](/docs/receipts-costs).
 
 ## Providers And Diagnostics
 
@@ -169,5 +198,7 @@ SELECT rvbbit.default_provider();
 ```sql
 SELECT rvbbit.deploy_catalog_capability(...);
 SELECT * FROM rvbbit.warren_jobs ORDER BY created_at DESC LIMIT 20;
-SELECT * FROM rvbbit.warren_worker_heartbeats ORDER BY observed_at DESC LIMIT 20;
+SELECT name, status, last_heartbeat FROM rvbbit.warren_nodes ORDER BY last_heartbeat DESC;
 ```
+
+See [Warren](/docs/warren) for node registration and the deploy flow.

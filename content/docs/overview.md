@@ -10,8 +10,8 @@ sourceDocs:
 
 RVBBIT is a Postgres extension for SQL-native semantic work. It lets you keep
 ordinary tables, queries, and operational habits while adding model-backed
-operators, embeddings, knowledge graph workflows, adaptive routing, and optional
-storage acceleration.
+operators, embeddings, knowledge graph workflows, and optional storage
+acceleration and routing.
 
 The extension is not only a columnar table experiment. The storage layer is
 useful, but the center of gravity is SQL as the control plane for AI and
@@ -41,8 +41,12 @@ cost accounting can share one SQL-visible control plane:
 - Cascades keep multi-step model workflows behind typed SQL functions.
 - MCP tools can be called directly, joined as row sources, or used as Cascade
   steps.
-- Built-in semantic functions cover retrieval, clustering, classification,
-  deduplication, novelty detection, extraction, and evidence snippets.
+- Semantic operators cover retrieval, clustering, classification, deduplication,
+  novelty detection, extraction, and evidence snippets. The core extension seeds
+  LLM-backed `means()`, `about()`, `classify()`, and `extract()`, while
+  [capability packs](/docs/capability-packs) add local-specialist versions of
+  those names plus pack-only operators like `extract_pii()` (for example,
+  reranker-backed `means()` / `about()` ship from the BGE reranker packs).
 - Receipts and cost ledgers make semantic calls inspectable after the fact.
 - Beaverdam can accelerate analytical tables without changing the heap fallback
   contract.
@@ -71,6 +75,6 @@ users should only need the first screen of a page to get moving.
 8. [Receipts And Costs](/docs/receipts-costs) for audit and cost accounting.
 9. [Beaverdam Storage](/docs/beaverdam) for file-backed acceleration and the
    heap fallback contract.
-10. [Routing And Training](/docs/routing-training) for how RVBBIT picks an
-   execution path.
+10. [Routing And Training](/docs/routing-training) for how RVBBIT chooses an
+   execution path (rules and shadow observation today) and trains models.
 11. [Operations](/docs/operations) for test, benchmark, and observability habits.

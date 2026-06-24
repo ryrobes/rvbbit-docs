@@ -159,8 +159,8 @@ SET rvbbit.accel_exclude_schemas = '';               -- exclude nothing
 ## Scheduled Maintenance Entrypoints
 
 Beyond the accelerator heartbeat, rvbbit ships a handful of "do all of X now"
-procedures, each category-filterable and built to be a pg_cron job. The lens
-**Scheduler** tray has one-click presets for each.
+procedures, each category-filterable and built to be a pg_cron job. The
+**Scheduler** tray in Data Rabbit has one-click presets for each.
 
 | Job | Call | What it does |
 | --- | --- | --- |
@@ -180,8 +180,8 @@ SELECT cron.schedule('rvbbit_catalog',          '0 2 * * *',   $$CALL rvbbit.cat
 
 > pg_cron's `cron.*` functions live only in its home database (often `postgres`,
 > per `cron.database_name`). If that differs from your working database, use
-> `cron.schedule_in_database(name, schedule, command, 'your_db')`, or the lens
-> Scheduler tray, which routes for you.
+> `cron.schedule_in_database(name, schedule, command, 'your_db')`, or the
+> Scheduler tray in Data Rabbit, which routes for you.
 
 ## Notes
 

@@ -159,10 +159,10 @@ SELECT rvbbit.publish_mcp_capability(
 );
 ```
 
-The entry now appears in the Capabilities window. Its manifest records the
-connection, the tool and resource surface, one operator definition per tool, and
-the **declared secrets** — the `${VAR}` names an installer must supply. No key
-values are stored.
+The entry now appears in the Capabilities window in Data Rabbit. Its manifest
+records the connection, the tool and resource surface, one operator definition
+per tool, and the **declared secrets** — the `${VAR}` names an installer must
+supply. No key values are stored.
 
 Installing an entry supplies those keys and generates the operators:
 
@@ -201,9 +201,11 @@ is therefore commit-safe — it carries no credential material.
 ### Servers That Ship By Default
 
 `github`, `firecrawl`, `time`, `iplocate`, `tavily`, `exa`, `apollo`, `ipgeo`,
-`maps` (Google Maps), `brave`, and `openweather` are baked into the catalog seed
-and browsable out of the box. `time` and `iplocate` are keyless; the rest declare
-a single API key you provide at install.
+`maps` (Google Maps), `brave`, `openweather`, and `linear` are baked into the
+catalog seed and browsable out of the box. `time` and `iplocate` are keyless;
+the rest declare a single API key you provide at install. These are seeded
+catalog entries (`mcp/<server>`), not file-backed packs — they live only in the
+capability catalog seed.
 
 ## Observability
 

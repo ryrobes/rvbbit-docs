@@ -35,9 +35,10 @@ SELECT * FROM rvbbit.flow($$
 $$);
 ```
 
-This works in any client (psql, DataGrip, the SQL Desktop). In the **lens SQL
-Desktop** you can drop the wrapper and type the bare `select … then …` form — the
-editor detects a top-level `THEN` and wraps it for you.
+This works in any client (psql, DataGrip, Data Rabbit). In **Data Rabbit** you can
+drop the wrapper and type the bare `select … then …` form — the editor detects a
+top-level `THEN` and wraps it for you. (That bare form is a Data Rabbit editor
+convenience; in raw SQL always use the `rvbbit.flow($$ … $$)` wrapper.)
 
 ## The rowset operators
 
@@ -135,7 +136,7 @@ WHERE run_id = (SELECT run_id FROM rvbbit.flow_steps ORDER BY created_at DESC LI
 ORDER BY step_idx;
 ```
 
-In the SQL Desktop, a **Steps** tab appears after a pipeline run with a tab per
+In Data Rabbit, a **Steps** tab appears after a pipeline run with a tab per
 stage. (Rows are stored capped to a sample; `n_rows` is the true count. Clean up
 old runs with `rvbbit.reap_flow_steps(interval)`.)
 

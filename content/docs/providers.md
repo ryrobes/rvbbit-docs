@@ -36,6 +36,15 @@ SELECT rvbbit.provider_catalog_summary();
 Missing provider keys do not have to fail setup. They produce skipped provider
 rows so a UI can show exactly what remains unconfigured.
 
+## Default LLM Provider
+
+A fresh install seeds `openrouter` as the default LLM provider (a chat backend
+with transport `openai_chat`, auth env `OPENROUTER_API_KEY`), and
+`rvbbit.default_provider()` returns `'openrouter'`. With just
+`OPENROUTER_API_KEY` set, LLM operators work immediately — no extra
+registration. `RVBBIT_DEFAULT_PROVIDER` overrides the SQL setting when present
+in the Postgres process environment.
+
 ## Self-Hosted Models
 
 Register the backend:
@@ -114,5 +123,6 @@ SELECT rvbbit.maintain(storage_tables => 2);
 ```
 
 For UIs, combine `doctor`, provider summary, cost audit, and recent receipts
-into a single setup/health screen.
+into a single setup/health screen. See [Receipts and Costs](/docs/receipts-costs)
+for the audit and per-call cost surfaces this screen draws from.
 

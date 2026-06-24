@@ -87,14 +87,19 @@ A **scored** condition uses `threshold` + `compare` (`gte` / `lte`) instead of
 }
 ```
 
-### Action: SQL, MCP, or flow
+### Action: SQL, MCP, operator, or flow
+
+Every action is an `{"operator": …}` spec. The action runs against a **context**
+JSONB `{"rule": …, "entity": …, "transition": …}`; string templates interpolate
+single-brace `{rule}` / `{entity}` / `{transition}` tokens.
 
 | `operator` | Spec keys | Does |
 | --- | --- | --- |
 | `noop` | — | Nothing (testing / dry runs). Still logged. |
 | `sql` | `sql` | Runs the SQL; `$1` is the alert context JSONB. |
-| `mcp_call` | `server`, `tool`, `args_template` | Calls an [MCP](/docs/mcp) tool; `{{entity}}`/`{{rule}}` interpolate. |
-| `flow` | a flow spec | Runs a [pipeline](/docs/pipelines). |
+| `mcp_call` | `server`, `tool`, `args` | Calls `rvbbit.mcp_call(server, tool, …)`; `args` is rendered against the context. |
+| `operator` | `operator_name`, `args` | Invokes a catalogued [operator](/docs/cascades) by name (positional `arg_names`, typed), so a receipt is captured. |
+| `flow` | `spec` | Runs a [pipeline](/docs/pipelines) (`spec` is a `rvbbit.flow` string, `{…}`-interpolated). |
 
 ```sql
 -- Page on-call via an MCP server when an anomaly trips.
@@ -102,9 +107,12 @@ A **scored** condition uses `threshold` + `compare` (`gte` / `lte`) instead of
     "operator": "mcp_call",
     "server":   "pagerduty",
     "tool":     "page_on_call",
-    "args_template": { "title": "Anomaly in {{entity}}", "severity": "high" }
+    "args":     { "title": "Anomaly in {entity}", "severity": "high" }
 }
 ```
+
+A whole-string placeholder (`"{entity}"`) keeps the context value's JSON type; an
+embedded one (`"Anomaly in {entity}"`) interpolates as text.
 
 ## Edge-Triggering
 
@@ -116,6 +124,8 @@ State lives in `rvbbit.alert_state`, one row per `(rule, entity_key)`:
 
 `fire_policy.consecutive_n` adds hysteresis: require N consecutive failing sweeps
 before firing — useful to denoise fuzzy or semantic conditions.
+`fire_policy.cooldown_secs` throttles re-fires for the same `(rule, entity)`
+episode.
 
 ## Run It (and schedule it)
 
@@ -131,8 +141,10 @@ In production, install the four pg_cron jobs (three sweep tiers + the worker) in
 one call:
 
 ```sql
-SELECT rvbbit.alerts_install_cron();   -- fast */1m, normal */15m, slow hourly, worker */1m
+SELECT rvbbit.alerts_install_cron();   -- fast every minute, normal */15m, slow hourly, worker every minute
 -- customize:  rvbbit.alerts_install_cron(p_fast => '*/2 * * * *', p_worker_max => 100)
+-- preview without scheduling:  rvbbit.alerts_install_cron(p_dry_run => true)
+-- stop them:  rvbbit.alerts_uninstall_cron()
 ```
 
 A rule's `cadence` (`fast`/`normal`/`slow`) picks which sweep tier evaluates it.
@@ -144,7 +156,7 @@ Runtime flags live in `rvbbit.alert_control` and survive redefinition:
 ```sql
 SELECT rvbbit.disable_alert('high_error_rate');             -- stop evaluating
 SELECT rvbbit.enable_alert('high_error_rate');
-SELECT rvbbit.mute_alert('high_error_rate', interval '1 hour');  -- evaluate but don't fire
+SELECT rvbbit.mute_alert('high_error_rate', interval '1 hour');  -- skip while muted (omit the interval to mute forever)
 SELECT rvbbit.unmute_alert('high_error_rate');
 SELECT rvbbit.set_alert_cadence('high_error_rate', 'fast');  -- move to the fast tier
 
@@ -176,7 +188,8 @@ FROM   rvbbit.alert_events
 WHERE  ts > now() - interval '24 hours'
 ORDER  BY ts DESC;
 
--- Pending actions (what the next worker tick will run).
+-- The action queue. The worker drains status='pending' (oldest first); 'failed'
+-- items are kept for inspection, not retried (fire-and-forget in v1).
 SELECT rule_name, entity_key, status, attempts, enqueued_at
 FROM   rvbbit.alert_queue
 WHERE  status IN ('pending', 'failed');
@@ -209,4 +222,5 @@ ORDER  BY started_at DESC LIMIT 3;
   cadence. Pair an alert with [`materialize_all_metrics`](/docs/metrics-kpis#materialize-everything).
 - **Fire-and-forget (v1)** — actions are executed and logged, but their downstream
   outcome isn't tracked for auto-remediation yet.
-- **Drop it all** with `rvbbit.delete_alert('name')` (rule + state + queue + events).
+- **Drop it all** with `rvbbit.delete_alert('name')` (every version + control +
+  state + queue + events); returns `true` if the rule existed.

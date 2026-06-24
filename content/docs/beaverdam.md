@@ -54,10 +54,11 @@ API:
 
 ```sql
 -- Refresh: incrementally write accelerator files after the watermark.
+-- Layout variants are (re)built by default; pass refresh_variants => false to skip them.
 SELECT rvbbit.refresh_acceleration('events'::regclass);
 
--- Rebuild: recreate accelerator state, including layout variants.
-SELECT rvbbit.refresh_acceleration('events'::regclass, refresh_variants => true);
+-- Rebuild: recreate accelerator state from heap (full heap re-scan).
+SELECT rvbbit.rebuild_acceleration('events'::regclass);
 
 -- Compact: rewrite/coalesce accelerator files and tombstones.
 SELECT rvbbit.compact('events'::regclass);
@@ -74,7 +75,7 @@ Beaverdam operations are visible from SQL:
 ```sql
 SELECT *
 FROM rvbbit.acceleration_status
-ORDER BY table_schema, table_name;
+ORDER BY table_name;
 ```
 
 Inspect recent work:
@@ -136,8 +137,11 @@ Common knobs:
 | `rvbbit.hot_store_budget_mb` | Per-backend memory budget for hot decoded batches. |
 | `rvbbit.hot_store_route_max_rows` | Maximum rows for automatic hot-memory routing. |
 
-Layout variants are (re)built after a canonical refresh by passing
-`refresh_variants => true` to `rvbbit.refresh_acceleration`.
+Layout variants are (re)built after a canonical refresh by default
+(`refresh_variants` defaults to `true` on both `rvbbit.refresh_acceleration`
+and `rvbbit.rebuild_acceleration`); pass `refresh_variants => false` to skip
+them. You can also (re)build them on their own with
+`rvbbit.refresh_layout_variants('events'::regclass)`.
 
 Keep variant builds bounded. Hive can be useful, but poor key choices can
 increase file count and load time without helping query plans.

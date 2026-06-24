@@ -55,8 +55,40 @@ FROM rvbbit.receipts
 WHERE receipt_id = $1::uuid;
 ```
 
-`sub_calls` is where Cascades expose internal model calls, specialist calls,
-MCP calls, validators, and retries.
+`sub_calls` is where Cascades expose their internal steps — model (`llm`)
+calls, specialist calls, MCP calls, and code/python steps. The `llm`,
+`specialist`, and `mcp` entries are the chargeable ones the cost audit
+reconciles against the ledger. Retried attempts accumulate into the same array,
+so a retry shows up as repeated sub-call entries on the one receipt.
+
+The `operator` column holds the operator name — `means`, `about`, a `classify`,
+or any user- or pack-defined operator. Built-ins like `means()` and `about()`
+ship from the BGE reranker [capability packs](/docs/capability-packs), so their
+receipts only appear once the relevant pack is installed.
+
+## Per-Operator Rollups
+
+`rvbbit.judgment_stats(op_name)` aggregates `rvbbit.receipts` for a single
+operator — invocation counts, unique inputs (distinct input hashes), token and
+cost totals, latency, and the first/last call timestamps:
+
+```sql
+SELECT *
+FROM rvbbit.judgment_stats('about');
+```
+
+It returns `op_name`, `n_invocations`, `n_unique_inputs`, `total_tokens_in`,
+`total_tokens_out`, `total_cost_usd`, `total_latency_ms`, `first_at`, and
+`last_at`. Because each successful call writes one receipt, `n_invocations`
+relative to `n_unique_inputs` shows how much repeat work the content-addressed
+cache has spared.
+
+## Correlating One User Query
+
+All receipts (and KG evidence and cost events) spawned by the same SQL query
+share a `query_id`. Start a fresh trace group with `rvbbit.reset_query_id()` and
+read the current one with `rvbbit.current_query_id()`; queued receipts may carry
+`query_id = NULL` if the originating context could not safely create one.
 
 ## Audit Cost Coverage
 

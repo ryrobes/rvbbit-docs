@@ -26,7 +26,7 @@ export function Screenshot({ src, alt, caption, wide }: ScreenshotProps) {
         <img src={`/${src}`} alt={alt} loading="lazy" />
       ) : (
         <div className="shot-placeholder" role="img" aria-label={alt}>
-          <span className="shot-tag">Lens screenshot</span>
+          <span className="shot-tag">Data Rabbit screenshot</span>
           <span className="shot-desc">{alt}</span>
           <code className="shot-path">public/{src}</code>
         </div>

@@ -12,6 +12,11 @@ The Beaverdam worker is the process path that serves DuckDB-backed queries,
 including Duck over Vortex files. The binary is named `rvbbit-duck`; the public
 concept is the Beaverdam worker.
 
+This is an optional acceleration path. The Postgres heap stays the source of
+truth, and you do not need a broker service to use the extension — the worker
+only serves selected analytical SQL that the router sends to the Duck/Vortex
+route.
+
 ## Modes
 
 | Mode | Shape | Use |
@@ -57,7 +62,7 @@ SELECT observed_at,
        query_hash,
        status,
        elapsed_ms,
-       rows_returned
+       row_count
 FROM rvbbit.duck_sidecar_query_events
 ORDER BY observed_at DESC
 LIMIT 100;
@@ -72,8 +77,12 @@ ORDER BY observed_at DESC
 LIMIT 50;
 ```
 
+For minute-level rollups (calls, p50/p95 latency, rows returned) grouped by
+host, node, mode, engine, and layout, read `rvbbit.duck_sidecar_query_summary`.
+
 Telemetry includes `hostname` and `node_id` so the schema supports multiple
-worker nodes over shared storage.
+worker nodes over shared storage. Raw SQL text is never stored — query events
+record only a `query_hash` to group repeated shapes.
 
 ## Load Testing
 

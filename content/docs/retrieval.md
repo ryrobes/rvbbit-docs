@@ -16,8 +16,10 @@ model-backed operators.
 
 ## Start With The Default Backend
 
-Fresh installs seed an `embed` backend. SQL resolves to that backend unless you
-pass another specialist name.
+Fresh installs seed an `embed` backend that runs the `local_embed` transport
+(in-process CPU embeddings via FastEmbed/ONNX, default model
+`bge-small-en-v1.5`). SQL resolves to that backend unless you pass another
+specialist name.
 
 ```sql
 SELECT name, transport, endpoint_url, batch_size, transport_opts
@@ -85,7 +87,8 @@ matched_accounts AS (
 )
 SELECT a.account_name,
        a.score,
-       k.path,
+       k.predicate,
+       k.to_label,
        k.evidence
 FROM matched_accounts a
 CROSS JOIN LATERAL rvbbit.kg_context(
@@ -113,9 +116,9 @@ have a correct slower fallback.
 ```sql
 SELECT * FROM rvbbit.embedding_cache_stats();
 
-SELECT graph_id, kind, status, row_count, updated_at
+SELECT graph_id, kind, status, n_values, refreshed_at
 FROM rvbbit.kg_lance_indexes
-ORDER BY updated_at DESC;
+ORDER BY refreshed_at DESC;
 ```
 
 Use these surfaces in a UI to show whether retrieval is cold, materialized, or

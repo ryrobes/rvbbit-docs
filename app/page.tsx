@@ -1,9 +1,7 @@
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
   BarChart3,
-  BrainCircuit,
   Cable,
   Cpu,
   Database,
@@ -15,7 +13,6 @@ import {
   Network,
   PlugZap,
   ReceiptText,
-  Route,
   Rows3,
   Search,
   ShieldCheck,
@@ -27,36 +24,8 @@ import { RabbitHero } from "@/components/RabbitHero";
 import { ScrollVideo } from "@/components/ScrollVideo";
 import { Screenshot } from "@/components/Screenshot";
 import { SqlCode } from "@/components/SqlCode";
-import {
-  formatMs,
-  getSuiteGroups,
-  routeLabel,
-  systemLabels
-} from "@/lib/benchmarks";
+import { formatMs, getSuiteGroups, routeLabel } from "@/lib/benchmarks";
 import { getAllDocs } from "@/lib/docs";
-
-const capabilities = [
-  {
-    icon: BrainCircuit,
-    title: "Semantic SQL",
-    text: "Call models, embeddings, MCP tools, and capability nodes from ordinary SQL."
-  },
-  {
-    icon: Layers3,
-    title: "Beaverdam Storage",
-    text: "Optional Parquet, Vortex, Lance, and memory-backed acceleration beside heap."
-  },
-  {
-    icon: Route,
-    title: "Adaptive Routing",
-    text: "Profiles and deterministic rules choose among native, DataFusion, Duck, and heap paths."
-  },
-  {
-    icon: ShieldCheck,
-    title: "Postgres Contract",
-    text: "Heap remains the source of truth, with fallbacks for correctness and pg_dump/restore."
-  }
-];
 
 const differentiators = [
   {
@@ -67,7 +36,7 @@ const differentiators = [
   {
     icon: Cpu,
     title: "Bring your own models",
-    text: "Spin up a HuggingFace specialist or your own fine-tune on your GPU and call it from SQL like any other function. Not a vendor's frontier-model menu."
+    text: "Spin up a Hugging Face specialist or your own model on your own GPU and call it from SQL like any other function — or use the 40-plus packs that ship in the box. Not a vendor's frontier-model menu."
   },
   {
     icon: Lock,
@@ -127,7 +96,7 @@ const metricsFeatures = [
   },
   {
     icon: ShieldCheck,
-    title: "KPIs that audit themselves",
+    title: "A KPI is a versioned threshold",
     text: "A check is one SELECT returning a boolean. Because the threshold is versioned too, you can ask: was this green under the rule we believed in then?"
   },
   {
@@ -155,13 +124,12 @@ export default function Home() {
           <div className="hero-lede">
             <p className="eyebrow">Open-source Postgres extension</p>
             <h1 className="hero-title">
-              Build your own <span className="accent">AI operators</span> in
-              Postgres.
+              Call a model from <span className="accent">inside a SELECT</span>.
             </h1>
             <p className="hero-copy">
-              Compose models, your own fine-tunes, and MCP tools — with retries,
-              validation, and a cost receipt — into one SQL function over the
-              tables you already have.
+              Classify a column, filter a <code>WHERE</code> by meaning, even
+              file a ticket — with retries, validation, and a cost receipt. We
+              call these operators, and you can build (or deploy) your own.
             </p>
             <div className="hero-actions">
               <Link className="button primary" href="/docs/quickstart">
@@ -187,7 +155,7 @@ export default function Home() {
                   <i />
                   <i />
                 </span>
-                <span className="hero-card-title">operators + a semantic filter</span>
+                <span className="hero-card-title">your operators + a built-in semantic filter</span>
               </div>
               <SqlCode ariaLabel="Operators you define plus a built-in semantic filter, in one SQL query">
                 {`-- your operators + a built-in semantic filter, one query
@@ -239,11 +207,11 @@ WHERE  created_at > now() - interval '1 day'
         </div>
       </section>
 
-      <section className="band" id="lens-proof">
+      <section className="band" id="dr-proof">
         <Screenshot
-          src="shots/lens-desktop.png"
-          alt="The rvbbit Lens desktop — windows for adaptive routing, metrics, the knowledge graph, and operators over a live database."
-          caption="The Lens — a desktop over the whole extension. Everything it shows is plain SQL underneath."
+          src="shots/data-rabbit-desktop.png"
+          alt="Data Rabbit — a desktop over any Postgres, lit up on an RVBBIT database: adaptive routing, model deploys, the operator canvas, the knowledge graph, and live receipts."
+          caption="Data Rabbit — point it at any Postgres to browse and query; point it at an RVBBIT database and it lights up. Everything here is plain SQL underneath."
           wide
         />
       </section>
@@ -254,9 +222,9 @@ WHERE  created_at > now() - interval '1 day'
           <h2>Not a fixed menu of AI functions — a layer you program.</h2>
           <span>
             Cortex and Databricks hand you a sealed set of AI SQL calls on their
-            cloud. RVBBIT hands you the building blocks: compose models, your own
-            fine-tunes, tools, retries, and receipts into operators you define —
-            open source, on Postgres, over your own data.
+            cloud. RVBBIT hands you the building blocks: compose hosted models,
+            your own Hugging Face deployments, tools, retries, and receipts into
+            operators you define — open source, on Postgres, over your own data.
           </span>
         </div>
         <div className="capability-grid">
@@ -273,186 +241,10 @@ WHERE  created_at > now() - interval '1 day'
         </div>
       </section>
 
-      <section className="band cascade-band" id="cascades">
-        <div className="section-header cascade-header">
-          <p>Operators become cascades</p>
-          <h2>Multi-step model logic, called like SQL.</h2>
-          <span>
-            A Cascade is the execution plan inside a semantic operator — guards,
-            model calls, validators, retries, tool calls, and a receipt — still
-            exposed as a single typed Postgres function.
-          </span>
-        </div>
-        <Screenshot
-          src="shots/operator-lens.png"
-          alt="An operator's cascade in the Lens — its steps (guard, model call, validator, retry, tool call) and a live receipt for one row."
-          caption="One operator's cascade, running in the Lens — every step and its receipt."
-        />
-        <div className="cascade-copy">
-          <div>
-            <h3>The workflow lives next to the data</h3>
-            <p>
-              Instead of scattering model orchestration across application code,
-              RVBBIT keeps it in the database — observable in SQL, versioned, and
-              callable from an ordinary query.
-            </p>
-          </div>
-          <SqlCode ariaLabel="Cascade SQL example">{`SELECT ticket_id,
-       rvbbit.review_risk(body, account_tier) AS risk
-FROM support_tickets
-WHERE created_at >= now() - interval '1 day';`}</SqlCode>
-        </div>
-      </section>
-
-      <section className="band semantic-band" id="semantic">
-        <div className="section-header semantic-header">
-          <p>Semantic functions</p>
-          <h2>AI work that looks like ordinary SQL.</h2>
-          <span>
-            RVBBIT ships built-in semantic primitives for retrieval,
-            classification, clustering, extraction, evidence, graph memory, and
-            audit receipts. Use them directly or as steps inside Cascades.
-          </span>
-        </div>
-        <div className="semantic-showcase">
-          <div className="semantic-card-grid">
-            {semanticPillars.map((item) => {
-              const Icon = item.icon;
-              return (
-                <article className="semantic-card" key={item.title}>
-                  <Icon aria-hidden="true" size={20} />
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </article>
-              );
-            })}
-          </div>
-          <div className="semantic-code-panel">
-            <SqlCode ariaLabel="Semantic retrieval and classification">{`WITH hits AS (
-  SELECT value, score
-  FROM rvbbit.knn_text(
-    'tickets'::regclass,
-    'body',
-    'renewal risk after late shipments',
-    20
-  )
-)
-SELECT t.ticket_id,
-       h.score,
-       rvbbit.semantic_case(
-         t.body,
-         ARRAY['billing issue', 'shipping delay', 'renewal risk'],
-         ARRAY['billing', 'shipping', 'renewal'],
-         'other',
-         0.0
-       ) AS bucket
-FROM hits h
-JOIN tickets t ON t.body = h.value
-ORDER BY h.score DESC;`}</SqlCode>
-            <SqlCode ariaLabel="Knowledge graph and receipts">{`SELECT *
-FROM rvbbit.triples_rows(
-  'Acme delayed renewal after repeated fulfillment misses.',
-  'customer risk'
-);
-
-SELECT receipt_id, operator, model, latency_ms, error
-FROM rvbbit.receipts
-ORDER BY invocation_at DESC
-LIMIT 10;`}</SqlCode>
-          </div>
-        </div>
-        <div className="semantic-links">
-          <Link href="/docs/semantic-functions">
-            Semantic functions
-            <ArrowRight aria-hidden="true" size={18} />
-          </Link>
-          <Link href="/docs/retrieval">
-            Retrieval and RAG
-            <ArrowRight aria-hidden="true" size={18} />
-          </Link>
-          <Link href="/docs/receipts-costs">
-            Receipts and costs
-            <ArrowRight aria-hidden="true" size={18} />
-          </Link>
-        </div>
-      </section>
-
-      <section className="band mcp-band" id="mcp">
-        <div className="section-header mcp-header">
-          <p>MCP as a SQL primitive</p>
-          <h2>Call any tool from SQL — as a data source, or an action.</h2>
-          <span>
-            Register MCP servers in Postgres and discover their tools. Read them
-            as JSON or row sources to join beside your data — or call them to
-            make something happen (next section). Every invocation is cataloged
-            and audited, and any tool can be a node inside a Cascade.
-          </span>
-        </div>
-        <div className="mcp-showcase">
-          <div className="mcp-points">
-            <article>
-              <PlugZap aria-hidden="true" size={20} />
-              <h3>Tool ecosystems, not app glue</h3>
-              <p>
-                GitHub, filesystem, internal HTTP, and custom MCP servers become
-                catalog-backed SQL surfaces instead of hidden application code.
-              </p>
-            </article>
-            <article>
-              <Rows3 aria-hidden="true" size={20} />
-              <h3>Rows when you need rows</h3>
-              <p>
-                <code>mcp_rows</code> unwraps list-shaped tool responses so they
-                can be filtered, joined, ranked, and aggregated beside real
-                Postgres data.
-              </p>
-            </article>
-            <article>
-              <FileSearch aria-hidden="true" size={20} />
-              <h3>Observable by default</h3>
-              <p>
-                Discovery, health, caching, usage, latency, and invocation
-                history live in RVBBIT tables and views for SQL-native UIs.
-              </p>
-            </article>
-          </div>
-          <div className="mcp-code-stack">
-            <SqlCode ariaLabel="Register an MCP server from SQL">{`SELECT rvbbit.register_mcp_server(
-  server_name       => 'github',
-  server_transport  => 'stdio',
-  server_command    => 'npx',
-  server_args       => ARRAY['-y', '@modelcontextprotocol/server-github'],
-  server_env        => '{"GITHUB_PERSONAL_ACCESS_TOKEN":"\${GITHUB_TOKEN}"}'::jsonb
-);
-
-SELECT rvbbit.refresh_mcp_server('github');`}</SqlCode>
-            <SqlCode ariaLabel="Join MCP results with local SQL data">{`SELECT a.account_id,
-       a.company_name,
-       repo->>'full_name' AS matching_repo,
-       (repo->>'stargazers_count')::int AS stars
-FROM accounts a
-JOIN LATERAL rvbbit.mcp_rows(
-  'github',
-  'search_repositories',
-  jsonb_build_object(
-    'query', a.company_name || ' postgres',
-    'perPage', 3
-  )
-) repo ON true
-WHERE a.tier = 'strategic'
-ORDER BY stars DESC;`}</SqlCode>
-          </div>
-        </div>
-        <Link className="mcp-link" href="/docs/mcp">
-          Read the MCP SQL surface
-          <ArrowRight aria-hidden="true" size={18} />
-        </Link>
-      </section>
-
       <section className="band mcp-band" id="act">
         <div className="section-header mcp-header">
           <p>SQL that acts</p>
-          <h2>A SELECT can change the outside world — and leave a receipt.</h2>
+          <h2>A SELECT can file the ticket — and leave a receipt.</h2>
           <span>
             An operator is an ordinary SQL function, but inside it can call
             models, MCP tools, and flows. So Postgres&apos;s own machinery —
@@ -558,22 +350,294 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
         </Link>
       </section>
 
-      <section className="band">
-        <div className="section-header">
-          <p>What it is</p>
-          <h2>One extension, multiple execution paths.</h2>
+      <section className="band mcp-band" id="models">
+        <div className="section-header mcp-header">
+          <p>Models &amp; capability packs</p>
+          <h2>Ships with 40+ model packs. Add any Hugging Face model in a paste.</h2>
+          <span>
+            Every operator is backed by a model, and RVBBIT comes with a catalog
+            of curated packs — local specialists (GLiNER, DeBERTa, BGE
+            rerankers), embeddings, summarizers, even MCP servers like Brave and
+            Apollo — each exposing ready-made SQL operators. That&apos;s where{" "}
+            <code>means()</code>, <code>about()</code>, <code>extract_pii()</code>,
+            and <code>classify()</code> come from: they work on day one, no
+            prompt-wiring.
+          </span>
         </div>
-        <div className="capability-grid">
-          {capabilities.map((item) => {
-            const Icon = item.icon;
-            return (
-              <article className="feature-card" key={item.title}>
-                <Icon aria-hidden="true" size={22} />
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            );
-          })}
+        <div className="mcp-showcase">
+          <div className="mcp-points">
+            <article>
+              <Layers3 aria-hidden="true" size={20} />
+              <h3>Batteries included</h3>
+              <p>
+                40+ curated packs: classification, extraction, embeddings,
+                reranking, summarization, web search. Day one,{" "}
+                <code>means()</code> and <code>classify()</code> just work.
+              </p>
+            </article>
+            <article>
+              <Cpu aria-hidden="true" size={20} />
+              <h3>Paste a model, get a function</h3>
+              <p>
+                Pick a model in Data Rabbit; a scaffold → build → register →
+                smoke pipeline turns it into <code>rvbbit.your_operator(...)</code>.
+                Local or managed runtime, CPU or CUDA.
+              </p>
+            </article>
+            <article>
+              <PlugZap aria-hidden="true" size={20} />
+              <h3>MCP servers are packs too</h3>
+              <p>
+                Register an MCP server and its tools become pseudo-tables or
+                functions — joinable beside your data, audited like everything
+                else.
+              </p>
+            </article>
+          </div>
+          <div className="mcp-code-stack">
+            <Screenshot
+              src="shots/hf-deploy.png"
+              alt="Deploy from Hugging Face in Data Rabbit — paste a model ID, inspect it, and run a scaffold → build → register → operator → smoke pipeline that turns it into a typed SQL operator, deployed local or to a managed runtime."
+              caption="Deploy from Hugging Face — paste a model ID, get a typed SQL operator."
+            />
+          </div>
+        </div>
+        <Screenshot
+          src="shots/capabilities.png"
+          alt="The capability catalog in Data Rabbit — 40+ curated packs mixing local specialist models, API embeddings, and MCP servers, each card exposing a set of ready-made SQL operators with call counts, latencies, and test status."
+          caption="The capability catalog — 40+ packs, each exposing ready-made SQL operators."
+          wide
+        />
+        <Link className="mcp-link" href="/capabilities">
+          Browse the capability catalog
+          <ArrowRight aria-hidden="true" size={18} />
+        </Link>
+      </section>
+
+      <section className="band semantic-band" id="semantic">
+        <div className="section-header semantic-header">
+          <p>Semantic functions</p>
+          <h2>Retrieval, classification, and graph memory — built-in SQL functions.</h2>
+          <span>
+            RVBBIT ships built-in semantic primitives for retrieval,
+            classification, clustering, extraction, evidence, graph memory, and
+            audit receipts. Use them directly or as steps inside Cascades.
+          </span>
+        </div>
+        <div className="semantic-showcase">
+          <div className="semantic-card-grid">
+            {semanticPillars.map((item) => {
+              const Icon = item.icon;
+              return (
+                <article className="semantic-card" key={item.title}>
+                  <Icon aria-hidden="true" size={20} />
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              );
+            })}
+          </div>
+          <div className="semantic-code-panel">
+            <SqlCode ariaLabel="Semantic retrieval and classification">{`WITH hits AS (
+  SELECT value, score
+  FROM rvbbit.knn_text(
+    'tickets'::regclass,
+    'body',
+    'renewal risk after late shipments',
+    20
+  )
+)
+SELECT t.ticket_id,
+       h.score,
+       rvbbit.semantic_case(
+         t.body,
+         ARRAY['billing issue', 'shipping delay', 'renewal risk'],
+         ARRAY['billing', 'shipping', 'renewal'],
+         'other',
+         0.0
+       ) AS bucket
+FROM hits h
+JOIN tickets t ON t.body = h.value
+ORDER BY h.score DESC;`}</SqlCode>
+            <SqlCode ariaLabel="Knowledge graph and receipts">{`SELECT *
+FROM rvbbit.triples_rows(
+  'Acme delayed renewal after repeated fulfillment misses.',
+  'customer risk'
+);
+
+SELECT receipt_id, operator, model, latency_ms, error
+FROM rvbbit.receipts
+ORDER BY invocation_at DESC
+LIMIT 10;`}</SqlCode>
+          </div>
+        </div>
+        <div className="semantic-links">
+          <Link href="/docs/semantic-functions">
+            Semantic functions
+            <ArrowRight aria-hidden="true" size={18} />
+          </Link>
+          <Link href="/docs/retrieval">
+            Retrieval and RAG
+            <ArrowRight aria-hidden="true" size={18} />
+          </Link>
+          <Link href="/docs/receipts-costs">
+            Receipts and costs
+            <ArrowRight aria-hidden="true" size={18} />
+          </Link>
+        </div>
+      </section>
+
+      <section className="band" id="synth">
+        <div className="section-header">
+          <p>Text-to-SQL</p>
+          <h2>Ask in English, get one grounded SELECT over your real schema.</h2>
+          <span>
+            Plain text-to-SQL is tame in 2026. The interesting part:{" "}
+            <code>rvbbit.synth</code> reads your catalog and writes ONE read-only
+            SELECT against your actual tables and foreign keys — and it&apos;s the
+            same operator + receipts machinery as everything else here, so the
+            generated SQL is grounded, validated read-only, cached, and
+            inspectable.
+          </span>
+        </div>
+        <SqlCode ariaLabel="Generate one grounded read-only SELECT from English">{`-- Ask in English; get ONE grounded, read-only SELECT over your real schema.
+SELECT rvbbit.synth_sql('bigfoot sightings in California since 1990');
+
+  SELECT s.id, s.state, s.classification, s.reported
+  FROM   bigfoot.sightings AS s
+  WHERE  s.state = 'California' AND s.reported >= DATE '1990-01-01'
+  ORDER  BY s.reported DESC
+  LIMIT  100;
+
+-- Same machinery as every operator: catalog-grounded, validated, cached, replayable.`}</SqlCode>
+        <Link className="mcp-link" href="/docs/text-to-sql">
+          Read about text-to-SQL
+          <ArrowRight aria-hidden="true" size={18} />
+        </Link>
+      </section>
+
+      <section className="band mcp-band" id="mcp">
+        <div className="section-header mcp-header">
+          <p>MCP as a SQL primitive</p>
+          <h2>Call any tool from SQL — as a data source, or an action.</h2>
+          <span>
+            Register MCP servers in Postgres and discover their tools. Read them
+            as JSON or row sources to join beside your data — or call them to
+            make something happen. Every invocation is cataloged and audited,
+            and any tool can be a node inside a Cascade.
+          </span>
+        </div>
+        <div className="mcp-showcase">
+          <div className="mcp-points">
+            <article>
+              <PlugZap aria-hidden="true" size={20} />
+              <h3>Tool ecosystems, not app glue</h3>
+              <p>
+                GitHub, filesystem, internal HTTP, and custom MCP servers become
+                catalog-backed SQL surfaces instead of hidden application code.
+              </p>
+            </article>
+            <article>
+              <Rows3 aria-hidden="true" size={20} />
+              <h3>Rows when you need rows</h3>
+              <p>
+                <code>mcp_rows</code> unwraps list-shaped tool responses so they
+                can be filtered, joined, ranked, and aggregated beside real
+                Postgres data.
+              </p>
+            </article>
+            <article>
+              <FileSearch aria-hidden="true" size={20} />
+              <h3>Observable by default</h3>
+              <p>
+                Discovery, health, caching, usage, latency, and invocation
+                history live in RVBBIT tables and views for SQL-native UIs.
+              </p>
+            </article>
+          </div>
+          <div className="mcp-code-stack">
+            <SqlCode ariaLabel="Register an MCP server from SQL">{`SELECT rvbbit.register_mcp_server(
+  server_name       => 'github',
+  server_transport  => 'stdio',
+  server_command    => 'npx',
+  server_args       => ARRAY['-y', '@modelcontextprotocol/server-github'],
+  server_env        => '{"GITHUB_PERSONAL_ACCESS_TOKEN":"\${GITHUB_TOKEN}"}'::jsonb
+);
+
+SELECT rvbbit.refresh_mcp_server('github');`}</SqlCode>
+            <SqlCode ariaLabel="Join MCP results with local SQL data">{`SELECT a.account_id,
+       a.company_name,
+       repo->>'full_name' AS matching_repo,
+       (repo->>'stargazers_count')::int AS stars
+FROM accounts a
+JOIN LATERAL rvbbit.mcp_rows(
+  'github',
+  'search_repositories',
+  jsonb_build_object(
+    'query', a.company_name || ' postgres',
+    'perPage', 3
+  )
+) repo ON true
+WHERE a.tier = 'strategic'
+ORDER BY stars DESC;`}</SqlCode>
+          </div>
+        </div>
+        <Link className="mcp-link" href="/docs/mcp">
+          Read the MCP SQL surface
+          <ArrowRight aria-hidden="true" size={18} />
+        </Link>
+      </section>
+
+      <section className="band cascade-band" id="cascades">
+        <div className="section-header cascade-header">
+          <p>Operators become cascades</p>
+          <h2>Multi-step model logic, called like SQL.</h2>
+          <span>
+            A Cascade is the execution plan inside a semantic operator — guards,
+            model calls, validators, retries, tool calls, and a receipt — still
+            exposed as a single typed Postgres function.
+          </span>
+        </div>
+        <Screenshot
+          src="shots/operator-canvas.png"
+          alt="An operator's cascade on the canvas in Data Rabbit — its steps (input, a specialist model node, output parser) wired together, a Try-It panel that runs the operator for real, and a live receipt with latency, tokens, and execution history."
+          caption="One operator's cascade on the canvas — every step, with a live receipt."
+        />
+        <div className="cascade-copy">
+          <div>
+            <h3>The workflow lives next to the data</h3>
+            <p>
+              Instead of scattering model orchestration across application code,
+              RVBBIT keeps it in the database — observable in SQL, versioned, and
+              callable from an ordinary query.
+            </p>
+          </div>
+          <SqlCode ariaLabel="Cascade SQL example">{`SELECT ticket_id,
+       rvbbit.review_risk(body, account_tier) AS risk
+FROM support_tickets
+WHERE created_at >= now() - interval '1 day';`}</SqlCode>
+        </div>
+      </section>
+
+      <section className="band split">
+        <div className="section-header">
+          <p>Architecture</p>
+          <h2>Heap is the source of truth; fast paths are optional and earn their place.</h2>
+          <span>
+            One extension, multiple execution paths. A semantic layer and an
+            optional storage/routing engine sit beside the Postgres heap — which
+            stays authoritative, with fallbacks for correctness and
+            pg_dump/restore.
+          </span>
+        </div>
+        <div className="architecture-list">
+          {architecture.map(([name, text], index) => (
+            <div className="architecture-row" key={name}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{name}</h3>
+              <p>{text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -622,7 +686,7 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
       <section className="band home-benchmarks" id="benchmarks">
         <div className="section-header benchmark-home-header">
           <p>Beaverdam benchmark snapshot</p>
-          <h2>Accelerated paths show up in end-to-end runs.</h2>
+          <h2>When a fast path fits, the router takes it.</h2>
           <span>
             Work-in-progress runs compare the default RVBBIT router against
             Postgres, Hydra, Citus, AlloyDB, and ClickHouse. Not final, audited
@@ -633,12 +697,6 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
           {benchmarkGroups.map((group) => {
             const rvbbit = group.summaries.find(
               (summary) => summary.system === "rvbbit"
-            );
-            const clickhouse = group.summaries.find(
-              (summary) => summary.system === "clickhouse"
-            );
-            const alloydb = group.summaries.find(
-              (summary) => summary.system === "alloydb"
             );
             const topRoute = group.routes[0];
             if (!rvbbit) return null;
@@ -667,16 +725,6 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
                     </strong>
                   </div>
                 </div>
-                <p>
-                  vs {systemLabels.clickhouse}:{" "}
-                  {clickhouse
-                    ? `${(clickhouse.geomeanMs / rvbbit.geomeanMs).toFixed(2)}x`
-                    : "n/a"}
-                  {"  "} / vs {systemLabels.alloydb}:{" "}
-                  {alloydb
-                    ? `${(alloydb.geomeanMs / rvbbit.geomeanMs).toFixed(2)}x`
-                    : "n/a"}
-                </p>
               </article>
             );
           })}
@@ -688,54 +736,39 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
         </Link>
       </section>
 
-      <section className="band split">
+      <section className="band" id="data-rabbit">
         <div className="section-header">
-          <p>Shape</p>
-          <h2>Built for correctness first, then fast paths where they fit.</h2>
-        </div>
-        <div className="architecture-list">
-          {architecture.map(([name, text], index) => (
-            <div className="architecture-row" key={name}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{name}</h3>
-              <p>{text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="band" id="lens">
-        <div className="section-header">
-          <p>The Lens</p>
-          <h2>A desktop over your warehouse — and it&apos;s all just SQL.</h2>
+          <p>Data Rabbit</p>
+          <h2>A Postgres desktop that gets superpowers on RVBBIT.</h2>
           <span>
-            The optional Lens makes the extension tangible: watch the planner pick
-            an engine, spin up a specialist model, explore your data&apos;s
-            knowledge graph, and read live receipts. Nothing it does that you
-            can&apos;t do from a query.
+            Data Rabbit is a fast desktop for any Postgres — browse, query,
+            explore. Point it at an RVBBIT database and it lights up: watch the
+            planner pick an engine, deploy a specialist model, build operators on
+            a canvas, and read live receipts. Works without the extension;
+            unmissable with it.
           </span>
         </div>
         <div className="shot-row">
           <Screenshot
             src="shots/routing-cockpit.png"
-            alt="The Adaptive Routing cockpit in the Lens — the planner choosing among native, DataFusion, Duck, and heap per query shape, with live timings."
+            alt="The Adaptive Routing cockpit in Data Rabbit — the planner choosing among native, DataFusion, Duck, and heap per query shape, with live timings."
             caption="Adaptive Routing — watch the planner pick an engine per query."
           />
           <Screenshot
             src="shots/model-studio.png"
-            alt="Model Studio in the Lens — spinning up a HuggingFace specialist model and wiring it to a SQL operator."
+            alt="Model Studio in Data Rabbit — spinning up a Hugging Face specialist model and wiring it to a SQL operator."
             caption="Model Studio — spin up a specialist model, call it from SQL."
           />
         </div>
         <div className="shot-row">
           <Screenshot
             src="shots/scry.png"
-            alt="Scry in the Lens — a graph explorer over the data knowledge graph, spidering from a table to its columns and related entities."
+            alt="Scry in Data Rabbit — a graph explorer over the data knowledge graph, spidering from a table to its columns and related entities."
             caption="Scry — explore your data's knowledge graph."
           />
           <Screenshot
             src="shots/data-search.png"
-            alt="Data Search in the Lens — free-text semantic search over the catalog, ranking tables and columns by what their data is about."
+            alt="Data Search in Data Rabbit — free-text semantic search over the catalog, ranking tables and columns by what their data is about."
             caption="Data Search — find tables by what their data is about."
           />
         </div>
@@ -744,7 +777,7 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
       <section className="band docs-band">
         <div className="section-header">
           <p>Documentation</p>
-          <h2>Approachable entry points, deep reference when needed.</h2>
+          <h2>Start with one SQL snippet. Go as deep as you want.</h2>
         </div>
         <div className="docs-preview">
           {docs.map((doc) => (
@@ -757,32 +790,25 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
         </div>
       </section>
 
-      <section className="band release-band">
+      <section className="band release-band" id="get-started">
         <div>
-          <Sparkles aria-hidden="true" size={20} />
-          <h2>Four ideas, one extension.</h2>
+          <TerminalSquare aria-hidden="true" size={20} />
+          <h2>CREATE EXTENSION rvbbit;</h2>
           <p>
-            Storage, routing, operators, and operations each get their own guide
-            — and the docs show how they fit together in production.
+            One extension over the Postgres you already run. Start with a single
+            SQL snippet and go as deep as you want — heap stays the source of
+            truth.
           </p>
         </div>
-        <div className="release-metrics" aria-label="Documentation pillars">
-          <span>
-            <Database aria-hidden="true" size={18} />
-            Storage
-          </span>
-          <span>
-            <GitBranch aria-hidden="true" size={18} />
-            Routing
-          </span>
-          <span>
-            <Cable aria-hidden="true" size={18} />
-            Operators
-          </span>
-          <span>
-            <Activity aria-hidden="true" size={18} />
-            Operations
-          </span>
+        <div className="hero-actions">
+          <Link className="button primary" href="/docs/quickstart">
+            <TerminalSquare aria-hidden="true" size={18} />
+            Start with SQL
+          </Link>
+          <Link className="button secondary" href="/docs">
+            Read the docs
+            <ArrowRight aria-hidden="true" size={18} />
+          </Link>
         </div>
       </section>
     </main>

@@ -26,8 +26,8 @@ rows**, so every run is parameterized by two *independent* axes:
 
 | Axis | Controlled by | Means |
 | --- | --- | --- |
-| **def-time** | `def_as_of` (a `created_at` filter) | which version of the definition |
-| **data-time** | `data_as_of` (rvbbit AS OF) | the data as of which moment |
+| **def-time** | `p_def_as_of` (a `created_at` filter) | which version of the definition |
+| **data-time** | `p_data_as_of` (rvbbit AS OF) | the data as of which moment |
 
 The **def-time** axis is stable: definitions are immutable, versioned rows, so
 "which definition" is always exact. The **data-time** axis rides on rvbbit
@@ -38,8 +38,8 @@ solid, everyday path.
 
 ```sql
 SELECT * FROM rvbbit.metric('revenue', '{}'::jsonb,
-    def_as_of  => '2025-01-01',   -- the metric as we defined it then
-    data_as_of => now());         -- over the data as it is now
+    p_def_as_of  => '2025-01-01',   -- the metric as we defined it then
+    p_data_as_of => now());         -- over the data as it is now
 ```
 
 "Today's definition over last quarter's data" and "last quarter's definition over
@@ -96,8 +96,8 @@ yesterday's threshold and today's threshold can disagree, and both answers are
 real:
 
 ```sql
-SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb, def_as_of => v1_time);  -- pass
-SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb, def_as_of => now());    -- fail
+SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb, p_def_as_of => v1_time);  -- pass
+SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb, p_def_as_of => now());    -- fail
 ```
 
 A `NULL` `ok` is never treated as "pass" — a KPI over missing data does not read
@@ -143,7 +143,7 @@ Mirror, each sync run becomes one observation automatically.
 SELECT data_generation, value->0->>'total' AS total, status, trigger
 FROM rvbbit.metric_history('daily_revenue');
 
-SELECT rvbbit.set_materialize('daily_revenue', on_compaction => true);
+SELECT rvbbit.set_materialize('daily_revenue', p_on_compaction => true);
 SELECT rvbbit.schedule_materialize_tick('* * * * *');   -- or call materialize_tick() yourself
 ```
 
@@ -181,10 +181,11 @@ SELECT cron.schedule('rvbbit_materialize_all', '0 * * * *',
                      $$SELECT rvbbit.materialize_all_metrics()$$);
 ```
 
-A broken check (e.g. an unbound `{param}`) is **isolated** — the verdict comes
-back `{"status": "error", ...}` and the metric *value* is still recorded, so one
-typo never wedges a batch. Give every `{param}` a default in the metric's `params`
-to be safe.
+A broken metric or check (e.g. an unbound `{param}`) is **isolated** — that one
+metric comes back as its own result row with `status = 'error'` and the error
+message in `error` (and no observation written for it), while every other metric
+in the batch still materializes. One typo never wedges a batch. Give every
+`{param}` a default in the metric's `params` to be safe.
 
 ## Categories
 
@@ -233,7 +234,7 @@ SELECT * FROM rvbbit.metric_board(p_metrics => ARRAY['daily_revenue'], p_bucket 
 
 SELECT metric_name, status, verdict, observed_at FROM rvbbit.breaching_kpis();
 
-SELECT rvbbit.metric_lineage('daily_revenue');   -- {"public.orders"}
+SELECT rvbbit.metric_lineage('pipeline_value');   -- {"cubes.opportunities"}
 ```
 
 A breaching KPI is the natural trigger for an [alert](/docs/alerts)
@@ -266,7 +267,7 @@ Tables and views — all plain and `SELECT`-able: `rvbbit.metric_defs`,
 `def_as_of`, `data_as_of`, `data_generation`, `trigger`), `rvbbit.metric_materialize`,
 `rvbbit.metric_dependencies`.
 
-In the [lens](/docs/overview), a **Metrics** desktop folder adds three apps — a
+In [Data Rabbit](/docs/overview), a **Metrics** folder adds three apps — a
 Catalog, a Creator (with a live resolved-SQL preview and verdict badge), and an
 Inspector that runs a metric across both axes with a results grid, a pass/fail
 verdict, and a materialized **Trend**.

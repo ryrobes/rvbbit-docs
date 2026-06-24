@@ -30,6 +30,14 @@ Treat RVBBIT functions like other privileged database capabilities:
 MCP and provider registration are especially sensitive because they can connect
 Postgres-visible SQL to external systems.
 
+The extension already enforces a baseline here. Writing an MCP server registration
+(`rvbbit.register_mcp_server`, `rvbbit.register_mcp_gateway`) calls
+`rvbbit.require_mcp_gateway_admin()`, which requires a superuser or membership in
+the `rvbbit_warren` role — because a registered server's command and args are
+spawned on the gateway host. Changing the capability catalog calls
+`rvbbit.require_capability_catalog_admin()`, which requires a superuser. Layer
+your own grants on top of these, rather than relying on them alone.
+
 ## Secrets
 
 Prefer environment-variable references:
@@ -46,6 +54,11 @@ SELECT rvbbit.register_mcp_server(
 
 The gateway resolves `${VAR}` from its runtime environment. Use
 `rvbbit.env_present('NAME')` to check presence without exposing values.
+
+Model and embedding backends follow the same rule: a backend stores the *name*
+of an auth env var (`auth_header_env`), never the literal token, so the secret
+lives in the process environment and never lands in a catalog table or
+`pg_dump`.
 
 ## Tool And Model Boundaries
 

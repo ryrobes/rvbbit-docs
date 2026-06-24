@@ -27,7 +27,7 @@ function from the caller's perspective.
 | Take | One model attempt in an ensemble. Multiple takes can run to improve confidence. |
 | Repair | Retry logic that asks the model or another step to fix an invalid result. |
 | Reducer | Logic that turns several takes or step outputs into one typed SQL result. |
-| Receipt | Cost, trace, and audit record for the call. |
+| Receipt | Cost, trace, and audit record for the call, written to `rvbbit.receipts`. See [Receipts and Costs](/docs/receipts-costs). |
 
 This gives the system a cleaner story:
 
@@ -91,6 +91,47 @@ ORDER BY name;
 ```
 
 In the catalog, gates are stored in the `wards` column.
+
+## How a Cascade Is Created
+
+There is no `create_cascade` function and no separate `cascades` table. A Cascade
+is simply an operator whose `steps` jsonb is non-null. You create it with the same
+[`rvbbit.create_operator`](/docs/sql-reference) call as any operator, passing the
+step plan as `op_steps`:
+
+```sql
+SELECT rvbbit.create_operator(
+    op_name        => 'review_risk',
+    op_arg_names   => ARRAY['body', 'account_tier'],
+    op_arg_types   => ARRAY['text', 'text'],
+    op_return_type => 'text',
+    op_steps       => $steps$[
+        {"name": "classify", "kind": "llm",  "model": "openai/gpt-5.4-mini",
+         "system": "...", "user": "..."},
+        {"name": "check",    "kind": "code", "fn": "validate_one_of",
+         "inputs": {"value": "{{ steps.classify.output }}"}}
+    ]$steps$::jsonb);
+```
+
+Each step has a `kind` — one of `llm`, `specialist`, `python`, `code`, `sql`, or
+`mcp` — and a step's output is available to later steps as
+`{{ steps.<name>.<field> }}`.
+
+Flow control (gates, ensemble takes, repair retries) is **not** set on
+`create_operator`. It is attached afterward with the decorator helpers, each of
+which takes a jsonb config (pass `NULL` to clear):
+
+```sql
+SELECT rvbbit.set_operator_wards('review_risk', '{"pre": [...], "post": [...]}');
+SELECT rvbbit.set_operator_takes('review_risk', '{"factor": 3, "reduce": "vote"}');
+SELECT rvbbit.set_operator_retry('review_risk', '{"until": {...}, "max_attempts": 3}');
+SELECT rvbbit.judgment_purge('review_risk');   -- clear cached receipts after editing
+```
+
+A call then flows through `pre-wards -> execute (one call, or an N-take ensemble)
+-> retry -> post-wards -> result`. See [Semantic SQL](/docs/semantic-sql) and the
+[SQL Reference](/docs/sql-reference) for the full operator model and exact
+signatures.
 
 ## Design Guidance
 

@@ -42,7 +42,17 @@ SELECT * FROM rvbbit.provider_doctor(true);
 ## Create A Semantic Operator
 
 Semantic operators are SQL functions backed by model calls or other capability
-nodes. They are stored as catalog rows and can be edited at runtime.
+nodes. They are stored as catalog rows (`rvbbit.operators`) and can be edited at
+runtime.
+
+You don't have to write every operator from scratch. The core extension already
+seeds LLM-backed `means()`, `about()`, `classify()`, and `extract()`, and
+installing a capability pack adds local-specialist versions of those names plus
+pack-only operators — for example reranker-backed `means()` / `about()` from the
+BGE reranker packs and `extract_pii()` from the GLiNER pack. See
+[Capability Packs](/docs/capability-packs#where-the-familiar-operators-come-from)
+for which name comes from where. The example below defines your own LLM-backed
+operator.
 
 ```sql
 SELECT rvbbit.create_operator(
@@ -111,19 +121,23 @@ SELECT rvbbit.refresh_acceleration('support_tickets'::regclass);
 
 That refresh:
 
-- scan rows that are newer than the stored watermark,
-- write accelerator files,
-- update Beaverdam metadata,
-- leave the heap intact for fallback, dump, and restore.
+- scans rows that are newer than the stored watermark,
+- writes accelerator files,
+- updates the acceleration metadata,
+- leaves the heap intact for fallback, dump, and restore.
 
-For a full rebuild, including layout variants:
+`refresh_acceleration` also refreshes layout variants by default. To skip that
+work on a fast incremental refresh, pass `refresh_variants => false`:
 
 ```sql
 SELECT rvbbit.refresh_acceleration(
   'support_tickets'::regclass,
-  refresh_variants => true
+  refresh_variants => false
 );
 ```
+
+For a from-scratch rebuild (drop and re-derive every row group), use
+`rvbbit.rebuild_acceleration(...)` instead.
 
 ## Query Normally
 
@@ -138,8 +152,11 @@ ORDER BY count(*) DESC
 LIMIT 20;
 ```
 
-The router decides whether that query should use heap, native execution,
-DataFusion, Duck/Vortex, hot memory, or another available path.
+The heap stays the source of truth. When acceleration is enabled, conservative,
+rule-based routing decides whether that query should use heap, native execution,
+DataFusion, Duck/Vortex, hot memory, or another available path. Learned routing
+runs in shadow/observation mode only — it does not take over default routing.
+See [Routing And Training](/docs/routing-training) for the details.
 
 ## Check Status
 

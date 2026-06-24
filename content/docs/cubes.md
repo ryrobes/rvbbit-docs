@@ -143,7 +143,7 @@ grain, category, lineage (source tables), per-column docs, a sample, and health:
 SELECT jsonb_pretty(rvbbit.describe_cube('opportunities'));
 ```
 
-`cube_health` is the freshness/drift summary the UI reads:
+`cube_health` is the freshness/drift summary Data Rabbit reads:
 
 ```sql
 SELECT jsonb_pretty(rvbbit.cube_health('opportunities'));
@@ -162,7 +162,8 @@ ORDER  BY refreshed_at DESC;
 ## Categorize
 
 Cubes share the same category taxonomy as metrics and alerts. Categories drive
-the `p_category` filter on `refresh_all_cubes` and organize the Studio UI:
+the `p_category` filter on `refresh_all_cubes` and organize the cube views in
+Data Rabbit:
 
 ```sql
 SELECT rvbbit.set_category('cube', 'opportunities', 'Sales', 'Pipeline');
@@ -219,8 +220,9 @@ SELECT rvbbit.drop_cube('opportunities');   -- table + definition + docs + catal
 ## Notes
 
 - **Refreshes are full** currently (`TRUNCATE` + reload). `cube_health` already
-  emits a `skip`/`delta`/`full` recommendation from drift, but that recommendation
-  is advisory only today — incremental/delta refresh is not yet implemented, so
+  emits a `skip` / `delta` / `full rebuild` recommendation from drift (or
+  `unknown` when there's no drift estimate yet), but that recommendation is
+  advisory only today — incremental/delta refresh is not yet implemented, so
   every refresh rebuilds the whole cube regardless of the hint.
 - **Lineage is best-effort** — derived by `EXPLAIN`-ing the cube SQL; if it won't
   plan, lineage is empty.

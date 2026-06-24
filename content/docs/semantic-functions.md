@@ -10,11 +10,21 @@ sourceDocs:
   - ../rvbbit-sql/docs/OPERATORS.md
 ---
 
-Semantic operators are user-defined functions. Semantic functions are the
-built-ins that should be useful before you design your own operator.
+[Operators](/docs/semantic-sql) are model-backed SQL functions you define (or
+that arrive inside a [capability pack](/docs/capability-packs)). The functions
+on this page are different: they ship inside the extension itself, so they are
+useful before you design your own operator.
 
-Most of these functions use the configured embedding backend, local specialist
-runtime, or model provider. They are meant to compose with ordinary SQL.
+Most of them embed text with the configured embedding backend (set with
+`rvbbit.set_default_embedder(...)`, or pass a specialist name as the last
+argument) and then do the rest of the work — clustering, nearest-neighbour
+search, branching — deterministically in Rust. `rvbbit.extract(...)` is the
+exception: it is a seeded LLM-backed operator, and `rvbbit.text_evidence(...)`
+is purely lexical (no model at all). All of them compose with ordinary SQL.
+
+Semantic scalar work runs tuple-at-a-time today, so embedding a large result set
+inline (for example clustering every row of a big table) is bounded by how fast
+the backend can embed each distinct value.
 
 ## Retrieval
 
@@ -98,7 +108,16 @@ FROM tickets
 LIMIT 20;
 ```
 
-For evidence snippets:
+`rvbbit.extract(text, what)` is a seeded operator backed by an LLM by default;
+it returns the literal value (or `NULL`). For typed entity and PII extraction
+backed by a local specialist instead, install the GLiNER
+[capability pack](/docs/capability-packs), which provides
+`rvbbit.extract_entities(text, labels)`, `rvbbit.extract_pii(text)`, and a
+specialist-backed `rvbbit.extract`.
+
+For evidence snippets, `rvbbit.text_evidence` returns the most relevant
+sentences (a `text[]`) using keyword coverage — it needs no embedding backend
+and runs in microseconds:
 
 ```sql
 SELECT id,
@@ -107,17 +126,23 @@ FROM tickets
 WHERE account_tier = 'enterprise';
 ```
 
-These functions are especially useful inside Cascades because later steps can
-work from extracted values or evidence spans instead of the full source text.
+These functions are especially useful inside [Cascades](/docs/cascades) because
+later steps can work from extracted values or evidence spans instead of the full
+source text.
 
 ## Explain A Semantic Call
 
 ```sql
-SELECT rvbbit.explain_semantic(
+SELECT * FROM rvbbit.explain_semantic(
   'SELECT rvbbit.review_risk(body, account_tier) FROM tickets LIMIT 10'
 );
 ```
 
-Use semantic explain output alongside receipts when you need to debug how an
-operator, backend, cache, or policy is being used.
+`rvbbit.explain_semantic` sketches the projected semantic execution graph (using
+Postgres row estimates plus receipt history) without running the query. To run
+the query once and report the actual cache cascade, tokens, latency, and dollar
+cost, use `rvbbit.explain_semantic_analyze(...)` with the same argument.
+
+Use semantic explain output alongside [receipts](/docs/receipts-costs) when you
+need to debug how an operator, backend, cache, or policy is being used.
 

@@ -95,8 +95,8 @@ SELECT count(*) FROM rvbbit.synth('delete every sighting permanently');  -- retu
 `synth` caches the validated SQL in `rvbbit.synth_cache`, keyed by the intent plus
 the retrieved schema. Re-running the same intent is a **cache hit — no model call**;
 if the schema changes, the retrieved context changes and it regenerates. The cached
-snippets are ordinary rows you can read, edit, and pin — and they show up in the
-SQL Desktop's **Cache** app (the *Synth* tab), alongside the per-call audit in
+snippets are ordinary rows you can read, edit, and pin — and they show up in
+Data Rabbit's **Cache** view (the *Synth* tab), alongside the per-call audit in
 *Receipts*:
 
 ```sql
@@ -145,7 +145,7 @@ SELECT rvbbit.synth_sql('number of sightings per region') \gexec
 ```
 
 Think of `synth` as the convenience form ("just give me rows") and `synth_sql` as
-the composable form ("give me a real query I can build on"). In the **SQL Desktop**
+the composable form ("give me a real query I can build on"). In **Data Rabbit**
 the jsonb is expanded into real, typed columns automatically — so `select * from
 rvbbit.synth(…)` renders as a normal grid, and you can drag a field out to
 post-aggregate it like any other result.

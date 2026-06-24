@@ -85,6 +85,40 @@ ORDER BY title;
 | Smoke tests | SQL calls that prove the pack is usable. |
 | UI metadata | Description, labels, requirements, and target compatibility. |
 
+## Where The Familiar Operators Come From
+
+Some friendly names exist out of the box and some arrive with a pack — and a few
+exist in *both* forms. The core extension seeds **LLM-backed** `means`, `about`,
+`classify`, `extract`, `summarize`, `sentiment`, and `triples` as editable rows
+in `rvbbit.operators`, so they work before you install anything. Installing a
+capability pack adds **local-specialist-backed** operators that reuse some of
+those same names (a reranker model behind `means`/`about`, DeBERTa behind
+`classify`, GLiNER behind `extract`) and also adds names that are **pack-only**
+and never core-seeded (`extract_pii`, `has_pii`, `semantic_score`,
+`semantic_matches`, `similar_to`). When a name is exported by more than one
+competing pack, whichever you install (or install last) provides that backing.
+
+| Operator | Returns | Backing |
+| --- | --- | --- |
+| `means(text, criterion)` (infix `~~?` / `MEANS`) | bool | core seeds an LLM version; the BGE/MS-MARCO reranker packs (`rerank/bge-reranker-base`, `rerank/bge-reranker-v2-m3`, `rerank/ms-marco-minilm-l6-v2`) add a local reranker version |
+| `about(text, topic)` (infix `~~%` / `ABOUT`) | float8 | core seeds an LLM version; same three rerank packs add a local reranker version |
+| `semantic_score`, `semantic_matches` | float8 / bool | pack-only — the same three rerank packs (no infix form) |
+| `classify(text, categories)`, `semantic_classify` | text | core seeds an LLM `classify`; `classify/deberta-v3-zero-shot` and `classify/deberta-v3-base-zero-shot` add local zero-shot versions |
+| `extract(text, what)` | text | core seeds an LLM version; `extract/gliner-medium-v2.1` (GLiNER) adds a specialist version |
+| `extract_entities`, `extract_pii`, `has_pii` | jsonb / text / bool | pack-only — `extract/gliner-medium-v2.1` (GLiNER) |
+| `semantic_embed(text)`, `similar_to(left, right)` | jsonb / float8 | pack-only — local embedding packs (`embeddings/bge-small-en-v1.5`, `embeddings/bge-m3`, `embeddings/e5-small-v2`) |
+
+Only `about` and `means` declare infix forms; `semantic_score` and
+`semantic_matches` are plain functions. The per-pack raw wrappers (for example
+`rerank_bge_base_score`, `embed_bge_small`, `summarize_bart`) keep their own
+prefixed names — the pack's friendly operators above are the multi-step Cascades
+built on top of them. For canonical retrieval, prefer `rvbbit.embed` /
+`rvbbit.set_default_embedder(...)` over the exploratory `embed_*` raw wrappers.
+See [/docs/semantic-functions](/docs/semantic-functions) for the extension's own
+semantic primitives, [/docs/predictive-models](/docs/predictive-models) for the
+trained-model and tabular-foundation packs, and [/docs/cascades](/docs/cascades)
+for how multi-step operators are defined.
+
 ## When To Use A Pack
 
 Good pack candidates:
@@ -106,11 +140,17 @@ FROM rvbbit.warren_jobs
 ORDER BY created_at DESC
 LIMIT 20;
 
-SELECT *
-FROM rvbbit.warren_worker_heartbeats
-ORDER BY observed_at DESC
+SELECT name, effective_status, heartbeat_age, inventory
+FROM rvbbit.warren_node_effective_status
+ORDER BY last_heartbeat DESC NULLS LAST
 LIMIT 20;
 ```
+
+`rvbbit.warren_node_effective_status` is a view over `rvbbit.warren_nodes` that
+folds the reported status together with heartbeat freshness. Backend health for
+individual specialists comes from `rvbbit.backends` and
+`rvbbit.backend_probe(backend_name)`; runtime registration lives in
+`rvbbit.python_runtimes` and `rvbbit.mcp_gateways`.
 
 Warren is a runtime inventory: what can be installed, where it can run, what is
 currently deployed, and what failed.

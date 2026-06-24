@@ -189,5 +189,5 @@ WHERE  n.graph_id = 'db_catalog' AND n.label = 'sales.orders.email';
 - **Tuning** (session GUCs): `rvbbit.search_query_prefix` (an instruction prefix
   for BGE/Nomic-style models), `rvbbit.search_dense_floor` (raise to be stricter),
   `rvbbit.crawl_dblink_conninfo` (the worker connection for the parallel crawler).
-- The crawl is also the engine behind the lens's **Data Search**, **Scry** graph
-  explorer, and **Drift** windows.
+- The crawl is also the engine behind **Data Search**, the **Scry** graph
+  explorer, and **Drift** views in Data Rabbit.

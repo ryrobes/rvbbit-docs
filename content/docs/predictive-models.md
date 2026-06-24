@@ -16,7 +16,7 @@ function you can call from ordinary SQL. The same shape that backs
 models: tabular classifiers and regressors trained with scikit-learn.
 
 Nothing here is UI-only. Every step below is a SQL call you can run from `psql`
-or DataGrip. The lens Model Studio window is observability sugar on top of these
+or DataGrip. Model Studio in Data Rabbit is observability sugar on top of these
 exact statements.
 
 ## Train From A SELECT
@@ -122,7 +122,7 @@ FROM analytics.customers
 WHERE churned IS NULL;
 ```
 
-A regression model returns a numeric `prediction` instead of a label. Like every
+A regression model returns a numeric `value` instead of a label. Like every
 operator, each prediction is recorded in [receipts](/docs/receipts-costs) — and
 reused when the same input row recurs — so scoring is auditable and idempotent.
 
@@ -220,41 +220,57 @@ labeled support set and want predictions for new rows right now. `predict_tabula
 fits in context against a foundation operator and returns predictions in one call.
 
 ```sql
-SELECT *
-FROM rvbbit.predict_tabular(
+SELECT rvbbit.predict_tabular(
   support_sql => $$ SELECT feat_a, feat_b, label FROM training_examples $$,
   predict_sql => $$ SELECT id, feat_a, feat_b FROM rows_to_score $$,
   target_column => 'label',
   task => 'classification',
-  dry_run => true   -- preview the plan without calling the backend
+  dry_run => true   -- inspect the assembled bundle without calling the backend
 );
 ```
 
-This routes through a tabular foundation [capability pack](/docs/capability-packs)
-rather than producing a persistent operator. It is the right tool for small,
-ad-hoc problems; `train_model` is better when you want a named, versioned,
-re-evaluable model.
+`predict_tabular` returns a single `jsonb` result (`{"n_queries":…,"predictions":[…]}`),
+or, with `dry_run => true`, a preview of the assembled bundle
+(`{"n_support":…,"n_queries":…,"task":…,"target":…,"sample_support":…,"sample_query":…}`)
+and no backend call. It routes through a tabular foundation
+[capability pack](/docs/capability-packs) (default operator
+`predict_tabular_foundation`) rather than producing a persistent operator, so the
+live path requires that a `tabular_foundation` capability is deployed — without one
+the call raises. It is the right tool for small, ad-hoc problems; `train_model` is
+better when you want a named, versioned, re-evaluable model.
+
+The shipped `tabpfn-foundation` pack is an `example`-visibility CPU reference
+implementation of the TabPFN request contract, not a GPU TabPFN forward pass; treat
+training-free prediction as a working contract whose high-accuracy foundation
+backend is still being filled in.
 
 ## Distillation
 
-`distill_model` turns an expensive labeler into a cheap model. It labels a sample
-of unlabeled rows with any operator or SQL expression (an LLM call, a semantic
-function, a heuristic), materializes the labels, and trains a tabular model on
-them.
+`distill_model` turns an expensive labeler into a cheap model. It labels up to
+`n_label` rows of the unlabeled query with any SQL expression — an LLM-backed
+operator, a [semantic function](/docs/semantic-functions), a heuristic —
+materializes the labels into a staging table, infers a feature schema, and trains
+a tabular model on them.
 
 ```sql
 SELECT rvbbit.distill_model(
   model_name    => 'ticket_priority',
   unlabeled_sql => $$ SELECT id, subject, channel, account_tier FROM tickets $$,
-  label_expr    => $$ rvbbit.classify(subject, ARRAY['p0','p1','p2']) $$,
+  label_expr    => $$ rvbbit.classify(subject, 'p0,p1,p2') $$,
   n_label       => 500,
   task          => 'classification'
 );
 ```
 
+`label_expr` is any expression over the query's columns. Here `classify(text,
+categories)` takes the candidate labels as a single comma-separated `text`
+argument, not an array; it comes from the DeBERTa zero-shot
+[capability packs](/docs/capability-packs) and exists only after one is installed.
 The labeling step is just operators, so it lands in receipts with its own cost.
-You pay the LLM once for the sample, then serve predictions from the distilled
-model for free.
+You pay the labeler once for the sample, then serve predictions from the distilled
+model for free. By default `distill_model` trains by enqueuing a local
+`train_model` run; pass `managed => true` (with a `target` selector) to hand the
+training off to a Warren agent instead.
 
 ## Lifecycle And Monitoring
 
@@ -282,12 +298,13 @@ Three read surfaces answer the common questions:
 
 ## Model Studio
 
-The lens **Model Studio** window is a view over everything above: a model list
-with Overview, Evaluate, Predict, Train, and Monitor tabs. It auto-builds a
-prediction form from the feature schema, renders the confusion matrix and
-residual scatter from `ml_evaluations`, and shows per-prediction receipts. Every
+**Model Studio** in **Data Rabbit** is a view over everything
+above: a model list with Overview, Evaluate, Predict, Train, and Monitor tabs. It
+auto-builds a prediction form from the feature schema, renders the confusion matrix
+and residual scatter from `ml_evaluations`, and shows per-prediction receipts. Every
 action surfaces the SQL it runs, so anything you do in the UI you can copy into
-`psql` or DataGrip unchanged.
+`psql` or DataGrip unchanged. Model behavior lives in the SQL functions above —
+Model Studio is sugar over them, not a separate runtime.
 
 ## Are These Still Worth Training?
 
