@@ -315,6 +315,7 @@ main > section {
   position: relative;
   z-index: 1;
   width: min(var(--max), calc(100% - 48px));
+  min-width: 0;
   margin: 0 auto;
   padding: 88px 0 128px;
 }
@@ -337,6 +338,7 @@ main > section {
 }
 
 .hero-lede {
+  min-width: 0;
   max-width: 620px;
 }
 
@@ -381,10 +383,12 @@ main > section {
   z-index: 1;
   justify-self: end;
   width: 100%;
+  min-width: 0;
   max-width: 560px;
 }
 
 .hero-card {
+  min-width: 0;
   border: 1px solid #a8f0d42e;
   border-radius: 14px;
   background: linear-gradient(180deg, #0b0b0bfa, #050505fa);
@@ -429,6 +433,8 @@ main > section {
 }
 
 .hero-card .sql-pre {
+  max-width: 100%;
+  overflow-x: auto;
   margin: 0;
   border: 0;
   border-radius: 0;
@@ -440,6 +446,7 @@ main > section {
 }
 
 .hero-result {
+  overflow-x: auto;
   border-top: 1px solid var(--line);
   background: #060606;
   padding: 12px 16px 16px;
@@ -2054,16 +2061,73 @@ main > section {
     grid-template-columns: 1fr;
   }
 
+  .hero-content.hero-split {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .hero-demo {
+    justify-self: stretch;
+    max-width: 720px;
+  }
+
   .docs-sidebar {
-    order: 2;
-    position: static;
+    order: 1;
+    position: sticky;
+    top: 64px;
+    z-index: 30;
     max-height: none;
-    padding: 0 0 20px;
+    overflow-x: auto;
+    padding: 10px 0 12px;
     border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .docs-home {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .docs-sidebar nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .docs-nav-section {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 0;
+    flex: 0 0 auto;
+  }
+
+  .docs-nav-section p {
+    margin: 0;
+    padding: 0 4px;
+    font-size: 10px;
+  }
+
+  .docs-nav-section a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    white-space: nowrap;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0 10px;
+    background: var(--panel);
+  }
+
+  .docs-nav-section a:hover,
+  .docs-nav-section a.active {
+    border-color: var(--mint);
   }
 
   .docs-article {
-    order: 1;
+    order: 2;
   }
 
   .architecture-row {
@@ -2130,12 +2194,11 @@ main > section {
   .hero-content,
   .band,
   .docs-layout {
-    width: min(100% - 32px, var(--max));
+    width: min(calc(100% - 32px), var(--max));
   }
 
   .hero-content.hero-split {
-    grid-template-columns: 1fr;
-    gap: 36px;
+    gap: 32px;
   }
 
   .hero-title {

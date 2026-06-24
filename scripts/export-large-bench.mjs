@@ -245,6 +245,19 @@ if (!raw) {
 }
 
 const parsed = JSON.parse(raw);
+const missingData =
+  !Array.isArray(parsed.runs) ||
+  parsed.runs.length === 0 ||
+  !Array.isArray(parsed.summaries) ||
+  parsed.summaries.length === 0 ||
+  !Array.isArray(parsed.queries) ||
+  parsed.queries.length === 0;
+
+if (missingData) {
+  console.error(`No benchmark data found for ${testName}`);
+  process.exit(1);
+}
+
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, `${JSON.stringify(parsed, null, 2)}\n`);
 console.log(`Wrote ${path.relative(process.cwd(), outputPath)}`);

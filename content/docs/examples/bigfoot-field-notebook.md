@@ -12,6 +12,7 @@ sourceDocs:
   - ../rvbbit-sql/examples/bigfoot/04_knowledge_graph.sql
   - ../rvbbit-sql/examples/bigfoot/06_capability_operators.sql
   - ../rvbbit-sql/examples/bigfoot/07_live_triples_receipts.sql
+  - ../rvbbit-sql/examples/bigfoot/08_predict_class.sql
   - ../rvbbit-sql/docs/EMBEDDINGS.md
   - ../rvbbit-sql/docs/CAPABILITIES.md
   - ../rvbbit-sql/docs/WARREN.md
@@ -43,6 +44,21 @@ Default run:
 - materializes embeddings,
 - runs retrieval, evidence, classification, clustering, outlier, diff,
   dedupe, extraction, Warren capability operators, and KG examples.
+
+The capability-operator section (`06_capability_operators.sql`) expects these
+Warren packs to be installed first:
+
+```bash
+make capability-test MANIFEST=capabilities/packs/extract/gliner-medium-v2.1 TARGET='{"capability":true,"docker":true}'
+make capability-test MANIFEST=capabilities/packs/rerank/bge-reranker-v2-m3 TARGET='{"capability":true,"docker":true}'
+make capability-test MANIFEST=capabilities/packs/classify/emotion-distilroberta TARGET='{"capability":true,"docker":true}'
+```
+
+To run only the non-capability notebook sections:
+
+```bash
+BIGFOOT_SKIP_CAPABILITIES=1 examples/bigfoot/run_all.sh
+```
 
 The live model triples and receipt section is opt-in:
 
