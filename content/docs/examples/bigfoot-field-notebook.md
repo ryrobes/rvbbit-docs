@@ -997,7 +997,7 @@ See [Text-to-SQL](/docs/text-to-sql) for grounding, safety, and writing your own
 
 This notebook touches the main RVBBIT story in one realistic dataset:
 
-- RVBBIT table storage and Parquet export through Beaverdam.
+- Registry-driven storage acceleration and Parquet export.
 - Local embeddings and semantic KNN search.
 - Evidence snippets for result explainability.
 - Classification without LLM calls.

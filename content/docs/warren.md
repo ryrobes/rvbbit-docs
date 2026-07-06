@@ -19,9 +19,9 @@ the requested service, then registers the resulting endpoint back into RVBBIT.
 The query engine keeps using the normal backend, operator, and runtime-node
 machinery — Warren just stores the catalog rows it already knows how to execute.
 
-Do not confuse Warren with Beaverdam. Beaverdam is the optional storage
-acceleration layer — see [Beaverdam](/docs/beaverdam). Warren is runtime
-capability management.
+Do not confuse Warren with storage acceleration. The
+[acceleration registry](/docs/acceleration) is the optional storage layer;
+Warren is runtime capability management.
 
 ## Capability Packs
 
@@ -122,6 +122,13 @@ rather than serving a model. Neither exposes SQL operators of its own.
 - **`runtimes/mcp-gateway`** registers `mcp_default` in `rvbbit.mcp_gateways`
   (port `9180`, endpoint `/`). It powers `kind: mcp` operator nodes and SQL MCP
   calls — see [MCP](/docs/mcp).
+
+There is also a lighter runtime registration that Warren does not manage: an
+external **n8n** instance can be registered with
+`rvbbit.register_n8n_runtime(name, base_url, ...)` so `kind: n8n` operator
+steps can invoke its production webhooks (`rvbbit.n8n_runtime_status()` lists
+runtimes; `rvbbit.n8n_workflows()` introspects reachable workflows). It is an
+integration surface, not a managed sidecar.
 
 A Warren-deployed runtime shows a `runtime_name` (e.g. `python_default`) rather
 than a backend name in `rvbbit.warren_inventory`.

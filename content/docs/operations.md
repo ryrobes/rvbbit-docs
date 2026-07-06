@@ -17,9 +17,10 @@ are sane, or semantic costs are accumulating.
 ## Health Surfaces
 
 The fastest install/health check is `rvbbit.doctor(false)`, which returns one
-row per check across subsystems (`core`, `storage`, `routing`, `provider`,
-`costs`, `mcp`, `warren`) with a `status` of `ok`, `warn`, or `error` and a
-JSONB `detail`. Pass `live => true` to allow active backend probes:
+row per check across areas (`core`, `storage`, `accelerator`, `routing`,
+`backend`, `provider`, `costs`, `mcp`, `warren`) with a `status` of `ok`,
+`warn`, or `error` and a JSONB `detail`. Pass `live => true` to allow active
+backend probes:
 
 ```sql
 SELECT * FROM rvbbit.doctor(false);
@@ -40,9 +41,10 @@ The underlying SQL surfaces behind those checks:
 | Warren / MCP | `rvbbit.warren_inventory`, `rvbbit.mcp_health` | Runtime node and MCP server health. |
 | E2E harness | `rvbbit_e2e.runs`, `rvbbit_e2e.events` | User-perspective coverage of semantic SQL, Warren, storage, and restore paths. |
 
-"Acceleration"/"Beaverdam" is the optional columnar layer; the heap stays the
-source of truth, and the shipped SQL identifiers are `acceleration_*` /
-`shadow_heap_status` (not `beaverdam_*`).
+Acceleration is the optional columnar layer, driven by the
+[registry](/docs/acceleration); the heap stays the source of truth. On GPU
+hosts, the `accelerator / runtime` doctor row also reports the
+[GQE](/docs/gqe) probe state (`detail->'gpu_gqe'`).
 
 ## Benchmark History
 

@@ -12,7 +12,7 @@ sourceDocs:
 ---
 
 Semantic SQL is the RVBBIT feature that should feel useful even when you never
-enable Beaverdam storage. It makes model calls, embeddings, tool calls, and
+accelerate a single table. It makes model calls, embeddings, tool calls, and
 workflow nodes visible as SQL functions with catalog-backed configuration.
 
 ## Cascades
@@ -21,7 +21,7 @@ Operators are the SQL surface. **Cascades** are the multi-step execution logic
 inside an operator. There is no separate cascade object: a Cascade is just an
 operator whose `steps` (set via `create_operator(... op_steps => …)`) are
 non-null. Each step has a `kind` — `llm`, `specialist`, `python`, `code`, `sql`,
-or `mcp` — and later steps can reference earlier ones with
+`mcp`, or `n8n` — and later steps can reference earlier ones with
 `{{ steps.<name>.<field> }}`.
 
 A Cascade can chain those steps with gates, validators, retries, and ensembles
@@ -123,7 +123,7 @@ FROM rvbbit.knn_text(
 );
 ```
 
-The optional Lance vector tier (part of Beaverdam storage acceleration) can speed
+The optional Lance vector tier (part of [storage acceleration](/docs/acceleration)) can speed
 up some table-local vector paths, but embeddings remain a semantic SQL feature
 first; the heap stays the source of truth. See
 [Semantic Functions](/docs/semantic-functions) for the full set of retrieval,

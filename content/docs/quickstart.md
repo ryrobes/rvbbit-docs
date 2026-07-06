@@ -1,28 +1,84 @@
 ---
 title: Quickstart
-description: Install the extension, create an operator, and refresh a Beaverdam table.
+description: Start the Docker ensemble, run semantic SQL, and accelerate your first table.
 section: Start
 navOrder: 20
 sourceDocs:
+  - ../rvbbit-sql/PACKAGING.md
   - ../rvbbit-sql/docs/OPERATORS.md
   - ../rvbbit-sql/docs/RVBBIT_PRODUCTION_SHAPE.md
-  - ../rvbbit-sql/docs/TUNING.md
   - ../rvbbit-sql/docs/DIAGNOSTICS.md
   - ../rvbbit-sql/docs/COSTS_AND_RECEIPTS.md
 ---
 
-This page shows the shape of the system from SQL. It intentionally avoids every
-knob until the end.
+RVBBIT is technically a Postgres extension plus a few helper processes, but
+for v1 you should treat it like a database: one Docker Compose file brings up
+Postgres 18 with the extension preinstalled, the Duck/Vortex query worker, the
+[Data Rabbit](/docs/data-rabbit) desktop UI, and a [Warren](/docs/warren)
+agent for deploying capability sidecars.
 
-## Install
+> **v1 install policy.** The Docker ensemble is the only supported install
+> path right now. Piecemeal installation — building the extension into an
+> existing Postgres and wiring the sidecars by hand — works, but it is not yet
+> streamlined or documented; it will come back as a first-class path in a
+> later release. If you have used TimescaleDB or similar "it's really an
+> extension" databases, the shape is the same: pretend it is a database and
+> start it with Docker.
 
-```sql
-CREATE EXTENSION IF NOT EXISTS pg_rvbbit;
+## Start The Stack
+
+Requirements: Docker with Compose, and about 4 GB of free RAM for the base
+stack. Grab the release compose file from the
+[rvbbit-sql repo](https://github.com/ryrobes/rvbbit-sql)
+(`docker/docker-compose.release.yml`) and start it:
+
+```bash
+# Optional: export provider keys first so LLM-backed operators work.
+export OPENROUTER_API_KEY=sk-or-...
+
+RVBBIT_VERSION=latest \
+docker compose -f docker/docker-compose.release.yml up -d
 ```
 
-Most local stacks also need model/backend configuration. In the development
-containers this is normally preloaded; in production, register the model
-backends and cost policy before exposing semantic operators to users.
+That starts four services from published images:
+
+| Service | Image | What it is |
+| --- | --- | --- |
+| `postgres` | `ghcr.io/ryrobes/rvbbit-postgres` | Postgres 18 + `pg_rvbbit` + the `rvbbit-duck` worker, on host port `55433`. |
+| `migrate` | (same image) | One-shot: `CREATE EXTENSION` / `ALTER EXTENSION ... UPDATE` / `rvbbit.migrate()` on every `up`, so upgrades are automatic. |
+| `lens` | `ghcr.io/ryrobes/rvbbit-lens` | The Data Rabbit desktop UI on host port `3000`. |
+| `warren` | `ghcr.io/ryrobes/rvbbit-warren-agent` | Deploys capability sidecars (local models, runtimes, MCP gateways) via the mounted Docker socket. |
+
+Provider API keys (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`,
+`ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, …) are passed through from your shell
+environment into the containers. None are required to boot — local CPU
+embeddings work out of the box — but LLM-backed operators need at least one.
+
+If you only want the database (no UI, no Warren), the single container works
+too:
+
+```bash
+docker run -d --name rvbbit \
+    -p 55433:5432 \
+    -e POSTGRES_PASSWORD=rvbbit \
+    ghcr.io/ryrobes/rvbbit-postgres:latest
+```
+
+There is also an "uber" compose file (`docker/docker-compose.uber.yml`) that
+additionally runs a dedicated shared Duck worker pool and bootstraps the
+baseline Warren capabilities on first start, and GPU overlay files for
+[NVIDIA GQE](/docs/gqe) hosts.
+
+## Connect
+
+```bash
+psql postgresql://postgres:rvbbit@localhost:55433/rvbbit
+```
+
+And open the UI: [http://localhost:3000](http://localhost:3000) — point Data
+Rabbit's connection window at any Postgres, but against this one the whole
+rvbbit surface lights up. The extension is already created; you never run
+`CREATE EXTENSION` yourself on the Docker path.
 
 ## Check The Install
 
@@ -110,12 +166,14 @@ FROM rvbbit.knn_text(
 );
 ```
 
-## Add Beaverdam Storage
+## Accelerate A Table
 
-Beaverdam keeps Postgres heap as the source of truth and builds accelerator
-files beside it. To accelerate a table:
+Acceleration is a registry: any ordinary heap table can be added to it, and
+RVBBIT then maintains rebuildable columnar files beside the heap. Register a
+table and build its first files:
 
 ```sql
+SELECT rvbbit.enable_table('support_tickets'::regclass);
 SELECT rvbbit.refresh_acceleration('support_tickets'::regclass);
 ```
 
@@ -125,6 +183,13 @@ That refresh:
 - writes accelerator files,
 - updates the acceleration metadata,
 - leaves the heap intact for fallback, dump, and restore.
+
+New tables can opt in at creation time with the `USING rvbbit` sugar — it
+produces a plain heap table that is auto-registered:
+
+```sql
+CREATE TABLE events (id bigint, payload jsonb) USING rvbbit;
+```
 
 `refresh_acceleration` also refreshes layout variants by default. To skip that
 work on a fast incremental refresh, pass `refresh_variants => false`:
@@ -137,7 +202,8 @@ SELECT rvbbit.refresh_acceleration(
 ```
 
 For a from-scratch rebuild (drop and re-derive every row group), use
-`rvbbit.rebuild_acceleration(...)` instead.
+`rvbbit.rebuild_acceleration(...)` instead. See
+[Storage Acceleration](/docs/acceleration) for the full registry API.
 
 ## Query Normally
 
@@ -154,16 +220,17 @@ LIMIT 20;
 
 The heap stays the source of truth. When acceleration is enabled, conservative,
 rule-based routing decides whether that query should use heap, native execution,
-DataFusion, Duck/Vortex, hot memory, or another available path. Learned routing
-runs in shadow/observation mode only — it does not take over default routing.
-See [Routing And Training](/docs/routing-training) for the details.
+DataFusion, Duck/Vortex, hot memory, [GPU GQE](/docs/gqe) on NVIDIA hosts, or
+another available path. Learned routing runs in shadow/observation mode only —
+it does not take over default routing. See
+[Routing And Training](/docs/routing-training) for the details.
 
 ## Check Status
 
 ```sql
 SELECT *
 FROM rvbbit.acceleration_status
-ORDER BY table_schema, table_name;
+ORDER BY table_name;
 ```
 
 Worker path:
@@ -182,6 +249,9 @@ SELECT rvbbit.cost_audit_summary();
 
 ## Next Steps
 
+- Use [Data Rabbit](/docs/data-rabbit) — already running at
+  [localhost:3000](http://localhost:3000) — to browse, query, and watch the
+  system work.
 - Use [Semantic SQL](/docs/semantic-sql) to design robust model-backed
   operators.
 - Use [Semantic Functions](/docs/semantic-functions) for retrieval,
@@ -191,7 +261,7 @@ SELECT rvbbit.cost_audit_summary();
 - Use [Receipts And Costs](/docs/receipts-costs) before exposing paid model
   calls to users.
 - Use [MCP Servers](/docs/mcp) when external tool results should join with SQL.
-- Use [Beaverdam Storage](/docs/beaverdam) before enabling storage acceleration
+- Use [Storage Acceleration](/docs/acceleration) before enabling acceleration
   for larger reporting tables.
 - Use [Routing And Training](/docs/routing-training) before adding trained
   profiles or forced engine paths.

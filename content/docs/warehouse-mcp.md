@@ -110,7 +110,10 @@ make warehouse-url         # print the current tunnel URL (changes per restart)
 Point a client at it:
 
 - **Claude Desktop / Code** — add it as a remote MCP server (URL + the
-  `Authorization: Bearer <key>` header).
+  `Authorization: Bearer <key>` header). Note for hand-rolled clients: the server speaks
+  streamable-HTTP MCP — after `initialize`, echo the returned
+  `mcp-session-id` header on every subsequent request (MCP client libraries
+  do this automatically).
 - **Claude Cowork** — register the URL; artifacts call tools via
   `window.cowork.callMcpTool('mcp__<id>__run_sql', { sql })` (see the dashboard
   template the server ships).

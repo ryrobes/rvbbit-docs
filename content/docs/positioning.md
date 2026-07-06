@@ -1,13 +1,12 @@
 ---
 title: Positioning
-description: What RVBBIT is for, what Beaverdam adds, and where the system should stay boring.
+description: What RVBBIT is for, what acceleration adds, and where the system should stay boring.
 section: Start
 navOrder: 15
 sourceDocs:
   - ../rvbbit-sql/docs/RVBBIT_V1_RELEASE_PLAN.md
   - ../rvbbit-sql/docs/DOCS_MARKETING_GAP_PLAN.md
   - ../rvbbit-sql/docs/RVBBIT_PRODUCTION_SHAPE.md
-  - ../rvbbit-sql/docs/BEAVERDAM_RENAME_PLAN.md
 ---
 
 RVBBIT is not trying to replace Postgres. It makes Postgres a better control
@@ -22,13 +21,20 @@ multi-engine execution where they make sense.
 | Subsystem | What it does | Required? |
 | --- | --- | --- |
 | Semantic SQL | Operators, Cascades, embeddings, KG, MCP, receipts, providers. | Yes, for the main RVBBIT value. |
-| Beaverdam | Optional storage acceleration with heap fallback. | No. Use it for analytical/reporting tables. |
+| Acceleration registry | Optional storage acceleration with heap fallback. | No. Use it for analytical/reporting tables. |
 | Warren | Capability packs and runtime nodes. | No. Use it when a capability needs a managed worker. |
 | Routing | Chooses execution paths from query shape, profile data, and available files. | Only for accelerated tables. |
+| Data Rabbit | The desktop UI over any Postgres, with cockpits for the rvbbit surface. | No, but it is the fastest way to see the system. |
 
 This split matters for users. A team can adopt semantic SQL against ordinary
-heap tables without buying into Beaverdam. A team can use Beaverdam for fast
-read-heavy tables without putting model calls in those queries.
+heap tables without registering anything for acceleration. A team can
+accelerate fast read-heavy tables without putting model calls in those
+queries.
+
+One deployment note: for v1, RVBBIT ships as a single Docker ensemble
+(Postgres + extension + workers + UI) rather than as separately installable
+pieces — see [Quickstart](/docs/quickstart). The subsystems above are still
+opt-in at the SQL level; the ensemble just removes install friction.
 
 ## Why SQL-Native AI
 
@@ -44,11 +50,12 @@ then write a result back. RVBBIT makes a different bet:
 That keeps AI work closer to the operational system that already owns identity,
 access, backups, transactions, and data modeling.
 
-## Where Beaverdam Fits
+## Where Acceleration Fits
 
-Beaverdam is the optional acceleration layer beside heap. It can maintain
-Parquet, Vortex, Lance, hot memory, and layout variants while keeping Postgres
-heap as the source of truth.
+Acceleration is a registry beside the heap, not a table type: registered
+tables stay ordinary heap tables while RVBBIT maintains Parquet, Vortex,
+Lance, hot memory, and layout variants for them — with Postgres heap as the
+source of truth throughout.
 
 Use it for:
 
@@ -77,7 +84,6 @@ sidecars.
 ## Elevator Pitch
 
 RVBBIT turns Postgres into a SQL-native AI runtime: semantic functions,
-multi-step Cascades, MCP tools, embeddings, knowledge graphs, receipts, provider
-catalogs, and optional Beaverdam acceleration, all while keeping heap as the
-source of truth.
-
+multi-step Cascades, MCP tools, embeddings, knowledge graphs, receipts,
+provider catalogs, and optional storage acceleration across CPU and
+[GPU](/docs/gqe) engines, all while keeping heap as the source of truth.

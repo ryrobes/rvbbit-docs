@@ -1,6 +1,6 @@
 ---
-title: Beaverdam Worker
-description: Duck/Vortex worker modes, fallback behavior, telemetry, and deployment shape.
+title: Duck/Vortex Worker
+description: The rvbbit-duck worker — modes, fallback behavior, telemetry, and deployment shape.
 section: Operations
 navOrder: 70
 sourceDocs:
@@ -8,14 +8,16 @@ sourceDocs:
   - ../rvbbit-sql/docs/RVBBIT_DUCK_UI_CONTRACT.md
 ---
 
-The Beaverdam worker is the process path that serves DuckDB-backed queries,
-including Duck over Vortex files. The binary is named `rvbbit-duck`; the public
-concept is the Beaverdam worker.
+The Duck/Vortex worker (`rvbbit-duck`) is the out-of-process engine that
+serves DuckDB-backed queries over [acceleration files](/docs/acceleration),
+including Duck over Vortex layouts. The same codebase, compiled for GPU
+hosts, is the bridge behind the [NVIDIA GQE route](/docs/gqe).
 
 This is an optional acceleration path. The Postgres heap stays the source of
 truth, and you do not need a broker service to use the extension — the worker
 only serves selected analytical SQL that the router sends to the Duck/Vortex
-route.
+route. In the Docker ensemble the binary ships preinstalled in the Postgres
+image (and the uber stack runs a dedicated shared worker pool).
 
 ## Modes
 

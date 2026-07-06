@@ -1826,6 +1826,15 @@ main > section {
   max-width: 850px;
 }
 
+.docs-article img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 26px 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
 .docs-heading {
   padding-bottom: 34px;
   margin-bottom: 34px;

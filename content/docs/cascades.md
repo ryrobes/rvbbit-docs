@@ -113,9 +113,10 @@ SELECT rvbbit.create_operator(
     ]$steps$::jsonb);
 ```
 
-Each step has a `kind` — one of `llm`, `specialist`, `python`, `code`, `sql`, or
-`mcp` — and a step's output is available to later steps as
-`{{ steps.<name>.<field> }}`.
+Each step has a `kind` — one of `llm`, `specialist`, `python`, `code`, `sql`,
+`mcp`, or `n8n` (invoke an external n8n workflow via its production webhook;
+register the runtime first with `rvbbit.register_n8n_runtime(...)`) — and a
+step's output is available to later steps as `{{ steps.<name>.<field> }}`.
 
 Flow control (gates, ensemble takes, repair retries) is **not** set on
 `create_operator`. It is attached afterward with the decorator helpers, each of

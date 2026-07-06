@@ -10,7 +10,7 @@ sourceDocs:
 ---
 
 A `USING rvbbit` table has two layers: a live heap for writes, and columnar
-[acceleration files](/docs/beaverdam) (parquet / vortex / lance) for fast
+[acceleration files](/docs/acceleration) (parquet / vortex / lance) for fast
 analytical scans. Writes make the acceleration stale — but **stale never means
 wrong**. If a table's columnar copy isn't authoritative, the planner simply falls
 back to a correct heap scan (the slow path). That turns freshness from a
@@ -62,15 +62,17 @@ SELECT rvbbit.set_accel_policy(
 
 ```sql
 rvbbit.set_accel_policy(
-    rel                      regclass,
-    strategy                 text    DEFAULT 'target',
-    freshness_target_secs    integer DEFAULT NULL,
-    min_interval_secs        integer DEFAULT 60,
-    daily_refresh_budget     integer DEFAULT NULL,   -- NULL = unlimited
-    full_rebuild_drift_ratio double precision DEFAULT 0.5,  -- drift ≥ this → full rebuild
-    lance_separate           boolean DEFAULT true,
-    active                   boolean DEFAULT true,
-    note                     text    DEFAULT NULL
+    rel                           regclass,
+    strategy                      text    DEFAULT 'target',
+    freshness_target_secs         integer DEFAULT NULL,
+    min_interval_secs             integer DEFAULT 60,
+    daily_refresh_budget          integer DEFAULT NULL,   -- NULL = unlimited
+    full_rebuild_drift_ratio      double precision DEFAULT 0.5,  -- drift ≥ this → full rebuild
+    lance_separate                boolean DEFAULT true,
+    active                        boolean DEFAULT true,
+    note                          text    DEFAULT NULL,
+    max_row_groups_before_rebuild integer DEFAULT NULL,   -- escalate to full on file sprawl
+    max_tombstones_before_rebuild bigint  DEFAULT NULL    -- escalate to full on tombstone pileup
 ) RETURNS jsonb
 ```
 

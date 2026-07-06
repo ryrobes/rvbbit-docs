@@ -14,7 +14,7 @@ const navItems = [
   { href: "/docs/cascades", label: "Cascades", icon: Workflow },
   { href: "/capabilities", label: "Capabilities", icon: PackageSearch },
   { href: "/benchmarks", label: "Benchmarks", icon: BarChart3 },
-  { href: "/docs/beaverdam", label: "Beaverdam", icon: Boxes },
+  { href: "/docs/acceleration", label: "Acceleration", icon: Boxes },
   { href: "/docs/quickstart", label: "Quickstart", icon: TerminalSquare }
 ];
 

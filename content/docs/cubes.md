@@ -22,7 +22,7 @@ experimental [time travel](/docs/time-travel).
 ## Define A Cube
 
 `define_cube` upserts a versioned definition, materializes `cubes.<name>`,
-compacts it to build the [acceleration files](/docs/beaverdam), and
+compacts it to build the [acceleration files](/docs/acceleration), and
 registers it in the catalog. Declare the **grain** — what one row means — every
 time; a cube with a fuzzy grain is a footgun.
 

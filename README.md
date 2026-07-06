@@ -21,12 +21,12 @@ Each markdown document uses frontmatter:
 
 ```yaml
 ---
-title: Beaverdam Storage
+title: Storage Acceleration
 description: Optional poly-engine acceleration beside Postgres heap.
 section: Storage
 navOrder: 40
 sourceDocs:
-  - ../rvbbit-sql/docs/BEAVERDAM_RENAME_PLAN.md
+  - ../rvbbit-sql/docs/TUNING.md
 ---
 ```
 

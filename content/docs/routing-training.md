@@ -33,11 +33,12 @@ Common candidates:
 | `duck_vortex` | DuckDB over Vortex-encoded files where they exist. |
 | `datafusion_hive` / `duck_hive` | Hive-style partitioned Parquet variants for filter-friendly workloads. |
 | `datafusion_mem` | Decoded hot-cache path for small hot tables. |
+| `gpu_gqe` | NVIDIA GQE over authoritative Parquet on GPU hosts — see [GPU Execution](/docs/gqe). |
 | `pg_rowstore` | Retained shadow heap rowstore path. |
 
 The candidate names above are the exact route labels the SQL API uses (the
 short aliases `native`, `datafusion`, `duck` also resolve). These storage-backed
-candidates are the optional acceleration layer — conceptually "Beaverdam" — that
+candidates are the optional [acceleration layer](/docs/acceleration) that
 sits beside the heap. The heap remains the source of truth.
 
 ## No-Profile Rules
@@ -89,10 +90,10 @@ rvbbit.route_train_query(
 
 `candidates` is a single text value: `'all'`, or a comma-separated list of
 candidate names (`rvbbit_native`, `datafusion_vector`, `duck_vector`,
-`duck_vortex`, `duck_hive`, `datafusion_hive`, `pg_rowstore`, `datafusion_mem`;
-short aliases like `native`, `datafusion`, `duck` also resolve). It is not a SQL
-array, and `rvbbit_native` is always included because it is the correctness
-baseline.
+`duck_vortex`, `duck_hive`, `datafusion_hive`, `pg_rowstore`, `datafusion_mem`,
+`gpu_gqe`; short aliases like `native`, `datafusion`, `duck` also resolve). It
+is not a SQL array, and `rvbbit_native` is always included because it is the
+correctness baseline.
 
 Example:
 
@@ -126,6 +127,37 @@ Profiles and their training corpus are ordinary SQL tables
 (`rvbbit.route_profiles`, the `rvbbit.route_training_*` family, and the
 `rvbbit.route_profile_summary` / `rvbbit.route_training_summary` views) that you
 can inspect, edit, prune, and audit.
+
+## The ML Layer and the Self-Training Loop
+
+Beyond profiles and exact-shape pins, the router carries a per-engine
+**latency model** (small gradient-boosted tree ensembles stored as rows in
+`rvbbit.route_model`, evaluated in-process in microseconds). For queries no
+profile or pin covers, the model ranks the *eligible* candidates by predicted
+latency — eligibility stays rule-based, so a misprediction can only cost
+speed, never correctness. Fresh installs ship with **factory-trained models**
+(seeded by migration; marked `factory-seed` in `route_model.notes`) so
+routing is informed from the first query, and any retrain overwrites them.
+
+The loop that keeps the models honest is one call, built for a nightly
+`pg_cron` job:
+
+```sql
+SELECT rvbbit.route_self_train();
+```
+
+It reads representative SQL captured from *your real traffic*
+(`rvbbit.route_shape_samples`), replays the hottest shapes across **every
+eligible engine** (unbiased — engines the router currently avoids still get
+measured), records timings to `rvbbit.route_observations`, pins measured
+winners, and refits the models. Guardrails learned the hard way: each shape
+remembers when it was last tested and is only re-benched after a cooldown
+*and* fresh traffic (`rvbbit.route_optimize_retest_hours`, default 24h);
+per-candidate errors and timeouts are isolated
+(`rvbbit.route_optimize_timeout_s`, default 60s); samples replay under the
+`search_path` they were captured with; and the whole pass is bounded by
+`top_k` / `max_seconds` arguments. Enable model-ranked routing with
+`SET rvbbit.route_ml_enabled = on`.
 
 ## Observability
 

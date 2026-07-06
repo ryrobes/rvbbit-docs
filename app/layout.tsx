@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s | RVBBIT"
   },
   description:
-    "RVBBIT documentation for semantic SQL, Beaverdam storage acceleration, routing, and operational workflows."
+    "RVBBIT documentation for semantic SQL, storage acceleration, routing, and operational workflows."
 };
 
 export const viewport: Viewport = {

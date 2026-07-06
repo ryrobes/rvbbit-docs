@@ -115,5 +115,5 @@ LIMIT 20;
 - Put the `rvbbit-duck` binary in a controlled path if Duck/Vortex is enabled.
 - Supervise long-running workers in production.
 - Monitor receipt queue, cost audit gaps, and worker health.
-- Keep the Postgres heap as the source of truth for accelerated (Beaverdam) tables — accelerator files are rebuildable, the heap is authoritative.
+- Keep the Postgres heap as the source of truth for accelerated tables — accelerator files are rebuildable, the heap is authoritative.
 

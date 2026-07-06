@@ -1,18 +1,19 @@
 ---
-title: Beaverdam Storage
-description: Optional poly-engine storage acceleration beside ordinary Postgres heap.
+title: Storage Acceleration
+description: The acceleration registry — ordinary heap tables with rebuildable columnar files beside them.
 section: Storage
 navOrder: 40
 sourceDocs:
-  - ../rvbbit-sql/docs/BEAVERDAM_RENAME_PLAN.md
   - ../rvbbit-sql/docs/RVBBIT_PRODUCTION_SHAPE.md
   - ../rvbbit-sql/docs/LAKEHOUSE.md
   - ../rvbbit-sql/docs/TUNING.md
 ---
 
-Beaverdam is RVBBIT's optional storage acceleration layer. It stores additional
-representations of table data beside the heap so analytical queries can take
-faster paths while ordinary Postgres remains correct and available.
+Acceleration in RVBBIT is a **registry, not a table type**. Every accelerated
+table is an ordinary Postgres heap table; adding it to the acceleration
+registry tells RVBBIT to maintain additional representations of its data
+beside the heap, so analytical queries can take faster paths while ordinary
+Postgres remains correct and available.
 
 The contract is simple:
 
@@ -20,6 +21,65 @@ The contract is simple:
 - accelerator files are rebuildable,
 - missing or stale files do not make normal SQL incorrect,
 - the router chooses a faster path only when it can preserve SQL semantics.
+
+## Add A Table To The Registry
+
+`rvbbit.enable_table` registers an existing heap table for acceleration and
+installs the dirty-tracking triggers. A refresh then builds the first files:
+
+```sql
+SELECT rvbbit.enable_table('events'::regclass);
+SELECT rvbbit.refresh_acceleration('events'::regclass);
+```
+
+```sql
+rvbbit.enable_table(
+    reloid          regclass,
+    convert_to_heap boolean DEFAULT true   -- normalize an AM-bound table back to heap
+) RETURNS jsonb
+```
+
+The registry itself is the `rvbbit.tables` catalog table (one row per
+registered table, with an `acceleration_enabled` flag). Membership checks and
+listing:
+
+```sql
+SELECT rvbbit.is_rvbbit_table('events'::regclass);
+
+SELECT * FROM rvbbit.list_tables();
+-- table_oid | table_name | n_row_groups | n_deletes
+```
+
+### `USING rvbbit` Sugar
+
+`CREATE TABLE ... USING rvbbit` still works, and it is deliberately just
+sugar: a DDL event trigger registers the new table in the acceleration
+registry and immediately normalizes it to a **plain heap table**. The `rvbbit`
+access method is a compatibility alias for heap — the registry row is the
+acceleration contract, not the access method.
+
+```sql
+CREATE TABLE events (
+  id         bigint,
+  account_id bigint,
+  created_at timestamptz,
+  payload    jsonb
+) USING rvbbit;   -- heap table + registry row, in one statement
+```
+
+This matters operationally: because accelerated tables are real heap tables,
+`pg_dump`, restore, logical replication, and `DROP EXTENSION` all behave the
+way they would on any Postgres database.
+
+## Remove A Table
+
+`rvbbit.disable_table` unregisters a table: it disables acceleration, drops
+the dirty-tracking triggers, and leaves the heap untouched
+(`rvbbit.detach_table` is a compatibility alias for the same thing):
+
+```sql
+SELECT rvbbit.disable_table('events'::regclass);
+```
 
 ## What It Builds
 
@@ -70,7 +130,7 @@ budgets, and the `accel_tick` heartbeat — see
 
 ## Observability
 
-Beaverdam operations are visible from SQL:
+Acceleration operations are visible from SQL:
 
 ```sql
 SELECT *
@@ -96,6 +156,13 @@ ORDER BY started_at DESC
 LIMIT 50;
 ```
 
+For a per-table freshness/demand summary (drift, dirty time, slow-path scans),
+read `rvbbit.accel_freshness` — see
+[Accelerator Freshness](/docs/accelerator-freshness). For runtime health of
+the execution engines themselves (Duck, DataFusion, [GPU GQE](/docs/gqe)),
+call `rvbbit.accelerator_runtime_status(false)` or the broader
+`rvbbit.doctor(false)`.
+
 ## Layouts
 
 A table can have more than one physical layout. The router prefers the
@@ -108,12 +175,14 @@ WHERE table_oid = 'events'::regclass;
 ```
 
 Vortex plus Duck has been the strongest large-table path in benchmark runs, but
-DataFusion/native paths still win edge cases. Beaverdam exposes those paths as
-first-class candidates so the router can pick the best engine per query.
+DataFusion/native paths still win edge cases, and on GPU hosts the
+[NVIDIA GQE route](/docs/gqe) competes for large scans. The registry exposes
+those paths as first-class candidates so the router can pick the best engine
+per query.
 
 ## Heap Fallback
 
-Beaverdam never requires truncating the heap. Keeping heap as gold source
+Acceleration never requires truncating the heap. Keeping heap as gold source
 matters for:
 
 - ordinary Postgres reads and writes,
@@ -145,4 +214,3 @@ them. You can also (re)build them on their own with
 
 Keep variant builds bounded. Hive can be useful, but poor key choices can
 increase file count and load time without helping query plans.
-

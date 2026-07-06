@@ -102,22 +102,38 @@ The registration function is `register_mcp_server` and the rediscovery function
 is `refresh_mcp_server` (probe a server with `rvbbit.mcp_probe(server)`). See
 [MCP Servers](/docs/mcp).
 
-## Beaverdam
+## Acceleration Registry
 
-Beaverdam is the optional columnar acceleration tier — the heap stays the source
-of truth, so these are accelerators you opt into. The SQL identifiers use
-`acceleration` / `hot` / `lance` / `duck`, not the word "beaverdam". See
-[Beaverdam Storage](/docs/beaverdam).
+Acceleration is the optional columnar tier — a registry that ordinary heap
+tables are added to; the heap stays the source of truth. See
+[Storage Acceleration](/docs/acceleration).
 
 ```sql
+SELECT rvbbit.enable_table('events'::regclass);    -- add to the registry
+SELECT rvbbit.disable_table('events'::regclass);   -- remove (detach_table is an alias)
+SELECT rvbbit.is_rvbbit_table('events'::regclass);
+SELECT * FROM rvbbit.list_tables();
+
+-- CREATE TABLE ... USING rvbbit is sugar: a plain heap table, auto-registered.
+
 SELECT rvbbit.refresh_acceleration('events'::regclass);
-SELECT rvbbit.refresh_acceleration('events'::regclass, refresh_variants => true);
+SELECT rvbbit.refresh_acceleration('events'::regclass, refresh_variants => false);
+SELECT rvbbit.rebuild_acceleration('events'::regclass);
 SELECT rvbbit.compact('events'::regclass);
 
 SELECT * FROM rvbbit.acceleration_status;
+SELECT * FROM rvbbit.accel_freshness;
 SELECT * FROM rvbbit.layout_variant_status;
 SELECT * FROM rvbbit.acceleration_operations ORDER BY started_at DESC LIMIT 20;
 SELECT * FROM rvbbit.acceleration_operation_phases ORDER BY started_at DESC LIMIT 50;
+```
+
+Freshness policy plane (see [Accelerator Freshness](/docs/accelerator-freshness)):
+
+```sql
+SELECT rvbbit.set_accel_policy('events'::regclass, strategy => 'target',
+                               freshness_target_secs => 300);
+SELECT * FROM rvbbit.accel_tick(budget => 10, dry_run => true);
 ```
 
 Hot cache:
@@ -143,6 +159,17 @@ FROM rvbbit.time_travel_timeline('events'::regclass);
 The comment directive (`/* rvbbit: as_of = '...' */`) pins one statement; the
 GUC `rvbbit.as_of_timestamp` (or `rvbbit.set_as_of`) pins a session. See
 [Time Travel](/docs/time-travel).
+
+## Routing And GPU
+
+```sql
+SELECT rvbbit.route_status();
+SELECT rvbbit.route_explain('SELECT count(*) FROM events');
+
+-- NVIDIA GQE (GPU) — see /docs/gqe
+SELECT rvbbit.warm_gpu_gqe();
+SELECT detail->'gpu_gqe' FROM rvbbit.doctor(false) WHERE name = 'runtime';
+```
 
 ## Worker Telemetry
 

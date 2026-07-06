@@ -13,7 +13,7 @@ import {
 export const metadata: Metadata = {
   title: "Benchmarks",
   description:
-    "Work-in-progress Beaverdam benchmark snapshot from ClickBench and TPC-H."
+    "Work-in-progress acceleration benchmark snapshot from ClickBench and TPC-H."
 };
 
 export default function BenchmarksPage() {
@@ -22,7 +22,7 @@ export default function BenchmarksPage() {
   return (
     <main className="benchmark-page">
       <section className="benchmark-hero">
-        <p className="eyebrow">Beaverdam benchmarks</p>
+        <p className="eyebrow">Acceleration benchmarks</p>
         <h1>Current WIP performance snapshot.</h1>
         <p>
           These numbers are from <code>{benchmarks.testName}</code>, recorded
@@ -203,7 +203,7 @@ export default function BenchmarksPage() {
           </li>
           <li>
             RVBBIT numbers use the default router. The route column shows which
-            Beaverdam/native path was selected for each query.
+            accelerated/native path was selected for each query.
           </li>
           <li>
             Median latency is from the benchmark harness with three repeats in

@@ -102,11 +102,12 @@ CROSS JOIN LATERAL rvbbit.kg_context(
 This is the core RAG shape: vector retrieval finds relevant rows, graph context
 adds durable memory, and SQL controls the join.
 
-## Lance And Beaverdam
+## Lance And Acceleration
 
 Lance is used where an ANN file/index is a better fit than scanning cached
-vectors. The KG can enable Lance for fuzzy node resolution, and Beaverdam can
-build Lance assets for some accelerated table paths.
+vectors. The KG can enable Lance for fuzzy node resolution, and the
+[acceleration registry](/docs/acceleration) can build Lance assets for some
+accelerated table paths.
 
 The contract remains the same: if a Lance path is not ready, SQL should still
 have a correct slower fallback.

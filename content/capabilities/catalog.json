@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T14:35:07.981Z",
+  "generatedAt": "2026-07-05T05:38:24.743Z",
   "sourcePath": "../rvbbit-sql/crates/pg_rvbbit/src/capability_catalog_seed.json",
   "sourceSchemaVersion": 1,
   "sourceCatalogLayout": "rvbbit.pack/v1",
@@ -1573,6 +1573,47 @@
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'tabular/california-housing-sklearn',\n  target_selector => '{}'::jsonb\n);"
     },
     {
+      "id": "sql/core-workflows",
+      "name": "core_sql_workflows",
+      "title": "Core SQL Workflow Tests",
+      "description": "SQL-only catalog tests for rvbbit.flow, seeded operators, and SQL/code workflow nodes.",
+      "kind": "sql_test_pack",
+      "visibility": "public",
+      "tags": [
+        "acceptance",
+        "core",
+        "operators",
+        "sql",
+        "test",
+        "workflow"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": null,
+      "sourceModel": null,
+      "sourceUrl": null,
+      "backendName": null,
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "custom",
+      "runtimeMode": "sql",
+      "packPath": "capabilities/packs/sql/core-workflows",
+      "manifestPath": "capabilities/packs/sql/core-workflows/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'sql/core-workflows',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
       "id": "quality/data-contract-miner",
       "name": "data_contract_miner",
       "title": "Data Contract Miner",
@@ -2266,70 +2307,6 @@
       ],
       "deploySelector": {},
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'classify/deberta-v3-zero-shot',\n  target_selector => '{}'::jsonb\n);"
-    },
-    {
-      "id": "doc_extractor",
-      "name": "doc_extractor",
-      "title": "Document Extractor",
-      "description": "Universal document→markdown extraction (pdf/docx/xlsx/pptx/html/images/…) for the document brain.",
-      "kind": "hf_backend",
-      "visibility": "public",
-      "tags": [
-        "brain",
-        "document",
-        "extract"
-      ],
-      "device": "cpu",
-      "systemRuntime": false,
-      "capabilityRole": "backend",
-      "sourceProvider": null,
-      "sourceModel": null,
-      "sourceUrl": null,
-      "backendName": "extract_doc",
-      "backendTransport": "rvbbit",
-      "runtimeName": null,
-      "runtimeLanguage": null,
-      "runtimeTemplate": "hf-rvbbit-fastapi",
-      "runtimeHandler": "join_detective",
-      "runtimeMode": "build",
-      "packPath": "capabilities/packs/catalog/join-detective",
-      "manifestPath": "capabilities/packs/catalog/join-detective/capability.yaml",
-      "gpuRequired": false,
-      "gpuPlacement": null,
-      "vramRequiredBytes": null,
-      "ramRequiredBytes": null,
-      "modelSizeBytes": null,
-      "resourceHeadroomPct": null,
-      "resourceEstimateSource": null,
-      "operators": [
-        {
-          "name": "extract_doc",
-          "description": "Extract a staged file to markdown.",
-          "returnType": "text",
-          "parser": "strip",
-          "argNames": [
-            "staged_path",
-            "mime"
-          ],
-          "argTypes": [
-            "text",
-            "text"
-          ],
-          "capabilityId": "doc_extractor",
-          "capabilityTitle": "Document Extractor",
-          "capabilityTags": [
-            "brain",
-            "document",
-            "extract"
-          ],
-          "capabilityVisibility": "public",
-          "backendName": "extract_doc",
-          "runtimeName": null,
-          "device": "cpu"
-        }
-      ],
-      "deploySelector": {},
-      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'doc_extractor',\n  target_selector => '{}'::jsonb\n);"
     },
     {
       "id": "embeddings/e5-small-v2",
@@ -3587,6 +3564,51 @@
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'mcp/firecrawl',\n  target_selector => '{}'::jsonb\n);"
     },
     {
+      "id": "data/fletch-data-mover",
+      "name": "fletch_data_mover",
+      "title": "Fletch Data Mover",
+      "description": "Warren-managed ADBC import/export sidecar powered by the Fletch CLI.",
+      "kind": "runtime_sidecar",
+      "visibility": "public",
+      "tags": [
+        "adbc",
+        "cpu",
+        "data-mover",
+        "export",
+        "fletch",
+        "import",
+        "parquet",
+        "postgres",
+        "runtime",
+        "s3"
+      ],
+      "device": "cpu",
+      "systemRuntime": false,
+      "capabilityRole": "data_mover",
+      "sourceProvider": "github",
+      "sourceModel": "early-signal-tech/fletch",
+      "sourceUrl": null,
+      "backendName": null,
+      "backendTransport": "rvbbit",
+      "runtimeName": "fletch_data_mover",
+      "runtimeLanguage": "data_mover",
+      "runtimeTemplate": "fletch-data-mover",
+      "runtimeHandler": "fletch",
+      "runtimeMode": "build",
+      "packPath": "capabilities/packs/data/fletch-data-mover",
+      "manifestPath": "capabilities/packs/data/fletch-data-mover/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'data/fletch-data-mover',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
       "id": "llm/gemma-4-12b-it-vllm",
       "name": "gemma_4_12b_it_vllm",
       "title": "Gemma 4 12B IT via vLLM",
@@ -4796,44 +4818,6 @@
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'extract/gliner-medium-v2.1',\n  target_selector => '{}'::jsonb\n);"
     },
     {
-      "id": "gdrive_connector",
-      "name": "gdrive_connector",
-      "title": "Google Drive Connector",
-      "description": "Google Drive file-source connector for the document brain: lists configured folders, maps folder sharing to allowed emails, stages changed files, returns a manifest. Set source.config.connector=gdrive_connector.",
-      "kind": "hf_backend",
-      "visibility": "public",
-      "tags": [
-        "brain",
-        "connector",
-        "gdrive"
-      ],
-      "device": "cpu",
-      "systemRuntime": false,
-      "capabilityRole": "connector",
-      "sourceProvider": null,
-      "sourceModel": null,
-      "sourceUrl": null,
-      "backendName": "gdrive_connector",
-      "backendTransport": "rvbbit",
-      "runtimeName": null,
-      "runtimeLanguage": null,
-      "runtimeTemplate": "hf-rvbbit-fastapi",
-      "runtimeHandler": "join_detective",
-      "runtimeMode": "build",
-      "packPath": "capabilities/packs/catalog/join-detective",
-      "manifestPath": "capabilities/packs/catalog/join-detective/capability.yaml",
-      "gpuRequired": false,
-      "gpuPlacement": null,
-      "vramRequiredBytes": null,
-      "ramRequiredBytes": null,
-      "modelSizeBytes": null,
-      "resourceHeadroomPct": null,
-      "resourceEstimateSource": null,
-      "operators": [],
-      "deploySelector": {},
-      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'gdrive_connector',\n  target_selector => '{}'::jsonb\n);"
-    },
-    {
       "id": "mcp/maps",
       "name": "maps",
       "title": "Google Maps",
@@ -5419,6 +5403,182 @@
       ],
       "deploySelector": {},
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'mcp/maps',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "memory/hindsight-slim",
+      "name": "hindsight_slim",
+      "title": "Hindsight Memory Service",
+      "description": "Hindsight API service for agent long-term memory, backed by a dedicated schema in the RVBBIT Postgres database and RVBBIT-compatible embedding config where possible.",
+      "kind": "runtime_sidecar",
+      "visibility": "public",
+      "tags": [
+        "agent-memory",
+        "cpu",
+        "embeddings",
+        "hermes",
+        "hindsight",
+        "memory",
+        "postgres",
+        "warren"
+      ],
+      "device": "cpu",
+      "systemRuntime": false,
+      "capabilityRole": "system_runtime",
+      "sourceProvider": "builtin",
+      "sourceModel": "vectorize-io/hindsight-api-slim",
+      "sourceUrl": "https://github.com/vectorize-io/hindsight",
+      "backendName": null,
+      "backendTransport": "rvbbit",
+      "runtimeName": "hindsight_default",
+      "runtimeLanguage": "memory",
+      "runtimeTemplate": "runtime-sidecar",
+      "runtimeHandler": "custom",
+      "runtimeMode": "image",
+      "packPath": "capabilities/packs/memory/hindsight-slim",
+      "manifestPath": "capabilities/packs/memory/hindsight-slim/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [
+        {
+          "name": "hindsight_memory_recall",
+          "description": "Search a Hindsight memory bank for memories relevant to a query.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "bank_id",
+            "query",
+            "options",
+            "service_name"
+          ],
+          "argTypes": [
+            "text",
+            "text",
+            "jsonb",
+            "text"
+          ],
+          "capabilityId": "memory/hindsight-slim",
+          "capabilityTitle": "Hindsight Memory Service",
+          "capabilityTags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
+        },
+        {
+          "name": "hindsight_memory_reflect",
+          "description": "Ask Hindsight to synthesize context from a memory bank for a query.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "bank_id",
+            "query",
+            "options",
+            "service_name"
+          ],
+          "argTypes": [
+            "text",
+            "text",
+            "jsonb",
+            "text"
+          ],
+          "capabilityId": "memory/hindsight-slim",
+          "capabilityTitle": "Hindsight Memory Service",
+          "capabilityTags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
+        },
+        {
+          "name": "hindsight_memory_retain",
+          "description": "Store content in a Hindsight memory bank through the registered memory service.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "bank_id",
+            "content",
+            "options",
+            "service_name",
+            "async_mode"
+          ],
+          "argTypes": [
+            "text",
+            "text",
+            "jsonb",
+            "text",
+            "bool"
+          ],
+          "capabilityId": "memory/hindsight-slim",
+          "capabilityTitle": "Hindsight Memory Service",
+          "capabilityTags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
+        },
+        {
+          "name": "hindsight_memory_status",
+          "description": "Probe the configured Hindsight memory service and return its health payload.",
+          "returnType": "jsonb",
+          "parser": "json",
+          "argNames": [
+            "service_name"
+          ],
+          "argTypes": [
+            "text"
+          ],
+          "capabilityId": "memory/hindsight-slim",
+          "capabilityTitle": "Hindsight Memory Service",
+          "capabilityTags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'memory/hindsight-slim',\n  target_selector => '{}'::jsonb\n);"
     },
     {
       "id": "mcp/ipgeo",
@@ -13239,6 +13399,47 @@
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'tabular/wine-quality-sklearn',\n  target_selector => '{}'::jsonb\n);"
     },
     {
+      "id": "sql/workflow-visuals",
+      "name": "workflow_visual_operators",
+      "title": "Workflow Visual Operator Tests",
+      "description": "SQL-only catalog tests for deterministic rvbbit.flow UI artifact operators.",
+      "kind": "sql_test_pack",
+      "visibility": "public",
+      "tags": [
+        "acceptance",
+        "operators",
+        "sql",
+        "test",
+        "visual",
+        "workflow"
+      ],
+      "device": "auto",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": null,
+      "sourceModel": null,
+      "sourceUrl": null,
+      "backendName": null,
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "custom",
+      "runtimeMode": "sql",
+      "packPath": "capabilities/packs/sql/workflow-visuals",
+      "manifestPath": "capabilities/packs/sql/workflow-visuals/capability.yaml",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'sql/workflow-visuals',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
       "id": "classify/language-detection-xlm-roberta",
       "name": "language_detection_xlm_roberta",
       "title": "XLM-R Language Detection",
@@ -15244,35 +15445,6 @@
           "backendName": "extract_gliner",
           "runtimeName": null,
           "device": "auto"
-        }
-      ]
-    },
-    {
-      "name": "extract_doc",
-      "description": "Extract a staged file to markdown.",
-      "returnType": "text",
-      "parser": "strip",
-      "argNames": [
-        "staged_path",
-        "mime"
-      ],
-      "argTypes": [
-        "text",
-        "text"
-      ],
-      "capabilities": [
-        {
-          "id": "doc_extractor",
-          "title": "Document Extractor",
-          "visibility": "public",
-          "tags": [
-            "brain",
-            "document",
-            "extract"
-          ],
-          "backendName": "extract_doc",
-          "runtimeName": null,
-          "device": "cpu"
         }
       ]
     },
@@ -17487,6 +17659,154 @@
           "backendName": "extract_gliner",
           "runtimeName": null,
           "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "hindsight_memory_recall",
+      "description": "Search a Hindsight memory bank for memories relevant to a query.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "bank_id",
+        "query",
+        "options",
+        "service_name"
+      ],
+      "argTypes": [
+        "text",
+        "text",
+        "jsonb",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "memory/hindsight-slim",
+          "title": "Hindsight Memory Service",
+          "visibility": "public",
+          "tags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "hindsight_memory_reflect",
+      "description": "Ask Hindsight to synthesize context from a memory bank for a query.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "bank_id",
+        "query",
+        "options",
+        "service_name"
+      ],
+      "argTypes": [
+        "text",
+        "text",
+        "jsonb",
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "memory/hindsight-slim",
+          "title": "Hindsight Memory Service",
+          "visibility": "public",
+          "tags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "hindsight_memory_retain",
+      "description": "Store content in a Hindsight memory bank through the registered memory service.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "bank_id",
+        "content",
+        "options",
+        "service_name",
+        "async_mode"
+      ],
+      "argTypes": [
+        "text",
+        "text",
+        "jsonb",
+        "text",
+        "bool"
+      ],
+      "capabilities": [
+        {
+          "id": "memory/hindsight-slim",
+          "title": "Hindsight Memory Service",
+          "visibility": "public",
+          "tags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "hindsight_memory_status",
+      "description": "Probe the configured Hindsight memory service and return its health payload.",
+      "returnType": "jsonb",
+      "parser": "json",
+      "argNames": [
+        "service_name"
+      ],
+      "argTypes": [
+        "text"
+      ],
+      "capabilities": [
+        {
+          "id": "memory/hindsight-slim",
+          "title": "Hindsight Memory Service",
+          "visibility": "public",
+          "tags": [
+            "agent-memory",
+            "cpu",
+            "embeddings",
+            "hermes",
+            "hindsight",
+            "memory",
+            "postgres",
+            "warren"
+          ],
+          "backendName": null,
+          "runtimeName": "hindsight_default",
+          "device": "cpu"
         }
       ]
     },

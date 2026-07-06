@@ -1,16 +1,15 @@
 ---
 title: Time Travel
-description: Query previous Beaverdam generations with timestamp-oriented syntax and timeline helpers.
+description: Query previous acceleration generations with timestamp-oriented syntax and timeline helpers.
 section: Storage
 navOrder: 60
 sourceDocs:
   - ../rvbbit-sql/docs/TIME_TRAVEL.md
-  - ../rvbbit-sql/docs/BEAVERDAM_RENAME_PLAN.md
 ---
 
 Time travel is generation-based. Each successful acceleration refresh writes
 immutable parquet row groups and stamps them with a monotonic generation number
-per table (the optional Beaverdam storage layer). Historical reads resolve a
+per table (the optional [acceleration layer](/docs/acceleration)). Historical reads resolve a
 timestamp or generation, and the scan then ignores row groups newer than that
 generation. It is intended primarily for audit, debugging, and reproducibility;
 it does not need to be the fastest route in the system.
@@ -115,7 +114,7 @@ It returns one row per generation (newest first) with:
 ## Routing
 
 Time-travel queries favor correctness over speed. The router may use a narrower
-set of Beaverdam layouts, and falls back when a candidate cannot prove it can
+set of accelerated layouts, and falls back when a candidate cannot prove it can
 represent the requested generation.
 
 What to expect: a historical query aims to return the correct result for that

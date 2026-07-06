@@ -267,7 +267,7 @@ Tables and views — all plain and `SELECT`-able: `rvbbit.metric_defs`,
 `def_as_of`, `data_as_of`, `data_generation`, `trigger`), `rvbbit.metric_materialize`,
 `rvbbit.metric_dependencies`.
 
-In [Data Rabbit](/docs/overview), a **Metrics** folder adds three apps — a
+In [Data Rabbit](/docs/data-rabbit), a **Metrics** folder adds three apps — a
 Catalog, a Creator (with a live resolved-SQL preview and verdict badge), and an
 Inspector that runs a metric across both axes with a results grid, a pass/fail
 verdict, and a materialized **Trend**.

@@ -83,7 +83,7 @@ const receiptDims = [
 
 const architecture = [
   ["Heap", "Authoritative Postgres tables and fallback execution."],
-  ["Beaverdam", "Columnar files, layout variants, time travel, hot cache, Lance."],
+  ["Accelerate", "Columnar files, layout variants, time travel, hot cache, Lance."],
   ["Route", "Cheap query-shape decisions plus optional trained profiles."],
   ["Warren", "Capability nodes for semantic and workflow execution."]
 ];
@@ -685,7 +685,7 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
 
       <section className="band home-benchmarks" id="benchmarks">
         <div className="section-header benchmark-home-header">
-          <p>Beaverdam benchmark snapshot</p>
+          <p>Acceleration benchmark snapshot</p>
           <h2>When a fast path fits, the router takes it.</h2>
           <span>
             Work-in-progress runs compare the default RVBBIT router against
@@ -793,11 +793,12 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
       <section className="band release-band" id="get-started">
         <div>
           <TerminalSquare aria-hidden="true" size={20} />
-          <h2>CREATE EXTENSION rvbbit;</h2>
+          <h2>docker compose up -d</h2>
           <p>
-            One extension over the Postgres you already run. Start with a single
-            SQL snippet and go as deep as you want — heap stays the source of
-            truth.
+            One compose file brings up the whole thing — Postgres 18 with the
+            extension preinstalled, the query workers, Data Rabbit, and a
+            Warren agent. Start with a single SQL snippet and go as deep as
+            you want — heap stays the source of truth.
           </p>
         </div>
         <div className="hero-actions">

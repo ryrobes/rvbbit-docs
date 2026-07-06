@@ -18,6 +18,12 @@ tests, or Warren deployment jobs.
 Use packs when a feature needs assets and runtime shape, not only a single SQL
 function.
 
+The friendliest install path is the **Capabilities** window in
+[Data Rabbit](/docs/data-rabbit) — browse the catalog, click install, watch
+the deploy graph — which drives the same
+[Warren SQL deployment](#sql-deployment-through-warren) documented below. The
+shell CLI is the development/repeatable-install path.
+
 ## Local Pack Workflow
 
 ```bash
