@@ -28,26 +28,36 @@ agent for deploying capability sidecars.
 ## Start The Stack
 
 Requirements: Docker with Compose, and about 4 GB of free RAM for the base
-stack. Grab the release compose file from the
-[rvbbit-sql repo](https://github.com/ryrobes/rvbbit-sql)
-(`docker/docker-compose.release.yml`) and start it:
+stack. One line:
+
+```bash
+curl -fsSL https://rvbbit.ai/install.sh | bash
+```
+
+The script is short and readable — it checks for Docker, downloads
+[docker-compose.yml](https://rvbbit.ai/docker-compose.yml) into `./rvbbit/`,
+runs `docker compose up -d`, and waits for Postgres to report healthy. If you
+prefer to do exactly that by hand:
 
 ```bash
 # Optional: export provider keys first so LLM-backed operators work.
 export OPENROUTER_API_KEY=sk-or-...
 
-RVBBIT_VERSION=latest \
-docker compose -f docker/docker-compose.release.yml up -d
+mkdir rvbbit && cd rvbbit
+curl -fsSL https://rvbbit.ai/docker-compose.yml -o docker-compose.yml
+docker compose up -d
 ```
 
-That starts four services from published images:
+That starts everything from published images:
 
 | Service | Image | What it is |
 | --- | --- | --- |
-| `postgres` | `ghcr.io/ryrobes/rvbbit-postgres` | Postgres 18 + `pg_rvbbit` + the `rvbbit-duck` worker, on host port `55433`. |
-| `migrate` | (same image) | One-shot: `CREATE EXTENSION` / `ALTER EXTENSION ... UPDATE` / `rvbbit.migrate()` on every `up`, so upgrades are automatic. |
+| `postgres` | `ghcr.io/ryrobes/rvbbit-postgres` | Postgres 18 + `pg_rvbbit`, on host port `55433`. Migrations apply automatically on every `up`, so image upgrades are safe. |
+| `duck` | (same image) | The shared Duck/Vortex query worker pool. |
 | `lens` | `ghcr.io/ryrobes/rvbbit-lens` | The Data Rabbit desktop UI on host port `3000`. |
 | `warren` | `ghcr.io/ryrobes/rvbbit-warren-agent` | Deploys capability sidecars (local models, runtimes, MCP gateways) via the mounted Docker socket. |
+| `bootstrap` | (one-shot) | Deploys and verifies the baseline capabilities on first start, then exits. |
+| `warehouse-mcp` | opt-in | The [Warehouse MCP server](/docs/warehouse-mcp): start with `docker compose --profile warehouse up -d` after setting `WAREHOUSE_MCP_KEY`. |
 
 Provider API keys (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`,
 `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, …) are passed through from your shell
@@ -64,10 +74,11 @@ docker run -d --name rvbbit \
     ghcr.io/ryrobes/rvbbit-postgres:latest
 ```
 
-There is also an "uber" compose file (`docker/docker-compose.uber.yml`) that
-additionally runs a dedicated shared Duck worker pool and bootstraps the
-baseline Warren capabilities on first start, and GPU overlay files for
-[NVIDIA GQE](/docs/gqe) hosts.
+For NVIDIA hosts there is a GPU overlay
+([docker-compose.gqe.yml](https://rvbbit.ai/docker-compose.gqe.yml)) that
+pulls the prebuilt [GQE engine](/docs/gqe) image (~9GB, covers every CUDA
+CC 8.0+ card from RTX 30-series to Blackwell) — see the GPU host preflight
+on that page first.
 
 ## Connect
 

@@ -47,6 +47,8 @@ Two pool lanes keep the UI responsive: interactive queries get the main pool
 while monitors and schema fan-out use a small isolated `meta` pool, so a
 runaway dashboard can't starve your query.
 
+![The Connections window — pooled server-side connections with SSH tunnels; the æ badge marks rvbbit-enabled databases.](/shots/connections.png)
+
 ## The Desktop
 
 Windows live on an infinite pan/zoom canvas. Each window is draggable,
@@ -70,6 +72,8 @@ resizable, and minimizable, and the desktop itself is a first-class object:
 - **Dependency lines** — an optional overlay that draws curves between SQL
   windows that reference each other, so the reactive graph is visible.
 
+![The desktop canvas — SQL windows, charts, and monitors as draggable windows on an infinite pan/zoom canvas, with scenes and workspaces in the menu bar.](/shots/desktop-canvas.png)
+
 ## SQL Windows
 
 `⌘N` (File → New SQL window) opens the core surface: a CodeMirror SQL editor
@@ -89,6 +93,8 @@ with completion and formatting over a virtualized result grid.
 - **HTML Block mode** — chat-author an HTML app backed by named SQL queries
   (`rvbbit.html_block_turn`), rendered live in the `app` tab.
 
+![A SQL window — CodeMirror editor over a virtualized grid, with rows / profile / chart / explain body tabs.](/shots/sql-window.png)
+
 ### Reactive Blocks And Params
 
 Every SQL window has a **block name**, and any other window can reference it
@@ -101,6 +107,8 @@ or onto a rollup tile to pipeline it.
 
 This is the desktop's quiet superpower: a handful of small SQL windows
 compose into a live, cross-filtered dashboard without a dashboard builder.
+
+![Reactive blocks — windows referencing each other as {block_name}, with a click on one grid cross-filtering everything downstream.](/shots/reactive-blocks.png)
 
 ### Charts
 
@@ -118,6 +126,8 @@ from the active palette. Two editors sit on top:
 Chart marks participate in the param system — clicking a bar filters
 downstream windows, same as clicking a grid cell.
 
+![The chart shelf — drag-and-drop x/y/color/size shelves that round-trip with the underlying Vega-Lite spec.](/shots/chart-shelf.png)
+
 ### Time Travel Scrubber
 
 On an rvbbit connection, tables registered for
@@ -127,6 +137,8 @@ strata-style timeline of the table's generations (built from
 pin the window to an `AS OF` moment — the editor is rewritten with the
 `-- rvbbit: as_of = '…'` comment and re-run — hover ticks for snapshot cards,
 or type an exact datetime. See [Time Travel](/docs/time-travel).
+
+![The time-travel scrubber — dragging a table's timeline handle to pin the window to an AS OF moment.](/shots/time-travel-scrubber.png)
 
 ## Finding Things
 
@@ -141,6 +153,10 @@ or type an exact datetime. See [Time Travel](/docs/time-travel).
 - **Data Search** — free-text semantic search over the
   [catalog](/docs/catalog), ranking tables and columns by what their data is
   about.
+
+![Scry — the full-screen semantic search canvas: each stage scopes within the previous stage's results.](/shots/scry.png)
+
+![Finder — the schema tree with search, DDL view, and inline table-activity sparklines.](/shots/finder.png)
 
 ## The RVBBIT Cockpits
 
@@ -185,6 +201,8 @@ The non-rvbbit toolset works on any connection:
 - **View Apps** — save any SQL statement as a launchable desktop "app" with
   its own icon.
 
+![CSV import — streaming multi-gigabyte import with dialect inference and generated DDL.](/shots/csv-import.png)
+
 ## SQL-Authored Dashboards
 
 Results can *be* UI: a statement that returns `rvbbit_artifact = 'ui'` rows
@@ -196,6 +214,8 @@ these reusable: versioned SQL templates stored in `rvbbit.viz_block_defs`
 tables and shipped with the database rather than the client. Published
 dashboards render in a sandboxed **Dashboards** window with a read-only query
 bridge.
+
+![A SQL-authored dashboard — one statement returning rvbbit_artifact = 'ui' rows, rendered as chart, KPI, and filter tiles.](/shots/sql-dashboard.png)
 
 ## Keyboard Shortcuts
 

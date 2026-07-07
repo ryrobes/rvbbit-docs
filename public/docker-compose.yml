@@ -1,0 +1,235 @@
+name: rvbbit-uber
+
+x-rvbbit-secret-env: &rvbbit-secret-env
+  OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+  GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS:-}
+  GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT:-}
+  GOOGLE_CLOUD_QUOTA_PROJECT: ${GOOGLE_CLOUD_QUOTA_PROJECT:-}
+
+services:
+  postgres:
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-3.0.2}}
+    container_name: rvbbit-postgres
+    environment:
+      <<: *rvbbit-secret-env
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rvbbit}
+      POSTGRES_DB: ${POSTGRES_DB:-rvbbit}
+      RVBBIT_DUCK_BACKEND: ${RVBBIT_DUCK_BACKEND:-true}
+      RVBBIT_DUCK_BIN: ${RVBBIT_DUCK_BIN:-/usr/local/bin/rvbbit-duck}
+      RVBBIT_DUCK_DSN: postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}
+      RVBBIT_DUCK_BACKEND_SHARED: ${RVBBIT_DUCK_BACKEND_SHARED:-true}
+      RVBBIT_DUCK_BACKEND_SHARED_STRICT: ${RVBBIT_DUCK_BACKEND_SHARED_STRICT:-false}
+      RVBBIT_DUCK_BACKEND_SHARED_TARGETS: ${RVBBIT_DUCK_BACKEND_SHARED_TARGETS:-duck:vortex}
+      RVBBIT_DUCK_BACKEND_SHARED_DIR: ${RVBBIT_DUCK_BACKEND_SHARED_DIR:-/run/rvbbit/duck}
+      RVBBIT_DUCK_BACKEND_SHARED_WORKERS: ${RVBBIT_DUCK_BACKEND_SHARED_WORKERS:-4}
+      RVBBIT_DUCK_BACKEND_TIMEOUT_S: ${RVBBIT_DUCK_BACKEND_TIMEOUT_S:-300}
+      RVBBIT_DUCK_THREADS: ${RVBBIT_DUCK_THREADS:-4}
+      RVBBIT_PGDATA_PREFIX: ${RVBBIT_PGDATA_PREFIX:-/var/lib/postgresql}
+      RVBBIT_VISIBLE_PGDATA_PREFIX: ${RVBBIT_VISIBLE_PGDATA_PREFIX:-/var/lib/postgresql}
+      RVBBIT_ARROW_IPC_DIR: ${RVBBIT_ARROW_IPC_DIR:-/tmp/rvbbit-arrow-ipc}
+    ports:
+      - "${RVBBIT_POSTGRES_PORT:-55433}:5432"
+    volumes:
+      - rvbbit_pgdata:/var/lib/postgresql
+      - rvbbit_duck_run:/run/rvbbit
+      - rvbbit_duck_arrow_ipc:/tmp/rvbbit-arrow-ipc
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/rvbbit/tuning.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${POSTGRES_DB:-rvbbit}"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  duck:
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-3.0.2}}
+    container_name: rvbbit-duck
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      RVBBIT_DSN: postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}
+      RVBBIT_DUCK_BIN: ${RVBBIT_DUCK_BIN:-/usr/local/bin/rvbbit-duck}
+      RVBBIT_DUCK_BACKEND_SHARED_DIR: ${RVBBIT_DUCK_BACKEND_SHARED_DIR:-/run/rvbbit/duck}
+      RVBBIT_DUCK_WORKERS: ${RVBBIT_DUCK_BACKEND_SHARED_WORKERS:-4}
+      RVBBIT_DUCK_THREADS: ${RVBBIT_DUCK_THREADS:-4}
+      RVBBIT_DUCK_BROKER_QUEUE: ${RVBBIT_DUCK_BROKER_QUEUE:-1024}
+      RVBBIT_DUCK_MAX_REQUEST_BYTES: ${RVBBIT_DUCK_MAX_REQUEST_BYTES:-16777216}
+      RVBBIT_DUCK_SOCKET_IO_TIMEOUT_S: ${RVBBIT_DUCK_SOCKET_IO_TIMEOUT_S:-30}
+      RVBBIT_PGDATA_PREFIX: ${RVBBIT_PGDATA_PREFIX:-/var/lib/postgresql}
+      RVBBIT_VISIBLE_PGDATA_PREFIX: ${RVBBIT_VISIBLE_PGDATA_PREFIX:-/var/lib/postgresql}
+      RVBBIT_ARROW_IPC_DIR: ${RVBBIT_ARROW_IPC_DIR:-/tmp/rvbbit-arrow-ipc}
+      RVBBIT_DUCK_NODE_ID: ${RVBBIT_DUCK_NODE_ID:-compose-duck}
+    command:
+      - rvbbit-duck
+      - --serve-derived-socket
+      - --workers
+      - ${RVBBIT_DUCK_BACKEND_SHARED_WORKERS:-4}
+      - --engine
+      - ${RVBBIT_DUCK_ENGINE:-duck}
+      - --layout
+      - ${RVBBIT_DUCK_LAYOUT:-vortex}
+      - --dsn
+      - postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}
+      - --threads
+      - ${RVBBIT_DUCK_THREADS:-4}
+      - --pgdata-prefix
+      - ${RVBBIT_PGDATA_PREFIX:-/var/lib/postgresql}
+      - --visible-pgdata-prefix
+      - ${RVBBIT_VISIBLE_PGDATA_PREFIX:-/var/lib/postgresql}
+    volumes:
+      - rvbbit_duck_run:/run/rvbbit
+      - rvbbit_duck_arrow_ipc:/tmp/rvbbit-arrow-ipc
+      - rvbbit_pgdata:/var/lib/postgresql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "find /run/rvbbit/duck -maxdepth 1 -type s -name 'rvbbit-duck-*.sock' | grep -q ."]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  lens:
+    image: ${RVBBIT_LENS_IMAGE:-ghcr.io/ryrobes/rvbbit-lens:${RVBBIT_VERSION:-3.0.2}}
+    container_name: rvbbit-lens
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *rvbbit-secret-env
+      RVBBIT_LENS_HOME: /data
+      RVBBIT_LOCAL_WORK_ROOT: ${RVBBIT_LOCAL_WORK_ROOT:-/data}
+      RVBBIT_CAPABILITY_ROOT: ${RVBBIT_CAPABILITY_ROOT:-/usr/share/rvbbit/capabilities}
+      RVBBIT_CAPABILITY_CLI: ${RVBBIT_CAPABILITY_CLI:-/usr/share/rvbbit/capabilities/tools/rvbbit-capability}
+      DOCKER_HOST: ${RVBBIT_DOCKER_HOST:-unix:///var/run/docker.sock}
+      RVBBIT_DOCKER_NETWORK: ${RVBBIT_DOCKER_NETWORK:-rvbbit_uber}
+    ports:
+      - "${RVBBIT_LENS_PORT:-3000}:3000"
+    volumes:
+      - rvbbit_lens:/data
+      - ${RVBBIT_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
+    restart: unless-stopped
+
+  warren:
+    image: ${RVBBIT_WARREN_AGENT_IMAGE:-ghcr.io/ryrobes/rvbbit-warren-agent:${RVBBIT_VERSION:-3.0.2}}
+    container_name: rvbbit-warren
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *rvbbit-secret-env
+      RVBBIT_DSN: postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}
+      WARREN_NODE: ${WARREN_NODE:-compose-warren}
+      WARREN_WORK_DIR: /var/lib/rvbbit/warren
+      RVBBIT_DOCKER_NETWORK: ${RVBBIT_DOCKER_NETWORK:-rvbbit_uber}
+      WARREN_LABELS: '${WARREN_LABELS:-{"capability":true,"docker":true,"gpu":false}}'
+      WARREN_CAPACITY: '${WARREN_CAPACITY:-{}}'
+      WARREN_METRICS_MS: ${WARREN_METRICS_MS:-10000}
+      WARREN_RECONCILE_MS: ${WARREN_RECONCILE_MS:-15000}
+      DOCKER_HOST: ${RVBBIT_DOCKER_HOST:-unix:///var/run/docker.sock}
+    volumes:
+      - ${RVBBIT_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
+      - rvbbit_warren:/var/lib/rvbbit/warren
+    restart: unless-stopped
+
+  bootstrap:
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-3.0.2}}
+    container_name: rvbbit-bootstrap
+    depends_on:
+      postgres:
+        condition: service_healthy
+      warren:
+        condition: service_started
+    environment:
+      RVBBIT_DSN: postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}
+      WARREN_NODE: ${WARREN_NODE:-compose-warren}
+      RVBBIT_UBER_TARGET_SELECTOR: ${RVBBIT_UBER_TARGET_SELECTOR:-}
+      RVBBIT_UBER_BOOTSTRAP_CAPABILITIES: ${RVBBIT_UBER_BOOTSTRAP_CAPABILITIES:-smoke/warren-echo,runtimes/python-runtime,runtimes/mcp-gateway}
+      RVBBIT_UBER_BOOTSTRAP_TIMEOUT_SECONDS: ${RVBBIT_UBER_BOOTSTRAP_TIMEOUT_SECONDS:-600}
+      RVBBIT_UBER_BOOTSTRAP_POLL_SECONDS: ${RVBBIT_UBER_BOOTSTRAP_POLL_SECONDS:-2}
+      RVBBIT_UBER_SKIP_BOOTSTRAP: ${RVBBIT_UBER_SKIP_BOOTSTRAP:-false}
+      RVBBIT_LENS_CONNECTIONS_PATH: /var/lib/rvbbit/lens/connections.json
+      RVBBIT_LENS_BOOTSTRAP_CONNECTION: ${RVBBIT_LENS_BOOTSTRAP_CONNECTION:-true}
+      RVBBIT_LENS_CONNECTION_ID: ${RVBBIT_LENS_CONNECTION_ID:-rvbbit-uber}
+      RVBBIT_LENS_CONNECTION_LABEL: ${RVBBIT_LENS_CONNECTION_LABEL:-Rvbbit Uber}
+      RVBBIT_LENS_CONNECTION_HOST: ${RVBBIT_LENS_CONNECTION_HOST:-postgres}
+      RVBBIT_LENS_CONNECTION_PORT: ${RVBBIT_LENS_CONNECTION_PORT:-5432}
+      RVBBIT_LENS_CONNECTION_DATABASE: ${POSTGRES_DB:-rvbbit}
+      RVBBIT_LENS_CONNECTION_USER: ${RVBBIT_LENS_CONNECTION_USER:-postgres}
+      RVBBIT_LENS_CONNECTION_PASSWORD: ${POSTGRES_PASSWORD:-rvbbit}
+    command: ["rvbbit-uber-bootstrap"]
+    volumes:
+      - rvbbit_lens:/var/lib/rvbbit/lens
+    restart: "no"
+
+  # ── Warehouse MCP — serve the warehouse to Claude (Cowork & Code) ──────────
+  # Inbound (Claude -> rvbbit), the OPPOSITE of the capability mcp-gateway. Its own
+  # tiny image; connects straight to postgres (never via the gateway). Opt-in:
+  #   docker compose -f docker/docker-compose.uber.yml --profile warehouse up -d
+  # AUTH — two modes (the server picks based on WAREHOUSE_PUBLIC_URL):
+  #   * OAuth (recommended, for Claude Desktop/Cowork's native connector): set
+  #     WAREHOUSE_PUBLIC_URL + WAREHOUSE_LOGIN_PASSWORD + WAREHOUSE_JWT_SECRET
+  #     (JWT secret MUST differ from WAREHOUSE_MCP_KEY). Terminate TLS at your proxy
+  #     and forward it to the published 127.0.0.1:8765 below.
+  #   * Shared key (Claude Code): set only WAREHOUSE_MCP_KEY (a bearer header).
+  # The server fail-fasts on a bad OAuth config, so a misconfig won't serve unauthed.
+  # Prod hardening: point WAREHOUSE_DSN at a read-only `warehouse_reader` role.
+  warehouse-mcp:
+    profiles: ["warehouse"]
+    image: ${RVBBIT_WAREHOUSE_MCP_IMAGE:-ghcr.io/ryrobes/rvbbit-warehouse-mcp:${RVBBIT_VERSION:-3.0.2}}
+    container_name: rvbbit-warehouse-mcp
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8765:8765"   # localhost-only — your host nginx/proxy reaches it here
+    volumes:
+      - rvbbit_warehouse_mcp:/app/data   # durable OAuth state (clients + refresh tokens)
+    environment:
+      WAREHOUSE_DSN: ${WAREHOUSE_DSN:-postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}}
+      WAREHOUSE_MCP_PORT: "8765"
+      # OAuth mode (set these for the native connector):
+      WAREHOUSE_PUBLIC_URL: ${WAREHOUSE_PUBLIC_URL:-}
+      WAREHOUSE_LOGIN_PASSWORD: ${WAREHOUSE_LOGIN_PASSWORD:-}
+      WAREHOUSE_ALLOWED_EMAILS: ${WAREHOUSE_ALLOWED_EMAILS:-}
+      WAREHOUSE_JWT_SECRET: ${WAREHOUSE_JWT_SECRET:-}
+      WAREHOUSE_STATE_FILE: /app/data/oauth_state.json   # survives restarts (no re-add of connectors)
+      # Shared-key fallback (Claude Code / optional):
+      WAREHOUSE_MCP_KEY: ${WAREHOUSE_MCP_KEY:-}
+    restart: unless-stopped
+
+  # OPTIONAL Cloudflare QUICK tunnel — only if you have NO proxy of your own. Separate
+  # profile so the `warehouse` profile (above) does NOT start it. Instant public HTTPS,
+  # ephemeral URL in its logs (`logs warehouse-tunnel | grep trycloudflare`). NOTE:
+  # OAuth mode needs a STABLE url, so pair the tunnel with shared-key mode, or use a
+  # named tunnel (TUNNEL_TOKEN) / your own proxy for OAuth.
+  #   docker compose -f docker/docker-compose.uber.yml --profile warehouse-tunnel up -d
+  warehouse-tunnel:
+    profiles: ["warehouse-tunnel"]
+    image: cloudflare/cloudflared:latest
+    container_name: rvbbit-warehouse-tunnel
+    command: tunnel --no-autoupdate --url http://warehouse-mcp:8765
+    restart: unless-stopped
+
+networks:
+  default:
+    name: ${RVBBIT_DOCKER_NETWORK:-rvbbit_uber}
+
+volumes:
+  rvbbit_pgdata:
+    name: ${RVBBIT_PGDATA_VOLUME:-rvbbit_uber_pgdata}
+  rvbbit_duck_run:
+    name: ${RVBBIT_DUCK_RUN_VOLUME:-rvbbit_uber_duck_run}
+  rvbbit_duck_arrow_ipc:
+    name: ${RVBBIT_DUCK_ARROW_IPC_VOLUME:-rvbbit_uber_duck_arrow_ipc}
+  rvbbit_lens:
+    name: ${RVBBIT_LENS_VOLUME:-rvbbit_uber_lens}
+  rvbbit_warren:
+    name: ${RVBBIT_WARREN_VOLUME:-rvbbit_uber_warren}
+  rvbbit_warehouse_mcp:
+    name: ${RVBBIT_WAREHOUSE_MCP_VOLUME:-rvbbit_uber_warehouse_mcp}

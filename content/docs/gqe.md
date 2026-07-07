@@ -10,10 +10,14 @@ sourceDocs:
 
 RVBBIT can execute accelerated analytical queries on an NVIDIA GPU through
 [GQE](https://github.com/rapidsai/gqe), the RAPIDS GPU Query Engine built on
-libcudf. In routing terms it is simply one more candidate — `gpu_gqe` — beside
-Duck/Vortex, DataFusion, native, and the Postgres rowstore. The same contract
-applies: the heap stays the source of truth, and the route is only taken when
-it can preserve SQL semantics.
+libcudf. NVIDIA's post
+[Designing GPU-Accelerated Query Engines with NVIDIA GQE](https://developer.nvidia.com/blog/designing-gpu-accelerated-query-engines-with-nvidia-gqe/)
+is the reference for the engine itself — the three-layer query/data/execution
+design on cuDF, nvCOMP, and NVSHMEM — and is what RVBBIT's `gpu_gqe` bridge
+is built against. In routing terms it is simply one more candidate —
+`gpu_gqe` — beside Duck/Vortex, DataFusion, native, and the Postgres
+rowstore. The same contract applies: the heap stays the source of truth, and
+the route is only taken when it can preserve SQL semantics.
 
 The design goal is that GPU support is **inert everywhere it can't run**. On a
 box without a GPU (or without the GQE build), the candidate self-gates as
@@ -115,23 +119,44 @@ or why not.
 
 ## Deployment
 
-GQE builds are large (the CUDA/RAPIDS toolchain adds tens of gigabytes), so
-the GPU image is **built on the GPU box** rather than pulled from a registry.
-The rvbbit-sql repo ships Docker overlays for the supported shapes:
+The GPU image is **prebuilt and published** —
+`ghcr.io/ryrobes/rvbbit-postgres-gqe` (~9GB) — so a GPU deployment is a pull,
+not a compile. It is the standard image plus the GQE runtime, and one image
+covers every CUDA compute-capability 8.0+ GPU:
 
-| Compose overlay | Shape |
+| GPU | Covered by |
 | --- | --- |
-| `docker/docker-compose.gqe-image.yml` | Build the full GQE image (`Dockerfile.rvbbit-gqe`: libcudf + MLIR + gqe-cli on top of the standard image). |
-| `docker/docker-compose.gqe-host.yml` | Mount a host-built GQE tree read-only at `/opt/gqe` into the standard image. |
-| `docker/docker-compose.release-gqe.yml` | The release ensemble plus a build-on-box GQE Postgres. |
+| A100, RTX 30-series, RTX 40-series, Jetson Orin | `sm_80` SASS (8.x cards run it natively) |
+| H100 / H200 | `sm_90` SASS |
+| B100 / B200 / GB200 | `sm_100` SASS |
+| RTX 50-series, RTX PRO Blackwell, DGX Spark | `sm_120` SASS + PTX (forward-compatible) |
 
-Overlays set the GPU-specific runtime pieces (`gpus: all`, shared memory and
-memlock limits, `NVIDIA_VISIBLE_DEVICES`). Everything else — the ensemble,
-ports, volumes — matches the standard [quickstart](/docs/quickstart) stack.
+Turing (RTX 20-series) and older are not supported — cudf 26.x dropped them.
+On such hosts the plain image behaves identically (the route self-gates).
+
+Start it with the GPU overlay on top of the standard compose:
+
+```bash
+curl -fsSL https://rvbbit.ai/docker-compose.yml -o docker-compose.yml
+curl -fsSL https://rvbbit.ai/docker-compose.gqe.yml -o docker-compose.gqe.yml
+docker compose -f docker-compose.yml -f docker-compose.gqe.yml up -d
+```
+
+The overlay sets the GPU-specific runtime pieces (`gpus: all`, shared memory
+and memlock limits, `NVIDIA_VISIBLE_DEVICES`). Everything else — the
+ensemble, ports, volumes — matches the standard
+[quickstart](/docs/quickstart) stack.
+
+Building from source instead (custom GQE/cudf refs or arch lists) remains
+supported: `Dockerfile.rvbbit-gqe` builds the full toolchain image on the GPU
+box (one-time, ~2h on 48 cores), and `Dockerfile.rvbbit-gqe-runtime` extracts
+the slim runtime image from it. The dev overlays
+(`docker-compose.gqe-image.yml`, `docker-compose.gqe-host.yml`) cover
+build-from-source and host-mounted GQE trees.
 
 ### GPU host preflight
 
-Before the one-time GQE build, make sure the *host* is actually GPU-ready —
+Before first start, make sure the *host* is actually GPU-ready —
 "GPU instance" does not mean drivers are installed:
 
 ```bash

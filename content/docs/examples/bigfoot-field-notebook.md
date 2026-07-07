@@ -32,8 +32,15 @@ scripts do not use Python.
 
 ## Run It
 
+The notebook scripts live in the
+[rvbbit-sql repo](https://github.com/ryrobes/rvbbit-sql) under
+`examples/bigfoot/`; the dataset itself downloads automatically (~14MB from
+`https://rvbbit.ai/data/bigfoot_sightings.csv`) on the first run:
+
 ```bash
-examples/bigfoot/run_all.sh
+git clone https://github.com/ryrobes/rvbbit-sql && cd rvbbit-sql
+RVBBIT_DSN=postgresql://postgres:rvbbit@localhost:55433/rvbbit \
+  examples/bigfoot/run_all.sh
 ```
 
 Default run:
