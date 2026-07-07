@@ -1311,6 +1311,8 @@ main > section {
 
 .benchmark-table th:first-child,
 .benchmark-table td:first-child,
+.query-table th:nth-child(2),
+.query-table th:nth-child(3),
 .query-table td:nth-child(2),
 .query-table td:nth-child(3) {
   text-align: left;
