@@ -32,16 +32,22 @@ scripts do not use Python.
 
 ## Run It
 
-The notebook scripts live in the
-[rvbbit-sql repo](https://github.com/ryrobes/rvbbit-sql) under
-`examples/bigfoot/`; the dataset itself downloads automatically (~14MB from
-`https://rvbbit.ai/data/bigfoot_sightings.csv`) on the first run:
+No repo clone needed — one curl. The runner fetches the notebook SQL files
+and the BFRO dataset (~14MB) next to itself on first run, so you can read
+every line before and after it executes:
 
 ```bash
-git clone https://github.com/ryrobes/rvbbit-sql && cd rvbbit-sql
-RVBBIT_DSN=postgresql://postgres:rvbbit@localhost:55433/rvbbit \
-  examples/bigfoot/run_all.sh
+mkdir bigfoot && cd bigfoot
+curl -fsSL https://rvbbit.ai/bigfoot/run_all.sh -o run_all.sh && chmod +x run_all.sh
+
+RVBBIT_DSN=postgresql://postgres:rvbbit@localhost:55433/rvbbit ./run_all.sh
 ```
+
+Each numbered script is plain SQL — browse them at
+[rvbbit.ai/bigfoot/](https://rvbbit.ai/bigfoot/00_load.sql) or in the
+[rvbbit-sql repo](https://github.com/ryrobes/rvbbit-sql/tree/main/examples/bigfoot)
+— or skip the runner entirely and paste the sections below into any SQL
+client as you read.
 
 Default run:
 
