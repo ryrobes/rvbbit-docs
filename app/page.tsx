@@ -357,6 +357,11 @@ FROM   rvbbit.receipts
 WHERE  invocation_at > now() - interval '1 day'
 GROUP  BY operator, model
 ORDER  BY cost_usd DESC;`}</SqlCode>
+            <Screenshot
+              src="shots/receipts-costs.png"
+              alt="Data Rabbit receipts and costs view showing operator and model rollups for calls, tokens, cost, latency, errors, and recent activity."
+              caption="Receipts cockpit - live operator/model rollups for calls, tokens, cost, latency, errors, and last-call recency."
+            />
           </div>
         </div>
         <Link className="mcp-link" href="/docs/receipts-costs">

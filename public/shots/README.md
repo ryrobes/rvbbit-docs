@@ -20,6 +20,7 @@ slots.
 | `sql-window.png` | Data Rabbit docs | SQL editor plus virtualized result grid. |
 | `reactive-blocks.png` | Data Rabbit docs | Reactive SQL blocks with `{block}` references and lineage. |
 | `chart-shelf.png` | Data Rabbit docs | Chart shelf controls over real query results. |
+| `receipts-costs.png` | Receipts and costs docs / homepage | Receipts and costs cockpit with operator/model rollups, calls, tokens, cost, latency, errors, and recent activity. |
 | `time-travel-scrubber.png` | Data Rabbit docs | Table time-travel controls over an accelerated table. |
 | `finder.png` | Data Rabbit docs | Schema browser and object tree. |
 | `csv-import.png` | Data Rabbit docs | CSV import inspector with inferred columns and generated target table. |

@@ -14,6 +14,8 @@ Receipts are the operational trust layer for semantic SQL. A semantic function
 can be useful in a demo without receipts; it is not production-shaped until a
 user can inspect what happened, what it cost, and whether anything failed.
 
+![Receipts and costs in Data Rabbit, showing operator and model rollups with calls, tokens, cost, latency, errors, and recent activity.](/shots/receipts-costs.png)
+
 ## Two Layers
 
 | Layer | Purpose |
@@ -158,4 +160,3 @@ Everything you need to observe receipts is queryable from SQL:
 - maintenance actions for queue flush and backfill.
 
 Treat receipts as audit records — read and aggregate them, but don't mutate them.
-
