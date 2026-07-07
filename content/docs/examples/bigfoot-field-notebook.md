@@ -52,14 +52,36 @@ Default run:
 - runs retrieval, evidence, classification, clustering, outlier, diff,
   dedupe, extraction, Warren capability operators, and KG examples.
 
-The capability-operator section (`06_capability_operators.sql`) expects these
-Warren packs to be installed first:
+The capability-operator section (`06_capability_operators.sql`) uses three
+local-model packs — GLiNER entity extraction, BGE reranking, and emotion
+classification. Installing them is SQL too: the packs ship in
+`rvbbit.capability_catalog` (seeded at install), and Warren does the rest —
+pulls the model, builds the sidecar, probes it, and registers the operators.
 
-```bash
-make capability-test MANIFEST=capabilities/packs/extract/gliner-medium-v2.1 TARGET='{"capability":true,"docker":true}'
-make capability-test MANIFEST=capabilities/packs/rerank/bge-reranker-v2-m3 TARGET='{"capability":true,"docker":true}'
-make capability-test MANIFEST=capabilities/packs/classify/emotion-distilroberta TARGET='{"capability":true,"docker":true}'
+```sql
+SELECT rvbbit.deploy_catalog_capability(
+  catalog_id      => 'extract/gliner-medium-v2.1',
+  target_selector => '{"capability":true,"docker":true}'::jsonb);
+
+SELECT rvbbit.deploy_catalog_capability(
+  catalog_id      => 'rerank/bge-reranker-v2-m3',
+  target_selector => '{"capability":true,"docker":true}'::jsonb);
+
+SELECT rvbbit.deploy_catalog_capability(
+  catalog_id      => 'classify/emotion-distilroberta',
+  target_selector => '{"capability":true,"docker":true}'::jsonb);
 ```
+
+Watch the deploys land (each is a queued Warren job):
+
+```sql
+SELECT name, status, coalesce(phase, '') AS phase
+FROM rvbbit.warren_jobs
+ORDER BY created_at DESC LIMIT 3;
+```
+
+When all three report `completed`, the operators exist. See
+[Capability Packs](/docs/capability-packs) for the full deployment story.
 
 To run only the non-capability notebook sections:
 
