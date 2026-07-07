@@ -190,9 +190,6 @@ export default function BenchmarksPage() {
                       return (
                         <td className={isBest ? "best-cell" : ""} key={system}>
                           <span>{formatMs(measurement?.medianMs)}</span>
-                          {measurement?.status !== "ok" ? (
-                            <small>{measurement?.status ?? "missing"}</small>
-                          ) : null}
                         </td>
                       );
                     })}
