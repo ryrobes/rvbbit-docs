@@ -1,10 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
+import yaml from "js-yaml";
 
 const root = process.cwd();
 const sourcePath =
   process.env.CAPABILITY_CATALOG_SOURCE ??
-  path.resolve(root, "../rvbbit-sql/crates/pg_rvbbit/src/capability_catalog_seed.json");
+  path.resolve(root, "../rvbbit-sql/capabilities/catalog.json");
 const outputPath = path.join(root, "content", "capabilities", "catalog.json");
 
 function asArray(value) {
@@ -13,6 +14,29 @@ function asArray(value) {
 
 function asObject(value) {
   return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+}
+
+function resolveSourcePath(relativePath) {
+  if (!relativePath || typeof relativePath !== "string") return null;
+  if (path.isAbsolute(relativePath)) return relativePath;
+
+  const candidates = [
+    path.resolve(path.dirname(sourcePath), relativePath),
+    path.resolve(path.dirname(sourcePath), "..", relativePath),
+    path.resolve(root, "../rvbbit-sql", relativePath)
+  ];
+  return candidates.find((candidate) => fs.existsSync(candidate)) ?? null;
+}
+
+function readYamlObject(relativePath) {
+  const resolvedPath = resolveSourcePath(relativePath);
+  if (!resolvedPath) return {};
+
+  try {
+    return asObject(yaml.load(fs.readFileSync(resolvedPath, "utf8")));
+  } catch {
+    return {};
+  }
 }
 
 function asNumber(value) {
@@ -80,13 +104,22 @@ function normalizeResources(entry, manifest) {
 }
 
 function normalizeOperator(operator, capability) {
+  const op =
+    typeof operator === "string"
+      ? { name: operator }
+      : asObject(operator);
+
   return {
-    name: String(operator.name ?? ""),
-    description: String(operator.description ?? ""),
-    returnType: String(operator.return_type ?? ""),
-    parser: String(operator.parser ?? ""),
-    argNames: asArray(operator.arg_names).map(String),
-    argTypes: asArray(operator.arg_types).map(String),
+    name: String(op.name ?? op.operator_name ?? ""),
+    description: firstString(
+      op.description,
+      op.summary,
+      `Operator exported by ${capability.title}.`
+    ),
+    returnType: String(op.return_type ?? op.returnType ?? ""),
+    parser: String(op.parser ?? ""),
+    argNames: asArray(op.arg_names ?? op.argNames).map(String),
+    argTypes: asArray(op.arg_types ?? op.argTypes).map(String),
     capabilityId: capability.id,
     capabilityTitle: capability.title,
     capabilityTags: capability.tags,
@@ -118,8 +151,13 @@ function deploySql(id, selector) {
 
 const raw = JSON.parse(fs.readFileSync(sourcePath, "utf8"));
 const capabilities = asArray(raw.capabilities).map((item) => {
-  const manifest = asObject(item.capability_manifest);
-  const entry = asObject(item.catalog_entry);
+  const itemObject = asObject(item);
+  const fileManifest = readYamlObject(itemObject.manifest_path);
+  const manifest = asObject(
+    itemObject.capability_manifest ??
+      (asArray(fileManifest.operators).length > 0 ? fileManifest : itemObject)
+  );
+  const entry = asObject(itemObject.catalog_entry ?? itemObject);
   const resourceEstimate = normalizeResources(entry, manifest);
   const visibility = String(entry.catalog_visibility ?? "public");
   const id = String(entry.id ?? manifest.name ?? "");
@@ -159,8 +197,12 @@ const capabilities = asArray(raw.capabilities).map((item) => {
     deploySql: deploySql(id, selector)
   };
 
-  capability.operators = asArray(manifest.operators)
-    .map((operator) => normalizeOperator(asObject(operator), capability))
+  const operators = asArray(manifest.operators).length
+    ? asArray(manifest.operators)
+    : asArray(entry.operators);
+
+  capability.operators = operators
+    .map((operator) => normalizeOperator(operator, capability))
     .filter((operator) => operator.name)
     .sort((a, b) => a.name.localeCompare(b.name));
 

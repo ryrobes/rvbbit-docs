@@ -12,15 +12,17 @@ import { useRef, useEffect, useState } from "react";
  * `filter` warms it toward RVBBIT's amber/ink palette and the bottom mask keeps
  * it from fighting text lower on the page.
  *
- * To tune: drop more webms in public/alice/ (GOP=1 / low keyframe interval for
- * smooth seeking), and adjust maxOpacity / tint below.
+ * To tune: drop more webms in public/alice/ before building (GOP=1 / low
+ * keyframe interval for smooth seeking), and adjust maxOpacity / tint below.
  */
 export function ScrollVideo({
+  files,
   scrollRange = 3200,
   maxOpacity = 0.13,
   fadeOutStart = 1700,
   tint = "saturate(0.5) sepia(0.18) hue-rotate(-6deg) contrast(1.05)",
 }: {
+  files: string[];
   scrollRange?: number;
   maxOpacity?: number;
   fadeOutStart?: number;
@@ -45,19 +47,12 @@ export function ScrollVideo({
     setEnabled(!mq.matches);
   }, []);
 
-  // Pick a random video from the manifest on mount.
+  // Pick a random video from the build-time manifest on mount.
   useEffect(() => {
-    if (!enabled) return;
-    fetch("/api/alice")
-      .then((r) => (r.ok ? r.json() : { files: [] }))
-      .then(({ files }: { files: string[] }) => {
-        if (files.length > 0) {
-          const pick = files[Math.floor(Math.random() * files.length)];
-          setSrc(`/alice/${pick}`);
-        }
-      })
-      .catch(() => {});
-  }, [enabled]);
+    if (!enabled || files.length === 0) return;
+    const pick = files[Math.floor(Math.random() * files.length)];
+    setSrc(`/alice/${pick}`);
+  }, [enabled, files]);
 
   useEffect(() => {
     const video = videoRef.current;

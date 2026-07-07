@@ -6,7 +6,7 @@ import {
   getSuiteGroups,
   routeLabel,
   systemClass,
-  systemLabels,
+  systemLabel,
   systemOrder
 } from "@/lib/benchmarks";
 
@@ -18,6 +18,13 @@ export const metadata: Metadata = {
 
 export default function BenchmarksPage() {
   const groups = getSuiteGroups();
+  const latestRun = benchmarks.runs.reduce<(typeof benchmarks.runs)[number] | null>(
+    (latest, run) => {
+      if (!latest) return run;
+      return new Date(run.startedAt) > new Date(latest.startedAt) ? run : latest;
+    },
+    null
+  );
 
   return (
     <main className="benchmark-page">
@@ -26,8 +33,10 @@ export default function BenchmarksPage() {
         <h1>Current WIP performance snapshot.</h1>
         <p>
           These numbers are from <code>{benchmarks.testName}</code>, recorded
-          from local benchmark history on June 1, 2026. RVBBIT is the default
-          auto-router path, not a per-query hand-picked best path.
+          from local benchmark history
+          {latestRun ? <> on {formatDate(latestRun.startedAt)}</> : null}.
+          RVBBIT is the default auto-router path, not a per-query hand-picked
+          best path.
         </p>
         <div className="benchmark-note">
           <strong>Work in progress:</strong> the storage layer, router rules,
@@ -119,7 +128,7 @@ export default function BenchmarksPage() {
                   >
                     <th>
                       <span className={`system-pill ${systemClass(summary.system)}`}>
-                        {systemLabels[summary.system]}
+                        {systemLabel(summary.system)}
                       </span>
                     </th>
                     <td>{formatMs(summary.geomeanMs)}</td>
@@ -163,7 +172,7 @@ export default function BenchmarksPage() {
                   <th>Description</th>
                   <th>RVBBIT route</th>
                   {systemOrder.map((system) => (
-                    <th key={system}>{systemLabels[system]}</th>
+                    <th key={system}>{systemLabel(system)}</th>
                   ))}
                 </tr>
               </thead>
@@ -218,4 +227,3 @@ export default function BenchmarksPage() {
     </main>
   );
 }
-

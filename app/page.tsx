@@ -1,3 +1,5 @@
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -111,13 +113,26 @@ const metricsFeatures = [
   }
 ];
 
+function getAliceVideoFiles() {
+  try {
+    const entries = readdirSync(join(process.cwd(), "public", "alice"));
+    const webm = entries.filter((entry) => entry.endsWith(".webm")).sort();
+    return webm.length > 0
+      ? webm
+      : entries.filter((entry) => entry.endsWith(".mp4")).sort();
+  } catch {
+    return [];
+  }
+}
+
 export default function Home() {
   const docs = getAllDocs().slice(0, 10);
   const benchmarkGroups = getSuiteGroups();
+  const aliceVideoFiles = getAliceVideoFiles();
 
   return (
     <main>
-      <ScrollVideo />
+      <ScrollVideo files={aliceVideoFiles} />
       <section className="hero">
         <RabbitHero />
         <div className="hero-content hero-split">

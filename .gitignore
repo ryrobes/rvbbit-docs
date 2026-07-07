@@ -1,4 +1,6 @@
 .next/
+.playwright-mcp/
+lens-initial-snapshot.md
 node_modules/
 out/
 dist/
@@ -10,4 +12,3 @@ yarn-error.log*
 pnpm-debug.log*
 coverage/
 *.tsbuildinfo
-

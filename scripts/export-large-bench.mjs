@@ -7,13 +7,14 @@ const dsn =
   process.env.RVBBIT_DSN ??
   "postgresql://postgres:rvbbit@localhost:55433/bench";
 
-const testName = process.env.BENCHMARK_TEST_NAME ?? "large_bench2";
+const testName = process.env.BENCHMARK_TEST_NAME ?? "gpu_bench_test12";
 const testNameLiteral = `'${testName.replaceAll("'", "''")}'`;
+const outputName = process.env.BENCHMARK_OUTPUT_NAME ?? testName;
 const outputPath = path.join(
   process.cwd(),
   "content",
   "benchmarks",
-  `${testName}.json`
+  `${outputName}.json`
 );
 
 const sql = String.raw`
@@ -34,6 +35,29 @@ WITH base AS (
     FROM bench_history.query_results
     WHERE test_name = ${testNameLiteral}
 ),
+system_order AS (
+    SELECT
+        system,
+        row_number() OVER (
+            ORDER BY
+                coalesce(
+                    array_position(
+                        ARRAY[
+                            'rvbbit',
+                            'clickhouse',
+                            'alloydb',
+                            'pg_baseline',
+                            'hydra',
+                            'citus'
+                        ]::text[],
+                        system
+                    ),
+                    1000
+                ),
+                system
+        ) AS sort_key
+    FROM (SELECT DISTINCT system FROM base) systems
+),
 best AS (
     SELECT
         suite,
@@ -50,6 +74,7 @@ summary AS (
         b.suite,
         b.scale,
         b.system,
+        system_order.sort_key AS system_sort_key,
         count(*) AS queries,
         count(*) FILTER (WHERE b.status = 'ok') AS ok,
         round(exp(avg(ln(b.median_ms)) FILTER (
@@ -69,7 +94,8 @@ summary AS (
         count(*) FILTER (WHERE b.status <> 'ok') AS failures
     FROM base b
     JOIN best USING (suite, scale, qid)
-    GROUP BY 1, 2, 3
+    JOIN system_order USING (system)
+    GROUP BY 1, 2, 3, 4
 ),
 routes AS (
     SELECT
@@ -136,7 +162,10 @@ SELECT jsonb_build_object(
     'exportedAt', now(),
     'sourceQuery', format('select * from bench_history.query_results where test_name = %L', ${testNameLiteral}),
     'note', 'Work-in-progress benchmark snapshot from local bench_history. Median latency in milliseconds; lower is better.',
-    'systems', jsonb_build_array('rvbbit', 'clickhouse', 'alloydb', 'pg_baseline', 'hydra', 'citus'),
+    'systems', (
+        SELECT jsonb_agg(system ORDER BY sort_key)
+        FROM system_order
+    ),
     'runs', (
         SELECT jsonb_agg(
             jsonb_build_object(
@@ -178,15 +207,7 @@ SELECT jsonb_build_object(
             ORDER BY
                 suite,
                 nullif(scale, '')::float8 NULLS LAST,
-                CASE system
-                    WHEN 'rvbbit' THEN 0
-                    WHEN 'clickhouse' THEN 1
-                    WHEN 'alloydb' THEN 2
-                    WHEN 'pg_baseline' THEN 3
-                    WHEN 'hydra' THEN 4
-                    WHEN 'citus' THEN 5
-                    ELSE 9
-                END
+                system_sort_key
         )
         FROM summary
     ),

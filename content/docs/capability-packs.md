@@ -24,6 +24,8 @@ the deploy graph — which drives the same
 [Warren SQL deployment](#sql-deployment-through-warren) documented below. The
 shell CLI is the development/repeatable-install path.
 
+![Capabilities in Data Rabbit - curated packs with runtime requirements, operator names, test counts, tags, and deploy status.](/shots/capabilities.png)
+
 ## Local Pack Workflow
 
 ```bash

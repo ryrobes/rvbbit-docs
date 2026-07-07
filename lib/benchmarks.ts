@@ -1,12 +1,6 @@
-import benchmarkData from "@/content/benchmarks/large_bench2.json";
+import benchmarkData from "@/content/benchmarks/gpu_bench_test12.json";
 
-export type BenchmarkSystem =
-  | "rvbbit"
-  | "clickhouse"
-  | "alloydb"
-  | "pg_baseline"
-  | "hydra"
-  | "citus";
+export type BenchmarkSystem = string;
 
 export type BenchmarkSummary = {
   suite: string;
@@ -84,13 +78,14 @@ export type BenchmarkData = {
 
 export const benchmarks = benchmarkData as BenchmarkData;
 
-export const systemLabels: Record<BenchmarkSystem, string> = {
+export const systemLabels: Record<string, string> = {
   rvbbit: "RVBBIT",
   clickhouse: "ClickHouse",
   alloydb: "AlloyDB",
   pg_baseline: "Postgres",
   hydra: "Hydra",
-  citus: "Citus"
+  citus: "Citus",
+  gpu_gqe: "GPU GQE"
 };
 
 export const systemOrder = benchmarks.systems;
@@ -151,11 +146,21 @@ export function getSystemSummary(
 
 export function routeLabel(route: string | null) {
   if (!route) return "unknown";
-  return route
-    .replace("duck_vortex", "Duck/Vortex")
-    .replace("duck_hive", "Duck/Hive")
-    .replace("datafusion", "DataFusion")
-    .replace("native", "Native");
+  const labels: Record<string, string> = {
+    datafusion_hive: "DataFusion/Hive",
+    datafusion_vortex: "DataFusion/Vortex",
+    duck: "DuckDB",
+    duck_hive: "Duck/Hive",
+    duck_vortex: "Duck/Vortex",
+    gpu_gqe: "GPU GQE",
+    native: "Native",
+    postgres_rowstore: "Postgres Rowstore"
+  };
+  return labels[route] ?? route.replaceAll("_", " ");
+}
+
+export function systemLabel(system: string) {
+  return systemLabels[system] ?? system.replaceAll("_", " ");
 }
 
 export function formatMs(ms: number | null | undefined) {
@@ -189,4 +194,3 @@ export function formatDate(iso: string | null | undefined) {
 export function systemClass(system: string) {
   return `system-${system.replaceAll("_", "-")}`;
 }
-

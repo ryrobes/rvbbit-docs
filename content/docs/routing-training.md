@@ -21,6 +21,8 @@ adaptive part is rule- and profile-based. A learned router exists only in shadow
 mode today — it observes and explains decisions, it does not take over default
 routing.
 
+![Adaptive Routing in Data Rabbit - live route decisions flowing across native, Duck, Vortex, and GPU candidates with timing summaries per engine.](/shots/routing-cockpit.png)
+
 ## Candidate Paths
 
 Common candidates:
@@ -190,4 +192,3 @@ Fast paths are optional. The router refuses a candidate when:
 - a semantic/operator path would change evaluation semantics.
 
 When in doubt, use heap or another known-correct path.
-

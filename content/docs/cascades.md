@@ -16,6 +16,8 @@ A Cascade is specifically a SQL-callable operator plan that can branch, validate
 retry, reduce, and record receipts while still behaving like a typed Postgres
 function from the caller's perspective.
 
+![Operator Studio - the `rvbbit.classify` operator opened as an editable step graph with prompts, model selection, trust metadata, and execution history.](/shots/operator-canvas.png)
+
 ## Vocabulary
 
 | Word | Meaning |
@@ -148,4 +150,3 @@ Use a Cascade when the operator needs at least one of these:
 Do not use a Cascade when a single deterministic SQL expression or a simple
 operator call is enough. The point is to make complex semantic behavior
 observable, not to make every prompt look sophisticated.
-

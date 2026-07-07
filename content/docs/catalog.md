@@ -96,6 +96,8 @@ Returns the top-k objects scored `[0,1]`. An exact identifier (`customer_id`)
 ranks via the lexical side; a fuzzy concept (`"who pays us"`) via the dense side.
 Restrict to tables only with `kinds => ARRAY['db_table']`.
 
+![Data Search in Data Rabbit - a live `orders` search over the crawled catalog, ranking the `public.orders` table and its columns.](/shots/data-search.png)
+
 ## Drift
 
 Every crawl appends a fingerprint **snapshot** per object to

@@ -16,6 +16,8 @@ history.
 It does not hide a graph database behind Postgres. It makes model-derived facts
 inspectable, queryable, mergeable, and tied to receipts.
 
+![Scry graph search - `orders` expanded into the `db_catalog` graph, with table and column hits ranked in the results rail.](/shots/scry.png)
+
 ## Core Tables
 
 | Table | Purpose |
@@ -126,4 +128,3 @@ Resolution order is exact alias, ready Lance index, then slower embedding scan.
 The KG preserves provenance when you write evidence and `query_id` as facts come
 from model calls or tool output. That makes it possible to explain where graph
 context came from instead of treating it as an unreviewable memory blob.
-
