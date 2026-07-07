@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { versionedPublicAssetSrc } from "@/lib/shotAssets";
 
 type ScreenshotProps = {
   /** Path under public/, e.g. "shots/operator-lens.png". */
@@ -19,11 +20,12 @@ type ScreenshotProps = {
  */
 export function Screenshot({ src, alt, caption, wide }: ScreenshotProps) {
   const exists = fs.existsSync(path.join(process.cwd(), "public", src));
+  const imageSrc = exists ? versionedPublicAssetSrc(`/${src}`) : null;
   return (
     <figure className={`shot${wide ? " shot-wide" : ""}${exists ? "" : " shot-empty"}`}>
-      {exists ? (
+      {imageSrc ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={`/${src}`} alt={alt} loading="lazy" />
+        <img src={imageSrc} alt={alt} loading="lazy" />
       ) : (
         <div className="shot-placeholder" role="img" aria-label={alt}>
           <span className="shot-tag">Data Rabbit screenshot</span>

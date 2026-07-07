@@ -9,6 +9,7 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeStringify from "rehype-stringify";
 import { tokenizeSql } from "@/lib/sqlHighlight";
+import { versionedPublicAssetSrc } from "@/lib/shotAssets";
 
 const docsRoot = path.join(process.cwd(), "content", "docs");
 
@@ -105,6 +106,26 @@ function rehypeSqlHighlight() {
   };
 }
 
+function versionImageSources(node: HastNode) {
+  if (node.type === "element" && node.tagName === "img") {
+    const src = node.properties?.src;
+    if (typeof src === "string") {
+      node.properties = {
+        ...node.properties,
+        src: versionedPublicAssetSrc(src)
+      };
+    }
+  }
+
+  node.children?.forEach(versionImageSources);
+}
+
+function rehypeVersionedImages() {
+  return (tree: HastNode) => {
+    versionImageSources(tree);
+  };
+}
+
 function getMarkdownFiles(dir: string): string[] {
   return fs
     .readdirSync(dir, { withFileTypes: true })
@@ -170,6 +191,7 @@ export async function getDocBySlug(slugParts: string[] = []): Promise<DocPage> {
     .use(remarkGfm)
     .use(remarkRehype)
     .use(rehypeSqlHighlight)
+    .use(rehypeVersionedImages)
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings, {
       behavior: "append",
