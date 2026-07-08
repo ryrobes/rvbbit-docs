@@ -86,10 +86,14 @@ on that page first.
 psql postgresql://postgres:rvbbit@localhost:55433/rvbbit
 ```
 
-And open the UI: [http://localhost:3000](http://localhost:3000) — point Data
-Rabbit's connection window at any Postgres, but against this one the whole
-rvbbit surface lights up. The extension is already created; you never run
-`CREATE EXTENSION` yourself on the Docker path.
+And open the UI: [http://localhost:3000](http://localhost:3000) — it comes
+**pre-connected** to the stack's own Postgres (a seeded "rvbbit (this stack)"
+connection; lens ≥ 3.0.5). Add more connections to any Postgres you like —
+remember they resolve from the lens *server*, so inside the ensemble the
+stack's database is `postgres:5432`, not `localhost`. Against an
+rvbbit-enabled database the whole rvbbit surface lights up. The extension is
+already created; you never run `CREATE EXTENSION` yourself on the Docker
+path.
 
 ## Check The Install
 

@@ -25,12 +25,12 @@
 # on runtime availability, so a non-GPU box behaves identically either way.
 services:
   postgres:
-    image: ${RVBBIT_POSTGRES_GQE_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres-gqe:${RVBBIT_VERSION:-3.0.3}}
+    image: ${RVBBIT_POSTGRES_GQE_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres-gqe:${RVBBIT_VERSION:-3.0.5}}
     build:
       context: .
       dockerfile: Dockerfile.rvbbit-gqe
       args:
-        RVBBIT_BASE_IMAGE: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-3.0.3}}
+        RVBBIT_BASE_IMAGE: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-3.0.5}}
         GQE_REPO: ${GQE_REPO:-https://github.com/rapidsai/gqe.git}
         GQE_REF: ${GQE_REF:-main}
         CUDF_REF: ${CUDF_REF:-v26.06.01}
