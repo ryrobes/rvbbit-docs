@@ -47,6 +47,16 @@ Two pool lanes keep the UI responsive: interactive queries get the main pool
 while monitors and schema fan-out use a small isolated `meta` pool, so a
 runaway dashboard can't starve your query.
 
+> **Hostnames are resolved by the Data Rabbit *server*, not your browser.**
+> Because connections are made server-side, the host you type is answered
+> from wherever the lens process runs. In the Docker ensemble that means
+> `localhost` points at the lens container itself — use the compose service
+> name instead: host **`postgres`**, port **`5432`** (not the host-published
+> `55433`). Conversely, if Data Rabbit runs directly on your machine and
+> you're reaching a remote database through an SSH tunnel, then
+> `localhost:<tunnel-port>` is exactly right — the tunnel lives where the
+> server lives.
+
 ![The Connections window — pooled server-side connections with SSH tunnels; the æ badge marks rvbbit-enabled databases.](/shots/connections.png)
 
 ## The Desktop
