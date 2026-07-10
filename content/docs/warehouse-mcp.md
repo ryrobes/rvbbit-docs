@@ -58,6 +58,32 @@ elsewhere:
   (`ask_brain`, `brain_*`) filters to the caller's permitted docs *before* the
   vector search.
 
+### Agent ergonomics (no local glue needed)
+
+The tool surface is designed so a remote agent never needs shell or Python
+glue around it:
+
+- **Publish by handle.** `upload_artifact(content)` stages a large HTML/source
+  payload server-side (chunkable with `append=true`, `sha256` echoed back for
+  integrity) and returns an `artifact_id`; `publish_dashboard`,
+  `update_dashboard`, `create_live_app`, and `update_live_app` all accept
+  `source_artifact_id` instead of inline `html` — no re-transmitting a large
+  document through every call, and no reading files off the agent's machine.
+  Artifacts expire after ~48 hours; they're a staging area, not storage.
+- **Validate without hauling rows.** `run_sql_multi(queries,
+  result_mode='summary', preview_rows?)` returns per-query row counts, column
+  names, truncation, timing, and a tiny preview — instead of hundreds of KB of
+  rowsets — with per-query errors still isolated under their name.
+- **Captures you can actually see.** `capture_live_app(slug,
+  return_image=true)` returns the PNG as MCP image content (the saved path is
+  on the server host, useless to a remote agent), and every HTML capture runs
+  the app against the **live** query bridge and reports `bridge` health:
+  queries run/failed (with per-query timing), console errors, and page errors
+  — one call verifies the page renders *and* its data layer works.
+- **One bad tool never benches the server.** Unexpected tool exceptions come
+  back as the same structured `{"error": ...}` shape every tool uses, not
+  protocol-level failures that trip client-side circuit breakers.
+
 ## Why It's Safe
 
 - **Read-only execution.** `run_sql` runs in a read-only session
