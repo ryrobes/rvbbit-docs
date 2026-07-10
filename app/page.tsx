@@ -172,23 +172,20 @@ export default function Home() {
           </div>
 
           <aside className="hero-demo" aria-label="The RVBBIT fleet topology">
-            {/* TODO(hero-graphic): Fleet topology shot/animation — brain at
-                center, engines + models orbiting, a query pulse and a receipt.
-                Capture from the Fleet window once 3.1.5 is live on GCP. */}
-            <div className="hero-card hero-placeholder">
+            <div className="hero-card">
               <div className="hero-card-bar">
                 <span className="hero-card-dots" aria-hidden="true">
                   <i />
                   <i />
                   <i />
                 </span>
-                <span className="hero-card-title">fleet topology · live shot coming</span>
+                <span className="hero-card-title">fleet topology · live</span>
               </div>
-              <div className="hero-placeholder-body">
-                <span className="hero-placeholder-node">postgres</span>
-                <span className="hero-placeholder-orbit">duckdb · datafusion · gpu · models · warrens</span>
-                <span className="hero-placeholder-note">one boring database · a fleet of exciting engines</span>
-              </div>
+              <img
+                className="hero-shot"
+                src="/shots/fleet-topology.jpg"
+                alt="A live RVBBIT desktop: the fleet topology (one Postgres brain, cpu and gpu workers with probe latencies), published-artifact water levels, model capabilities, and the adaptive-routing flow — every query pathway visible."
+              />
             </div>
           </aside>
         </div>
