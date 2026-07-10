@@ -171,6 +171,51 @@ jobs). Watch `rvbbit.cost_audit_gaps` and `rvbbit.cost_audit_summary()` for
 receipts that never settled. Full detail is in
 [Receipts and Costs](/docs/receipts-costs).
 
+## Metadata Maintenance
+
+RVBBIT's own catalog tables need vacuum care under extreme workloads. The
+canonical failure mode: an ELT pipeline that fully re-copies hundreds of
+tables every few hours generates tombstones in `rvbbit.delete_log` at the
+scale of the data itself — and Postgres' default autovacuum trigger
+(20% of the table) means a 200M-row delete_log waits for ~40M dead tuples
+before its first vacuum. Symptoms are stale stats, TOAST bloat on
+`rvbbit.row_groups`, and CPU burned in catalog lookups.
+
+The extension now handles this itself:
+
+- **Tuned autovacuum, automatically.** `rvbbit.tune_metadata_autovacuum()`
+  sets per-table autovacuum storage parameters (including TOAST) on every
+  RVBBIT catalog table — small scale factors with fixed thresholds, so
+  trigger math stays sane at any size. It runs on the
+  `rvbbit.maintain_storage()` heartbeat, skips tables you've tuned yourself,
+  and is a no-op once applied.
+- **Orphaned-tombstone pruning.** Tombstones whose row groups were retired by
+  generation reaping can never affect a scan again;
+  `rvbbit.prune_delete_log()` removes them on the same heartbeat.
+- **Pressure visibility.** `SELECT * FROM rvbbit.tombstone_pressure` shows
+  tombstone weight per table. A table that's fully replaced each cycle will
+  show `tombstone_pct` near 100 — that's the signal to schedule
+  `rvbbit.rebuild_acceleration(t)`, which folds tombstones into a fresh
+  baseline.
+
+For belt-and-suspenders on busy instances (autovacuum workers saturated by
+thousands of user tables), register a scheduled top-level VACUUM of the
+RVBBIT catalogs:
+
+```sql
+SELECT rvbbit.schedule_metadata_vacuum();          -- every 6 hours
+SELECT rvbbit.schedule_metadata_vacuum('5 3 * * *'); -- custom cron expression
+```
+
+And for planned maintenance windows, route everything to the heap without
+touching acceleration state:
+
+```sql
+SELECT rvbbit.maintenance_mode(true);   -- new sessions read the heap directly
+-- vacuum / rebuild / debug at leisure; answers stay correct, just slower
+SELECT rvbbit.maintenance_mode(false);
+```
+
 ## Failure Handling
 
 A failed fast path produces a reason you can surface:
