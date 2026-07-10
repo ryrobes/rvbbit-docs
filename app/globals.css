@@ -332,9 +332,9 @@ main > section {
 
 .hero-content.hero-split {
   display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
   align-items: center;
-  gap: clamp(32px, 5vw, 80px);
+  gap: clamp(28px, 4vw, 64px);
 }
 
 .hero-lede {
@@ -382,9 +382,14 @@ main > section {
   position: relative;
   z-index: 1;
   justify-self: end;
-  width: 100%;
   min-width: 0;
-  max-width: 560px;
+  /* On wide viewports, let the shot bleed past the 1180px shell toward the
+     right viewport edge — the hero art tolerates the overlap and the card
+     earns the room. --bleed resolves to 0 at/below the shell width, and the
+     single-column breakpoints reset width/margin entirely. */
+  --bleed: clamp(0px, calc((100vw - var(--max)) / 2 - 24px), 150px);
+  width: calc(100% + var(--bleed));
+  margin-right: calc(-1 * var(--bleed));
 }
 
 .hero-card {
@@ -2080,6 +2085,8 @@ main > section {
   .hero-demo {
     justify-self: stretch;
     max-width: 720px;
+    width: 100%;
+    margin-right: 0;
   }
 
   .docs-sidebar {
@@ -2219,6 +2226,8 @@ main > section {
   .hero-demo {
     justify-self: stretch;
     max-width: none;
+    width: 100%;
+    margin-right: 0;
   }
 
   .rabbit-hero-art {
@@ -2373,7 +2382,7 @@ main > section {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 0 0 13px 13px;
+  border-radius: 13px;
 }
 .hero-placeholder-body {
   display: flex;

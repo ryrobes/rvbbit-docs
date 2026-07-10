@@ -173,14 +173,6 @@ export default function Home() {
 
           <aside className="hero-demo" aria-label="The RVBBIT fleet topology">
             <div className="hero-card">
-              <div className="hero-card-bar">
-                <span className="hero-card-dots" aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                <span className="hero-card-title">fleet topology · live</span>
-              </div>
               <img
                 className="hero-shot"
                 src="/shots/fleet-topology.jpg"
