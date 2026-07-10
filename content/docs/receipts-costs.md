@@ -57,13 +57,13 @@ FROM rvbbit.receipts
 WHERE receipt_id = $1::uuid;
 ```
 
-`sub_calls` is where Cascades expose their internal steps — model (`llm`)
+`sub_calls` is where Cascades expose their internal steps - model (`llm`)
 calls, specialist calls, MCP calls, and code/python steps. The `llm`,
 `specialist`, and `mcp` entries are the chargeable ones the cost audit
 reconciles against the ledger. Retried attempts accumulate into the same array,
 so a retry shows up as repeated sub-call entries on the one receipt.
 
-The `operator` column holds the operator name — `means`, `about`, a `classify`,
+The `operator` column holds the operator name - `means`, `about`, a `classify`,
 or any user- or pack-defined operator. Built-ins like `means()` and `about()`
 ship from the BGE reranker [capability packs](/docs/capability-packs), so their
 receipts only appear once the relevant pack is installed.
@@ -71,7 +71,7 @@ receipts only appear once the relevant pack is installed.
 ## Per-Operator Rollups
 
 `rvbbit.judgment_stats(op_name)` aggregates `rvbbit.receipts` for a single
-operator — invocation counts, unique inputs (distinct input hashes), token and
+operator - invocation counts, unique inputs (distinct input hashes), token and
 cost totals, latency, and the first/last call timestamps:
 
 ```sql
@@ -159,4 +159,4 @@ Everything you need to observe receipts is queryable from SQL:
 - missing or pending cost rows,
 - maintenance actions for queue flush and backfill.
 
-Treat receipts as audit records — read and aggregate them, but don't mutate them.
+Treat receipts as audit records - read and aggregate them, but don't mutate them.

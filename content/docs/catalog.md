@@ -1,6 +1,6 @@
 ---
 title: Catalog & Data Search
-description: rvbbit crawls your own database, fingerprints every table and column, builds a knowledge graph plus embeddings, and gives you hybrid free-text search over your data's structure — and run-over-run drift detection — all with zero LLM calls in the base build.
+description: rvbbit crawls your own database, fingerprints every table and column, builds a knowledge graph plus embeddings, and gives you hybrid free-text search over your data's structure - and run-over-run drift detection - all with zero LLM calls in the base build.
 section: SQL Primitives
 navOrder: 44
 sourceDocs:
@@ -13,10 +13,10 @@ sourceDocs:
 your tables, **fingerprints** each one (structural stats + example values),
 materializes a `db_catalog` [knowledge graph](/docs/knowledge-graph) of schemas →
 tables → columns (with foreign-key edges), and embeds a deterministic document
-per object. On top of that you get `data_search` — hybrid (dense + lexical)
-free-text search over your data's structure — and **drift detection** that diffs
+per object. On top of that you get `data_search` - hybrid (dense + lexical)
+free-text search over your data's structure - and **drift detection** that diffs
 fingerprint snapshots run-over-run. It works on ordinary heap tables, not just
-rvbbit-managed ones, and the base build makes **no LLM calls** — the fingerprint
+rvbbit-managed ones, and the base build makes **no LLM calls** - the fingerprint
 documents are deterministic.
 
 ## Crawl
@@ -56,7 +56,7 @@ ORDER  BY ordinal;
 ```
 
 And the **parallel** form fans tables across N background workers (via dblink),
-joining on a shared progress queue. Same progress/results interface — just faster
+joining on a shared progress queue. Same progress/results interface - just faster
 when the embedder can keep up:
 
 ```sql
@@ -102,8 +102,8 @@ Restrict to tables only with `kinds => ARRAY['db_table']`.
 
 Every crawl appends a fingerprint **snapshot** per object to
 `rvbbit.catalog_snapshots`. `catalog_drift` diffs two runs and scores each change
-— schema changes, row-count/ndv/null-fraction deltas, new/lost categorical
-values (PSI), range shifts, even embedding drift — with a `severity` in `[0,1]`.
+- schema changes, row-count/ndv/null-fraction deltas, new/lost categorical
+values (PSI), range shifts, even embedding drift - with a `severity` in `[0,1]`.
 
 ```sql
 -- Which runs do I have?
@@ -125,7 +125,7 @@ rvbbit.catalog_drift(
                 flags text[], diff jsonb)
 ```
 
-The `flags` array names what tripped — `rows_up`, `null_spike`, `new_values`,
+The `flags` array names what tripped - `rows_up`, `null_spike`, `new_values`,
 `dist_shift`, `type_change`, `embed_drift`, … Filter to one kind of change:
 
 ```sql
@@ -176,15 +176,15 @@ WHERE  n.graph_id = 'db_catalog' AND n.label = 'sales.orders.email';
 | `rvbbit.catalog_runs` | One row per crawl: `status`, `tables_seen`, `columns_seen`, `docs_embedded`, timings. |
 | `rvbbit.catalog_crawl_progress` | Live per-table progress for the durable/parallel crawlers (`ordinal/total`, status). |
 | `rvbbit.catalog_docs` | The fingerprint document + embedding per object (table or column). |
-| `rvbbit.catalog_snapshots` | Append-only fingerprint history — one row per object per run. The drift layer. |
+| `rvbbit.catalog_snapshots` | Append-only fingerprint history - one row per object per run. The drift layer. |
 | `rvbbit.kg_nodes` / `rvbbit.kg_edges` | The `db_catalog` graph: `db_schema` / `db_table` / `db_column` nodes; `has_table` / `has_column` / `references` edges. |
 
 ## Notes
 
-- **No embedder?** Crawl with `do_embed => false` (faster) — `data_search` still
+- **No embedder?** Crawl with `do_embed => false` (faster) - `data_search` still
   works lexical-only. With an embedder, embeddings are
   [cached](/docs/retrieval), so re-crawling unchanged tables is cheap.
-- **Sampling noise** — on tables larger than `sample_rows`, stats come from
+- **Sampling noise** - on tables larger than `sample_rows`, stats come from
   `TABLESAMPLE`, so small run-to-run drift may be noise. Snapshots record
   `n_sampled` vs `n_rows` so you can judge confidence; crawl with a high
   `sample_rows` for an exact baseline.

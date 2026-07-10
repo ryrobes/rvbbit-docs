@@ -1,6 +1,6 @@
 ---
 title: Cubes
-description: Wide, documented, accelerated analytical tables built from a SELECT — the curated middle between raw tables and blessed metrics, with a semantic layer, freshness tracking, and one-call promotion to metrics.
+description: Wide, documented, accelerated analytical tables built from a SELECT - the curated middle between raw tables and blessed metrics, with a semantic layer, freshness tracking, and one-call promotion to metrics.
 section: SQL Primitives
 navOrder: 42
 sourceDocs:
@@ -8,8 +8,8 @@ sourceDocs:
   - ../rvbbit-sql/docs/METRICS.md
 ---
 
-A **cube** is a wide analytical table you define with one `SELECT` — usually a
-join across raw or rvbbit tables — that rvbbit materializes into the `cubes`
+A **cube** is a wide analytical table you define with one `SELECT` - usually a
+join across raw or rvbbit tables - that rvbbit materializes into the `cubes`
 schema, accelerates, documents, and refreshes on demand. It is the curated
 middle between two extremes: thousands of cryptic raw tables on one side, and
 narrow blessed [metrics](/docs/metrics-kpis) on the other. Instead of searching
@@ -23,7 +23,7 @@ experimental [time travel](/docs/time-travel).
 
 `define_cube` upserts a versioned definition, materializes `cubes.<name>`,
 compacts it to build the [acceleration files](/docs/acceleration), and
-registers it in the catalog. Declare the **grain** — what one row means — every
+registers it in the catalog. Declare the **grain** - what one row means - every
 time; a cube with a fuzzy grain is a footgun.
 
 ```sql
@@ -58,7 +58,7 @@ rvbbit.define_cube(
 ) RETURNS integer                        -- the new definition version
 ```
 
-Each call appends a **new version** — definitions are never mutated. Redefining
+Each call appends a **new version** - definitions are never mutated. Redefining
 with the same column shape reloads in place; a *shape change* (new/renamed/
 dropped columns) needs `drop_cube` first.
 
@@ -73,8 +73,8 @@ files. Internally it uses `snapshot_load`: `TRUNCATE` → `INSERT … <the SELEC
 SELECT rvbbit.refresh_cube('opportunities');   -- returns the new row count
 ```
 
-To refresh **every** cube — the cube analog of
-[`materialize_all_metrics`](/docs/metrics-kpis#materialize-everything) — use the
+To refresh **every** cube - the cube analog of
+[`materialize_all_metrics`](/docs/metrics-kpis#materialize-everything) - use the
 bulk procedure. It commits after each cube (so partial progress survives) and
 sleeps briefly between cubes so dashboards keep breathing:
 
@@ -92,7 +92,7 @@ rvbbit.refresh_all_cubes(
 )
 ```
 
-A failing cube is recorded (in `cube_control.last_error`) and skipped — the batch
+A failing cube is recorded (in `cube_control.last_error`) and skipped - the batch
 never aborts. It's a procedure, so it's pg_cron-ready:
 
 ```sql
@@ -101,14 +101,14 @@ SELECT cron.schedule('rvbbit_refresh_cubes', '0 */2 * * *',
 ```
 
 > Cubes are excluded from the [accelerator freshness heartbeat](/docs/accelerator-freshness)
-> (`accel_tick`) by default — they're fully rebuilt by `refresh_cube`, so the
+> (`accel_tick`) by default - they're fully rebuilt by `refresh_cube`, so the
 > heartbeat has nothing to maintain. See `rvbbit.accel_exclude_schemas`.
 
 ## The Semantic Layer
 
 Cubes carry per-column documentation. `enrich_cube` uses an LLM to draft a
 description, grain, and per-column docs from a small sample plus the source
-tables' catalog docs — and **preserves any human edits**:
+tables' catalog docs - and **preserves any human edits**:
 
 ```sql
 SELECT rvbbit.enrich_cube('opportunities', p_sample_rows => 20);
@@ -136,7 +136,7 @@ SELECT rvbbit.set_cube_column_doc(
 
 ## Inspect
 
-`describe_cube` returns everything about a cube as one JSON object — definition,
+`describe_cube` returns everything about a cube as one JSON object - definition,
 grain, category, lineage (source tables), per-column docs, a sample, and health:
 
 ```sql
@@ -191,7 +191,7 @@ with `define_metric` over the cube.
 ## Dimensional Metrics Over Cubes
 
 A metric defined over a cube can be **sliced** by any of the cube's groupable
-dimensions without redefining it — see
+dimensions without redefining it - see
 [Dimensional Metrics](/docs/metrics-kpis#dimensional-metrics). To see what a
 cube exposes:
 
@@ -209,7 +209,7 @@ WHERE  groupable;
 | `rvbbit.cube_catalog` | View: the latest definition per cube (+ category/subcategory from the shared taxonomy). |
 | `rvbbit.cube_control` | One mutable row per cube: `refreshed_at, last_rows, last_error, enabled`, plus auto-enrichment state. |
 | `rvbbit.cube_columns` | The semantic layer: per-column `doc, semantics, source_ref, confidence, edited_by`. |
-| `cubes.<name>` | The materialized `USING rvbbit` table — accelerated and drift-tracked (with experimental time-travel). |
+| `cubes.<name>` | The materialized `USING rvbbit` table - accelerated and drift-tracked (with experimental time-travel). |
 
 ## Manage
 
@@ -222,9 +222,9 @@ SELECT rvbbit.drop_cube('opportunities');   -- table + definition + docs + catal
 - **Refreshes are full** currently (`TRUNCATE` + reload). `cube_health` already
   emits a `skip` / `delta` / `full rebuild` recommendation from drift (or
   `unknown` when there's no drift estimate yet), but that recommendation is
-  advisory only today — incremental/delta refresh is not yet implemented, so
+  advisory only today - incremental/delta refresh is not yet implemented, so
   every refresh rebuilds the whole cube regardless of the hint.
-- **Lineage is best-effort** — derived by `EXPLAIN`-ing the cube SQL; if it won't
+- **Lineage is best-effort** - derived by `EXPLAIN`-ing the cube SQL; if it won't
   plan, lineage is empty.
 - **The LLM model** for `enrich_cube` is runtime-configurable via
-  `rvbbit.set_cube_model(...)` — no rebuild.
+  `rvbbit.set_cube_model(...)` - no rebuild.

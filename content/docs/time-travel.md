@@ -43,7 +43,7 @@ the statement is resolved against the same timestamp, and each table resolves
 that timestamp to its own generation internally.
 
 A parser-level table clause (`SELECT * FROM events AS OF TIMESTAMP '...'`) is
-not supported today — PostgreSQL rejects that syntax before extension hooks run,
+not supported today - PostgreSQL rejects that syntax before extension hooks run,
 so use the comment form, `rvbbit.set_as_of(...)`, or the GUC instead.
 
 ## Session Form
@@ -94,7 +94,7 @@ just the latest generation, use `rvbbit.current_generation('events'::regclass)`.
 
 UIs need a cheap way to show available snapshot ticks without scanning files.
 The metadata-only helper `rvbbit.time_travel_timeline(...)` reads the generation
-log, row-group catalog, and delete log — it never scans the heap or parquet:
+log, row-group catalog, and delete log - it never scans the heap or parquet:
 
 ```sql
 SELECT *
@@ -103,10 +103,10 @@ FROM rvbbit.time_travel_timeline('events'::regclass);
 
 It returns one row per generation (newest first) with:
 
-- `generation` — the generation identifier,
-- `committed_at` — when the generation committed,
-- `rows_written` / `row_groups_written` — the delta written at that tick,
-- `visible_rows_estimate` — approximate rows visible at that tick, derived from
+- `generation` - the generation identifier,
+- `committed_at` - when the generation committed,
+- `rows_written` / `row_groups_written` - the delta written at that tick,
+- `visible_rows_estimate` - approximate rows visible at that tick, derived from
   row-group metadata minus generation-aware tombstones,
 - `visible_row_groups`,
 - `tombstones_visible`.
@@ -126,7 +126,7 @@ out of the normal route-calibration data.
 
 Time travel gets more expensive the more generations you retain. Use the
 `rvbbit.reap_generations(reloid regclass DEFAULT NULL, keep_days integer
-DEFAULT 30)` reaper to age out old generations — it deletes catalog rows and
+DEFAULT 30)` reaper to age out old generations - it deletes catalog rows and
 unlinks the parquet files for generations strictly below the live snapshot whose
 `committed_at` is older than `keep_days`. Passing `NULL` reaps every eligible
 table, which makes it convenient to schedule:
@@ -139,6 +139,6 @@ SELECT * FROM rvbbit.reap_generations(NULL, 14);
 The reaper only touches snapshot tables (those with a positive
 `min_visible_generation`) and never the current generation. Append tables are
 skipped, because their generations are cumulative and reaping an old one would
-drop live rows. There is no automatic retention schedule today — when and how
+drop live rows. There is no automatic retention schedule today - when and how
 aggressively to reap is your call.
 

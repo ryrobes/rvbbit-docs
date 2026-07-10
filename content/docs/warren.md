@@ -17,7 +17,7 @@ Warren is optional. The database stays the source of truth: a Warren agent runs
 on any host with the right resources, polls Postgres for deployment jobs, starts
 the requested service, then registers the resulting endpoint back into RVBBIT.
 The query engine keeps using the normal backend, operator, and runtime-node
-machinery — Warren just stores the catalog rows it already knows how to execute.
+machinery - Warren just stores the catalog rows it already knows how to execute.
 
 Do not confuse Warren with storage acceleration. The
 [acceleration registry](/docs/acceleration) is the optional storage layer;
@@ -27,7 +27,7 @@ Warren is runtime capability management.
 
 A capability pack is a portable bundle that can register model backends,
 operators, or runtime services. Built-in operators like `means()`, `about()`,
-`classify()`, and `extract_pii()` come from packs, not from the engine itself —
+`classify()`, and `extract_pii()` come from packs, not from the engine itself -
 see [Capability Packs](/docs/capability-packs) for the full catalog and operator
 provenance.
 
@@ -121,7 +121,7 @@ rather than serving a model. Neither exposes SQL operators of its own.
 
 - **`runtimes/mcp-gateway`** registers `mcp_default` in `rvbbit.mcp_gateways`
   (port `9180`, endpoint `/`). It powers `kind: mcp` operator nodes and SQL MCP
-  calls — see [MCP](/docs/mcp).
+  calls - see [MCP](/docs/mcp).
 
 There is also a lighter runtime registration that Warren does not manage: an
 external **n8n** instance can be registered with
@@ -137,16 +137,16 @@ than a backend name in `rvbbit.warren_inventory`.
 
 Warren makes its state queryable from SQL through catalog tables and views:
 
-- `rvbbit.warren_nodes` — registered agent hosts, labels, capacity, heartbeat.
-- `rvbbit.warren_jobs` — queued/running/completed jobs, with `phase` and
+- `rvbbit.warren_nodes` - registered agent hosts, labels, capacity, heartbeat.
+- `rvbbit.warren_jobs` - queued/running/completed jobs, with `phase` and
   `progress` for UI-visible install progress.
-- `rvbbit.warren_deployments` — materialized deployment records tied to nodes
+- `rvbbit.warren_deployments` - materialized deployment records tied to nodes
   and backend/operator/runtime names.
-- `rvbbit.warren_inventory` — node plus active-deployment view.
-- `rvbbit.warren_backend_status` — backend rows annotated with the latest Warren
+- `rvbbit.warren_inventory` - node plus active-deployment view.
+- `rvbbit.warren_backend_status` - backend rows annotated with the latest Warren
   deployment state and a `callable` flag.
 - `rvbbit.warren_gpu_capacity`, `rvbbit.warren_node_metrics`,
-  `rvbbit.warren_node_latest_metrics`, `rvbbit.warren_node_effective_status` —
+  `rvbbit.warren_node_latest_metrics`, `rvbbit.warren_node_effective_status` -
   telemetry and placement.
 
 So a UI can show what is pending, running, failed, drifted, or deployed entirely

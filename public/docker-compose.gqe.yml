@@ -4,7 +4,7 @@
 #       -f docker-compose.release.yml -f docker-compose.release-gqe.yml up -d
 #
 # That PULLS the prebuilt runtime image (ghcr.io/ryrobes/rvbbit-postgres-gqe,
-# ~9GB) — no on-box compilation. One image covers every CUDA CC 8.0+ GPU:
+# ~9GB) - no on-box compilation. One image covers every CUDA CC 8.0+ GPU:
 # A100 / RTX 30- and 40-series (sm_8x runs sm_80 SASS), H100/H200 (90),
 # B100/B200/GB200 (100), RTX 50-series / RTX PRO Blackwell / DGX Spark
 # (120 SASS + PTX forward-compat). Turing and older are not supported
@@ -21,12 +21,12 @@
 #
 # Requirements: NVIDIA GPU + driver + nvidia-container-toolkit (docker info
 # must list the 'nvidia' runtime). Without them, use the plain release
-# compose — the extension's GQE routing gate is on by default but self-gates
+# compose - the extension's GQE routing gate is on by default but self-gates
 # on runtime availability, so a non-GPU box behaves identically either way.
 services:
   # On every `up`, persist the GQE router-prior GUC to match the overlay env.
   # The env var alone reaches the Rust router, but rvbbit.warm_gpu_gqe() is
-  # plpgsql and reads only the GUC — without this, heartbeat warm stays
+  # plpgsql and reads only the GUC - without this, heartbeat warm stays
   # "disabled" even though the overlay asked for it. Fully self-contained so
   # the overlay works over BOTH the release compose (which has a migrate
   # service) and the uber compose (which doesn't). Each -c is its own
@@ -95,10 +95,10 @@ services:
       RVBBIT_GQE_AUTO_START: ${RVBBIT_GQE_AUTO_START:-true}
       # This overlay IS the explicit GPU opt-in, so enable the GQE router prior:
       # the accel_tick heartbeat keeps the engine warm (rvbbit.warm_gpu_gqe) and
-      # the router may pick GQE for large shapes without a profile — never cold
+      # the router may pick GQE for large shapes without a profile - never cold
       # (gated on fresh gqe_warm_state). Set to "off" to revert to lazy start.
       RVBBIT_ROUTE_GPU_GQE_PRIOR: ${RVBBIT_ROUTE_GPU_GQE_PRIOR:-on}
       RVBBIT_GQE_CLIENT_MODE: ${RVBBIT_GQE_CLIENT_MODE:-flight}
       RVBBIT_GQE_FLIGHT_FALLBACK: ${RVBBIT_GQE_FLIGHT_FALLBACK:-true}
       # Routing gate (rvbbit.route_gpu_gqe) defaults ON in the extension and
-      # self-gates on runtime availability — no override needed here.
+      # self-gates on runtime availability - no override needed here.

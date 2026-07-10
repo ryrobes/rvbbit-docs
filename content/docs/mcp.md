@@ -145,8 +145,8 @@ parses it when possible so downstream nodes can reference paths such as
 
 ## Ship It As A Capability
 
-A registered server works on one database. To make it portable — browsable,
-installable on any database, even baked into the extension — publish it into the
+A registered server works on one database. To make it portable - browsable,
+installable on any database, even baked into the extension - publish it into the
 same capability catalog that holds model and runtime capabilities:
 
 ```sql
@@ -161,7 +161,7 @@ SELECT rvbbit.publish_mcp_capability(
 
 The entry now appears in the Capabilities window in Data Rabbit. Its manifest
 records the connection, the tool and resource surface, one operator definition
-per tool, and the **declared secrets** — the `${VAR}` names an installer must
+per tool, and the **declared secrets** - the `${VAR}` names an installer must
 supply. No key values are stored.
 
 Installing an entry supplies those keys and generates the operators:
@@ -172,7 +172,7 @@ SELECT rvbbit.install_mcp_register('mcp/firecrawl');   -- register from the mani
 SELECT rvbbit.install_mcp_finalize('mcp/firecrawl');   -- refresh + generate operators
 ```
 
-The Capabilities window renders the declared secrets as key inputs — you install
+The Capabilities window renders the declared secrets as key inputs - you install
 an MCP server by pasting its API key, exactly like installing a model.
 
 ### Tools Become Operators
@@ -185,7 +185,7 @@ lifted from the tool's input schema:
 SELECT rvbbit.iplocate_lookup_ip_address_location(ip => '1.1.1.1');  -- Sydney, AU
 ```
 
-These compose with the rest of RVBBIT — pair a web search with `classify`, or a
+These compose with the rest of RVBBIT - pair a web search with `classify`, or a
 scrape with `embed` for retrieval. High-arity tools (some have 20+ optional
 arguments) are easiest to call via `mcp_call(...)`; low-arity tools call cleanly
 by name.
@@ -196,7 +196,7 @@ Keys never touch Postgres. `rvbbit.mcp_servers.env` and the published manifest
 store only `${VAR}` references; the gateway resolves them at spawn time from a
 per-server encrypted store (Fernet) or its own environment. Install-time keys go
 straight from the UI to the gateway's store. A published or shipped catalog entry
-is therefore commit-safe — it carries no credential material.
+is therefore commit-safe - it carries no credential material.
 
 ### Servers That Ship By Default
 
@@ -204,12 +204,12 @@ is therefore commit-safe — it carries no credential material.
 `maps` (Google Maps), `brave`, `openweather`, and `linear` are baked into the
 catalog seed and browsable out of the box. `time` and `iplocate` are keyless;
 the rest declare a single API key you provide at install. These are seeded
-catalog entries (`mcp/<server>`), not file-backed packs — they live only in the
+catalog entries (`mcp/<server>`), not file-backed packs - they live only in the
 capability catalog seed.
 
 ## Observability
 
-These catalog views expose gateway state — discovery, health, usage — without a
+These catalog views expose gateway state - discovery, health, usage - without a
 direct gateway connection:
 
 ```sql

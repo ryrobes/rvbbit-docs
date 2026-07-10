@@ -18,8 +18,8 @@ Postgres 18 with the extension preinstalled, the Duck/Vortex query worker, the
 agent for deploying capability sidecars.
 
 > **v1 install policy.** The Docker ensemble is the only supported install
-> path right now. Piecemeal installation — building the extension into an
-> existing Postgres and wiring the sidecars by hand — works, but it is not yet
+> path right now. Piecemeal installation - building the extension into an
+> existing Postgres and wiring the sidecars by hand - works, but it is not yet
 > streamlined or documented; it will come back as a first-class path in a
 > later release. If you have used TimescaleDB or similar "it's really an
 > extension" databases, the shape is the same: pretend it is a database and
@@ -34,7 +34,7 @@ stack. One line:
 curl -fsSL https://rvbbit.ai/install.sh | bash
 ```
 
-The script is short and readable — it checks for Docker, downloads
+The script is short and readable - it checks for Docker, downloads
 [docker-compose.yml](https://rvbbit.ai/docker-compose.yml) into `./rvbbit/`,
 runs `docker compose up -d`, and waits for Postgres to report healthy. If you
 prefer to do exactly that by hand:
@@ -61,8 +61,8 @@ That starts everything from published images:
 
 Provider API keys (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`,
 `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, …) are passed through from your shell
-environment into the containers. None are required to boot — local CPU
-embeddings work out of the box — but LLM-backed operators need at least one.
+environment into the containers. None are required to boot - local CPU
+embeddings work out of the box - but LLM-backed operators need at least one.
 
 If you only want the database (no UI, no Warren), the single container works
 too:
@@ -77,7 +77,7 @@ docker run -d --name rvbbit \
 For NVIDIA hosts there is a GPU overlay
 ([docker-compose.gqe.yml](https://rvbbit.ai/docker-compose.gqe.yml)) that
 pulls the prebuilt [GQE engine](/docs/gqe) image (~9GB, covers every CUDA
-CC 8.0+ card from RTX 30-series to Blackwell) — see the GPU host preflight
+CC 8.0+ card from RTX 30-series to Blackwell) - see the GPU host preflight
 on that page first.
 
 ## Connect
@@ -86,9 +86,9 @@ on that page first.
 psql postgresql://postgres:rvbbit@localhost:55433/rvbbit
 ```
 
-And open the UI: [http://localhost:3000](http://localhost:3000) — it comes
+And open the UI: [http://localhost:3000](http://localhost:3000) - it comes
 **pre-connected** to the stack's own Postgres (a seeded "rvbbit (this stack)"
-connection; lens ≥ 3.0.5). Add more connections to any Postgres you like —
+connection; lens ≥ 3.0.5). Add more connections to any Postgres you like -
 remember they resolve from the lens *server*, so inside the ensemble the
 stack's database is `postgres:5432`, not `localhost`. Against an
 rvbbit-enabled database the whole rvbbit surface lights up. The extension is
@@ -119,7 +119,7 @@ runtime.
 You don't have to write every operator from scratch. The core extension already
 seeds LLM-backed `means()`, `about()`, `classify()`, and `extract()`, and
 installing a capability pack adds local-specialist versions of those names plus
-pack-only operators — for example reranker-backed `means()` / `about()` from the
+pack-only operators - for example reranker-backed `means()` / `about()` from the
 BGE reranker packs and `extract_pii()` from the GLiNER pack. See
 [Capability Packs](/docs/capability-packs#where-the-familiar-operators-come-from)
 for which name comes from where. The example below defines your own LLM-backed
@@ -199,7 +199,7 @@ That refresh:
 - updates the acceleration metadata,
 - leaves the heap intact for fallback, dump, and restore.
 
-New tables can opt in at creation time with the `USING rvbbit` sugar — it
+New tables can opt in at creation time with the `USING rvbbit` sugar - it
 produces a plain heap table that is auto-registered:
 
 ```sql
@@ -236,7 +236,7 @@ LIMIT 20;
 The heap stays the source of truth. When acceleration is enabled, conservative,
 rule-based routing decides whether that query should use heap, native execution,
 DataFusion, Duck/Vortex, hot memory, [GPU GQE](/docs/gqe) on NVIDIA hosts, or
-another available path. Learned routing runs in shadow/observation mode only —
+another available path. Learned routing runs in shadow/observation mode only -
 it does not take over default routing. See
 [Routing And Training](/docs/routing-training) for the details.
 
@@ -264,8 +264,8 @@ SELECT rvbbit.cost_audit_summary();
 
 ## Next Steps
 
-- Use [Data Rabbit](/docs/data-rabbit) — already running at
-  [localhost:3000](http://localhost:3000) — to browse, query, and watch the
+- Use [Data Rabbit](/docs/data-rabbit) - already running at
+  [localhost:3000](http://localhost:3000) - to browse, query, and watch the
   system work.
 - Use [Semantic SQL](/docs/semantic-sql) to design robust model-backed
   operators.

@@ -1,6 +1,6 @@
 ---
 title: Metrics And KPIs
-description: Versioned SQL metrics with KPI checks, a bitemporal run model, rolling baselines, and a durable verdict-stamped history — built into every rvbbit table.
+description: Versioned SQL metrics with KPI checks, a bitemporal run model, rolling baselines, and a durable verdict-stamped history - built into every rvbbit table.
 section: SQL Primitives
 navOrder: 41
 sourceDocs:
@@ -8,7 +8,7 @@ sourceDocs:
   - ../rvbbit-sql/docs/TIME_TRAVEL.md
 ---
 
-Metrics are a small BI layer that comes with rvbbit tables — and you never have
+Metrics are a small BI layer that comes with rvbbit tables - and you never have
 to use it. A metric is a row in a plain table and a `SELECT`. A KPI is that plus
 one more `SELECT` that returns a boolean. There is no separate metric store, no
 metric DSL, and no service to run. If you define one, you get systematic,
@@ -32,7 +32,7 @@ rows**, so every run is parameterized by two *independent* axes:
 The **def-time** axis is stable: definitions are immutable, versioned rows, so
 "which definition" is always exact. The **data-time** axis rides on rvbbit
 [time travel](/docs/time-travel), which is experimental and intended primarily
-for audit and reproducibility — treat data-time results as best-effort and
+for audit and reproducibility - treat data-time results as best-effort and
 validate them before relying on them. Def-time alone (over live data) is the
 solid, everyday path.
 
@@ -73,8 +73,8 @@ SELECT * FROM rvbbit.metric_versions('revenue_by_region');            -- history
 ## KPIs: The Check Is Part Of The Definition
 
 A metric becomes a KPI when its definition carries a check (the 8th argument to
-`define_metric`). The check runs against the metric's result — exposed to it as a
-CTE named `metric` — and must reduce to **one row** with an `ok` boolean (plus
+`define_metric`). The check runs against the metric's result - exposed to it as a
+CTE named `metric` - and must reduce to **one row** with an `ok` boolean (plus
 optional `status` / `value` / `target`). Thresholds are `{param}` tokens, so they
 have versioned defaults and are overridable per call.
 
@@ -91,7 +91,7 @@ SELECT rvbbit.check_metric('daily_revenue');
 ```
 
 Because the check lives on the **versioned** definition, moving a threshold makes
-a new version — so the verdict is auditable across def-time. Over the *same* data,
+a new version - so the verdict is auditable across def-time. Over the *same* data,
 yesterday's threshold and today's threshold can disagree, and both answers are
 real:
 
@@ -100,7 +100,7 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb, p_def_as_of => v1_time)
 SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb, p_def_as_of => now());    -- fail
 ```
 
-A `NULL` `ok` is never treated as "pass" — a KPI over missing data does not read
+A `NULL` `ok` is never treated as "pass" - a KPI over missing data does not read
 as healthy.
 
 ## Rolling Baselines In One Line
@@ -120,19 +120,19 @@ data-time, so rolling, delta, and week-over-week become single tokens:
 an alias (`yesterday`, `lastweek`). Only the data-time shifts; the definition
 stays current. Because the shifted value is reconstructed by re-reading earlier
 generations via AS OF, treat these rolling/delta figures as best-effort
-(experimental) — they depend on the data-time path that is still being hardened.
+(experimental) - they depend on the data-time path that is still being hardened.
 
 ## A Durable, Verdict-Stamped History
 
 Live reads stay live, and earlier generations can be re-read with AS OF to
-*approximate* a historical value (experimental — see
+*approximate* a historical value (experimental - see
 [time travel](/docs/time-travel)). Rather than lean on that for the record of
 record, rvbbit materializes a durable **log of what was reported**: `(value,
 verdict, threshold-version, def-time, data-time, generation, trigger)`. It
-outlives generation reaping and records the KPI verdict *as decided* — so the
+outlives generation reaping and records the KPI verdict *as decided* - so the
 authoritative history is the materialized log, not a replayed reconstruction.
 
-The default cadence is not a clock — **compaction is the trigger.** A new
+The default cadence is not a clock - **compaction is the trigger.** A new
 generation enqueues itself (if a metric depends on the table) and
 `materialize_tick()` (a `pg_cron` heartbeat) drains it, materializing each
 dependent metric at the generation's commit time. One observation per
@@ -147,14 +147,14 @@ SELECT rvbbit.set_materialize('daily_revenue', p_on_compaction => true);
 SELECT rvbbit.schedule_materialize_tick('* * * * *');   -- or call materialize_tick() yourself
 ```
 
-Observations are **immutable** — they are the record of what you reported.
+Observations are **immutable** - they are the record of what you reported.
 "What it *would* have been under a newer definition" stays a live query.
 
 ## Materialize Everything
 
 `materialize_tick()` only touches metrics whose tables just compacted. To take
-**one timestamped snapshot of every metric on demand** — the natural shape for a
-scheduled batch — use `materialize_all_metrics`. It records one observation per
+**one timestamped snapshot of every metric on demand** - the natural shape for a
+scheduled batch - use `materialize_all_metrics`. It records one observation per
 metric at a single captured `def`/`data` timestamp (a consistent snapshot), and a
 failing metric is reported, never aborting the rest:
 
@@ -181,7 +181,7 @@ SELECT cron.schedule('rvbbit_materialize_all', '0 * * * *',
                      $$SELECT rvbbit.materialize_all_metrics()$$);
 ```
 
-A broken metric or check (e.g. an unbound `{param}`) is **isolated** — that one
+A broken metric or check (e.g. an unbound `{param}`) is **isolated** - that one
 metric comes back as its own result row with `status = 'error'` and the error
 message in `error` (and no observation written for it), while every other metric
 in the batch still materializes. One typo never wedges a batch. Give every
@@ -201,7 +201,7 @@ SELECT name, category, subcategory FROM rvbbit.metric_catalog WHERE category = '
 ## Dimensional Metrics
 
 A metric defined over a [cube](/docs/cubes) can be **sliced** by the cube's
-dimensions without redefining it — declare the source in `labels`, then call
+dimensions without redefining it - declare the source in `labels`, then call
 `metric_by`:
 
 ```sql
@@ -261,13 +261,13 @@ A breaching KPI is the natural trigger for an [alert](/docs/alerts)
 | `set_materialize(name, on_compaction, cron, enabled)` → `void` | per-metric materialize policy |
 | `set_category('metric', name, category, subcategory)` → `void` | tag for organization + filtering |
 
-Tables and views — all plain and `SELECT`-able: `rvbbit.metric_defs`,
+Tables and views - all plain and `SELECT`-able: `rvbbit.metric_defs`,
 `rvbbit.metric_catalog` (latest def per metric + `category`/`subcategory`),
 `rvbbit.metric_observations` (the immutable log: `value`, `verdict`, `metric_version`,
 `def_as_of`, `data_as_of`, `data_generation`, `trigger`), `rvbbit.metric_materialize`,
 `rvbbit.metric_dependencies`.
 
-In [Data Rabbit](/docs/data-rabbit), a **Metrics** folder adds three apps — a
+In [Data Rabbit](/docs/data-rabbit), a **Metrics** folder adds three apps - a
 Catalog, a Creator (with a live resolved-SQL preview and verdict badge), and an
 Inspector that runs a metric across both axes with a results grid, a pass/fail
 verdict, and a materialized **Trend**.

@@ -1,6 +1,6 @@
 ---
 title: Text-to-SQL
-description: Turn a natural-language intent into a grounded, read-only SELECT with rvbbit.synth — generate it, or run it.
+description: Turn a natural-language intent into a grounded, read-only SELECT with rvbbit.synth - generate it, or run it.
 section: SQL Primitives
 navOrder: 40
 sourceDocs:
@@ -14,7 +14,7 @@ idea behind [`reshape`](/docs/pipelines#the-same-idea-on-single-values-reshape)
 and the [pipeline](/docs/pipelines) stages: the model authors SQL once, the result
 is cached, and execution is plain Postgres.
 
-Two entry points — one that hands you the SQL, one that runs it:
+Two entry points - one that hands you the SQL, one that runs it:
 
 ```sql
 -- Generate the SQL (never executes it):
@@ -35,7 +35,7 @@ SELECT value FROM rvbbit.synth('number of sightings per region');
   …
 ```
 
-Text-to-SQL is tame in 2026 — what's interesting is that it's the *same machinery*
+Text-to-SQL is tame in 2026 - what's interesting is that it's the *same machinery*
 as everything else in rvbbit (the operator + [receipts](/docs/receipts-costs)
 system), so the generated SQL is cached, inspectable, pinnable, and composes with
 the rest of the engine.
@@ -44,8 +44,8 @@ the rest of the engine.
 
 Before generating, `synth` retrieves the **most relevant tables and columns** for
 the intent from the crawled catalog via [`data_search`](/docs/retrieval) (KNN over
-column/table fingerprints), and injects their descriptions — types, example
-values, and foreign keys — into the prompt. So a request like *"sightings per
+column/table fingerprints), and injects their descriptions - types, example
+values, and foreign keys - into the prompt. So a request like *"sightings per
 region"* discovers that `sightings.state` references `regions.state` and writes the
 join, rather than hallucinating columns:
 
@@ -58,8 +58,8 @@ SELECT value FROM rvbbit.synth('number of sightings per region');
 ```
 
 Grounding is best after a [`catalog_crawl()`](/docs/retrieval) (which adds example
-values and FK hints). With no catalog it falls back to `information_schema` — table
-and column names + types — so `synth` works out of the box on a small database,
+values and FK hints). With no catalog it falls back to `information_schema` - table
+and column names + types - so `synth` works out of the box on a small database,
 just less richly.
 
 ## Safety: read-only by construction
@@ -75,11 +75,11 @@ ALTER DATABASE mydb SET rvbbit.synth_enabled = on;   -- or per database
 
 Generated SQL passes through two gates before it can ever run:
 
-- **Validation** — the statement is `PREPARE`-d (parse + analyze, so a hallucinated
+- **Validation** - the statement is `PREPARE`-d (parse + analyze, so a hallucinated
   column/table is caught) and then its plan is inspected; anything that writes (a
   `ModifyTable` node, including data-modifying CTEs like `WITH x AS (DELETE …)`) is
   rejected. Only a single read-only `SELECT` passes. Validated SQL is cached.
-- **Execution** — `rvbbit.synth` runs the SQL inside a **read-only transaction**
+- **Execution** - `rvbbit.synth` runs the SQL inside a **read-only transaction**
   with a statement timeout and a row cap, so even a function with side effects can't
   write. The guards are scoped so your surrounding transaction stays read-write.
 
@@ -93,9 +93,9 @@ SELECT count(*) FROM rvbbit.synth('delete every sighting permanently');  -- retu
 ## Caching: one model call per intent
 
 `synth` caches the validated SQL in `rvbbit.synth_cache`, keyed by the intent plus
-the retrieved schema. Re-running the same intent is a **cache hit — no model call**;
+the retrieved schema. Re-running the same intent is a **cache hit - no model call**;
 if the schema changes, the retrieved context changes and it regenerates. The cached
-snippets are ordinary rows you can read, edit, and pin — and they show up in
+snippets are ordinary rows you can read, edit, and pin - and they show up in
 Data Rabbit's **Cache** view (the *Synth* tab), alongside the per-call audit in
 *Receipts*:
 
@@ -103,10 +103,10 @@ Data Rabbit's **Cache** view (the *Synth* tab), alongside the per-call audit in
 SELECT operator, generated_sql, pinned FROM rvbbit.synth_cache WHERE operator = 'synth';
 ```
 
-## It's just an operator — write your own
+## It's just an operator - write your own
 
 `synth` is the built-in operator of a new shape, `query` (`shape => 'query',
-parser => 'sql'`) — the table-scoped sibling of the per-row `scalar` and pipeline
+parser => 'sql'`) - the table-scoped sibling of the per-row `scalar` and pipeline
 `rowset` synth operators. You can create your own house-style generators the same
 way you create any operator, and point `synth`/`synth_sql` at them:
 
@@ -131,7 +131,7 @@ The `query` shape fills `{{ _schema_context }}` from `data_search`; everything e
 ## Composing in plain SQL
 
 `rvbbit.synth(intent)` returns `SETOF jsonb` (one `value` object per row), because
-the result columns aren't known until runtime — Postgres can't reference dynamic
+the result columns aren't known until runtime - Postgres can't reference dynamic
 columns from a function in a CTE (it needs the shape at parse time). Two ways to
 work with it in psql:
 
@@ -140,13 +140,13 @@ work with it in psql:
 SELECT value->>'region' AS region, (value->>'sighting_count')::int AS n
 FROM rvbbit.synth('number of sightings per region');
 
--- 2. Use synth_sql and run the generated SELECT — it has real columns:
+-- 2. Use synth_sql and run the generated SELECT - it has real columns:
 SELECT rvbbit.synth_sql('number of sightings per region') \gexec
 ```
 
 Think of `synth` as the convenience form ("just give me rows") and `synth_sql` as
 the composable form ("give me a real query I can build on"). In **Data Rabbit**
-the jsonb is expanded into real, typed columns automatically — so `select * from
+the jsonb is expanded into real, typed columns automatically - so `select * from
 rvbbit.synth(…)` renders as a normal grid, and you can drag a field out to
 post-aggregate it like any other result.
 

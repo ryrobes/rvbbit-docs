@@ -56,13 +56,13 @@ recording a run.
 
 Tables and views:
 
-- `bench_history.runs` — one row per benchmark run (run id, suite, scale, row
+- `bench_history.runs` - one row per benchmark run (run id, suite, scale, row
   count, settings, report path, git state, summary JSON).
-- `bench_history.query_results` — one row per query/system result. Columns:
+- `bench_history.query_results` - one row per query/system result. Columns:
   `run_id, test_name, suite, scale, row_count, started_at, qid, description,
   system, median_ms, status, detail jsonb`.
-- `bench_history.run_system_summary` — aggregate view for charting scale curves.
-- `bench_history.tatp_system_summary` — TATP-specific view (TPS, p95, p99).
+- `bench_history.run_system_summary` - aggregate view for charting scale curves.
+- `bench_history.tatp_system_summary` - TATP-specific view (TPS, p95, p99).
 
 Useful query:
 
@@ -99,7 +99,7 @@ deterministic by default and writes a full debug trail. Common targets:
 ```bash
 make e2e-realworld         # core stack + deterministic sidecars, non-destructive reload
 make e2e-realworld-fresh   # deletes Docker volumes first (release-style install check)
-make e2e-realworld-live    # RVBBIT_E2E_LIVE_LLM=1 — allows paid provider calls
+make e2e-realworld-live    # RVBBIT_E2E_LIVE_LLM=1 - allows paid provider calls
 make e2e-realworld-warren  # heavier host-Docker Warren sidecar lifecycle smoke
 ```
 
@@ -176,7 +176,7 @@ receipts that never settled. Full detail is in
 RVBBIT's own catalog tables need vacuum care under extreme workloads. The
 canonical failure mode: an ELT pipeline that fully re-copies hundreds of
 tables every few hours generates tombstones in `rvbbit.delete_log` at the
-scale of the data itself — and Postgres' default autovacuum trigger
+scale of the data itself - and Postgres' default autovacuum trigger
 (20% of the table) means a 200M-row delete_log waits for ~40M dead tuples
 before its first vacuum. Symptoms are stale stats, TOAST bloat on
 `rvbbit.row_groups`, and CPU burned in catalog lookups.
@@ -185,7 +185,7 @@ The extension now handles this itself:
 
 - **Tuned autovacuum, automatically.** `rvbbit.tune_metadata_autovacuum()`
   sets per-table autovacuum storage parameters (including TOAST) on every
-  RVBBIT catalog table — small scale factors with fixed thresholds, so
+  RVBBIT catalog table - small scale factors with fixed thresholds, so
   trigger math stays sane at any size. It runs on the
   `rvbbit.maintain_storage()` heartbeat, skips tables you've tuned yourself,
   and is a no-op once applied.
@@ -194,7 +194,7 @@ The extension now handles this itself:
   `rvbbit.prune_delete_log()` removes them on the same heartbeat.
 - **Pressure visibility.** `SELECT * FROM rvbbit.tombstone_pressure` shows
   tombstone weight per table. A table that's fully replaced each cycle will
-  show `tombstone_pct` near 100 — that's the signal to schedule
+  show `tombstone_pct` near 100 - that's the signal to schedule
   `rvbbit.rebuild_acceleration(t)`, which folds tombstones into a fresh
   baseline.
 

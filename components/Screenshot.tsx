@@ -15,7 +15,7 @@ type ScreenshotProps = {
 /**
  * A Lens-screenshot slot. Renders the image once `public/<src>` exists; until
  * then it shows an intentional, captioned placeholder telling you exactly which
- * file to drop in — so the page looks finished now and upgrades automatically
+ * file to drop in - so the page looks finished now and upgrades automatically
  * when you add the PNG.
  */
 export function Screenshot({ src, alt, caption, wide }: ScreenshotProps) {

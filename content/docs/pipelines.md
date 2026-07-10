@@ -1,6 +1,6 @@
 ---
 title: Pipelines
-description: Chain whole-resultset operators after a query with THEN — pivot, enrich, analyze, and your own.
+description: Chain whole-resultset operators after a query with THEN - pivot, enrich, analyze, and your own.
 section: SQL Primitives
 navOrder: 39
 sourceDocs:
@@ -8,7 +8,7 @@ sourceDocs:
 ---
 
 A pipeline runs a query, then pipes the **whole resultset** through a chain of
-operators, each producing a new resultset — possibly with different columns:
+operators, each producing a new resultset - possibly with different columns:
 
 ```sql
 select state, class from bigfoot.sightings_all
@@ -16,7 +16,7 @@ then pivot('counts of each class by state')
 then analyze('which states have an unusual class mix?');
 ```
 
-Each stage is a **rowset operator** — a resultset in, a resultset out — dispatched
+Each stage is a **rowset operator** - a resultset in, a resultset out - dispatched
 through the same operator + [receipts](/docs/receipts-costs) machinery as every
 other rvbbit operator. They are the table-level cousins of the per-row
 [semantic functions](/docs/semantic-functions).
@@ -24,7 +24,7 @@ other rvbbit operator. They are the table-level cousins of the per-row
 ## How it runs: `rvbbit.flow`
 
 `THEN` is not valid SQL, so it never reaches the Postgres parser. The engine is a
-function — the `THEN`s live inside its dollar-quoted argument, and rvbbit splits
+function - the `THEN`s live inside its dollar-quoted argument, and rvbbit splits
 them itself (it ignores `THEN` inside strings, comments, parentheses, and
 `CASE…END`):
 
@@ -36,7 +36,7 @@ $$);
 ```
 
 This works in any client (psql, DataGrip, Data Rabbit). In **Data Rabbit** you can
-drop the wrapper and type the bare `select … then …` form — the editor detects a
+drop the wrapper and type the bare `select … then …` form - the editor detects a
 top-level `THEN` and wraps it for you. (That bare form is a Data Rabbit editor
 convenience; in raw SQL always use the `rvbbit.flow($$ … $$)` wrapper.)
 
@@ -53,7 +53,7 @@ Three kinds ship built in.
 | `sample(n)` | `n` rows spread evenly across the set (a representative subset) |
 | `count` | a single `{ "n": <rowcount> }` row |
 
-**Structural stages** (synth-sql — see below): `pivot`, `group`, `top`, `filter`.
+**Structural stages** (synth-sql - see below): `pivot`, `group`, `top`, `filter`.
 
 **Generative stages** (the model sees the data): `analyze` (returns a findings
 table) and `enrich` (adds computed columns to each row).
@@ -101,7 +101,7 @@ surrounding query untouched and returns the prior rowset.
 The shape-keyed compiler isn't only for resultsets. `rvbbit.reshape(value, intent)`
 is a **scalar** operator that maps each value to its structural shape (every digit
 → `d`, letter → `a`, other characters kept) and has the model author one expression
-per shape — so a column of 50 million values in ~50 formats costs ~50 model calls,
+per shape - so a column of 50 million values in ~50 formats costs ~50 model calls,
 then native SQL.
 
 ```sql
@@ -145,10 +145,10 @@ old runs with `rvbbit.reap_flow_steps(interval)`.)
 A rowset operator is just an operator with `shape => 'rowset'`. Two execution
 strategies, chosen by `parser`:
 
-- `parser => 'json'` — **value mode**: the model receives the table (as
+- `parser => 'json'` - **value mode**: the model receives the table (as
   `{{ _table }}`, with `{{ _table_columns }}` / `{{ _table_row_count }}`) and
   returns `{"data": [ …rows… ]}`. This is how `analyze` and `enrich` work.
-- `parser => 'sql'` — **synth-sql**: the model receives the schema
+- `parser => 'sql'` - **synth-sql**: the model receives the schema
   (`{{ _table_schema }}`, `{{ _table_distinct }}`) and returns
   `{"sql": "<SELECT over _input>"}`, which is cached by shape and executed. This is
   how `pivot` / `group` / `top` / `filter` work.
@@ -167,7 +167,7 @@ SELECT rvbbit.create_operator(
 ```
 
 Because pipelines are operators, every stage is logged to
-[receipts](/docs/receipts-costs) — cost, latency, and cache hits are queryable,
+[receipts](/docs/receipts-costs) - cost, latency, and cache hits are queryable,
 and a cached structural stage costs nothing to re-run.
 
 For a worked, real-dataset walkthrough see the

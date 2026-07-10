@@ -1,14 +1,14 @@
 ---
 title: The Read Fleet
-description: Distribute analytical reads across disposable workers over published artifacts — one brain, many muscles.
+description: Distribute analytical reads across disposable workers over published artifacts - one brain, many muscles.
 section: Execution
 navOrder: 54
 sourceDocs:
   - ../rvbbit-sql/docs/READ_FLEET_PLAN.md
 ---
 
-The read fleet lets one Postgres — **the brain** — offload analytical queries
-to lightweight worker processes on other machines — **the muscles** — without
+The read fleet lets one Postgres - **the brain** - offload analytical queries
+to lightweight worker processes on other machines - **the muscles** - without
 replicating Postgres, without a distributed query planner, and without ever
 risking a wrong answer.
 
@@ -16,7 +16,7 @@ The trick is that RVBBIT's acceleration layer is already **immutable files
 governed by a catalog**. Publish those files to shared object storage and any
 machine can serve scans over them; the brain keeps the heap (source of truth),
 the catalog, and the router. Workers hold no state worth mourning: kill one
-mid-query and the router falls back to local execution — the query gets
+mid-query and the router falls back to local execution - the query gets
 slower, never wrong.
 
 Think of it as a lakehouse turned upside down: instead of starting with files
@@ -29,12 +29,12 @@ database and publish the files outward.
   tables span placements, the brain serves it. There is no distributed join
   executor, and there never will be.
 - **Fail open.** A dead or unreachable worker means a warning in the log and
-  local execution — no user-visible error. Removing a live worker from the
+  local execution - no user-visible error. Removing a live worker from the
   fleet is an anticlimax by design.
 - **Workers earn queries by passing probes.** The dispatcher only considers
   registered, enabled endpoints whose last health probe succeeded.
 - **Declared staleness.** Workers read published generations. Freshness is
-  bounded by publication cadence — the same *stale-is-slow-not-wrong* contract
+  bounded by publication cadence - the same *stale-is-slow-not-wrong* contract
   as the rest of the acceleration layer.
 
 ## 1 · Configure a publish store
@@ -48,7 +48,7 @@ SELECT rvbbit.publish_store_doctor();
 ```
 
 Credentials come from the **server environment** (`AWS_ACCESS_KEY_ID`,
-`AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, optional `AWS_ENDPOINT`) — an
+`AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, optional `AWS_ENDPOINT`) - an
 env file or compose `environment:` block on the Postgres container. Google
 Cloud Storage works through its S3-interoperability endpoint: create HMAC keys
 for a service account and set `AWS_ENDPOINT=https://storage.googleapis.com`.
@@ -56,7 +56,7 @@ for a service account and set `AWS_ENDPOINT=https://storage.googleapis.com`.
 ## 2 · Publish artifacts
 
 Once a store is configured, every compaction publishes its new row groups
-automatically — **keeping the local files** (the brain never depends on the
+automatically - **keeping the local files** (the brain never depends on the
 network for its own reads). Backfill or re-publish by hand:
 
 ```sql
@@ -111,7 +111,7 @@ SELECT rvbbit.fleet_probe('cpu-1');   -- health check with teeth (see below)
 SELECT * FROM rvbbit.fleet;           -- the registry, at a glance
 ```
 
-The brain needs the same `RVBBIT_ENGINE_TOKEN` in **its** environment — it
+The brain needs the same `RVBBIT_ENGINE_TOKEN` in **its** environment - it
 authenticates to workers, never the reverse.
 
 `fleet_probe` is not a TCP ping: it asks the worker to prewarm, which proves
@@ -146,13 +146,13 @@ WHERE decided_at > now() - interval '1 hour'
 GROUP BY 1;
 ```
 
-In Data Rabbit, the **Fleet** window (System folder) is the live topology —
-click a worker to probe it — and the **Adaptive Routing** window grows
+In Data Rabbit, the **Fleet** window (System folder) is the live topology -
+click a worker to probe it - and the **Adaptive Routing** window grows
 per-node filter pills so you can see exactly what ran where.
 
 ## Disk lifecycle: the local cache escape hatch
 
-Published tables can release their local copies — reads transparently shift
+Published tables can release their local copies - reads transparently shift
 to the published objects (slower, never wrong), reclaiming the brain's disk:
 
 ```sql
@@ -161,7 +161,7 @@ SELECT rvbbit.evict_local('big_archive_table');  -- verify, flip reads, reclaim
 
 Eviction verifies the published object byte-for-byte before releasing
 anything, and the local file goes through the same deferred-unlink grace
-window as every other artifact (`reap_grace_minutes` in `rvbbit.settings` —
+window as every other artifact (`reap_grace_minutes` in `rvbbit.settings` -
 size it beyond your longest remote query).
 
 ## Reference
@@ -189,6 +189,6 @@ size it beyond your longest remote query).
 There is no consensus protocol, no shard rebalancing, no replica lag to
 reason about, and no distributed transaction anywhere in this design. The
 brain remains a single ordinary Postgres with ordinary Postgres HA options.
-The fleet scales *reads over immutable data* — which, in an accelerated
-RVBBIT warehouse, is most of the expensive work — and protects the writer's
+The fleet scales *reads over immutable data* - which, in an accelerated
+RVBBIT warehouse, is most of the expensive work - and protects the writer's
 buffer cache and I/O from analytical bursts while doing it.

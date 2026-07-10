@@ -32,7 +32,7 @@ scripts do not use Python.
 
 ## Run It
 
-No repo clone needed — one curl. The runner fetches the notebook SQL files
+No repo clone needed - one curl. The runner fetches the notebook SQL files
 and the BFRO dataset (~14MB) next to itself on first run, so you can read
 every line before and after it executes:
 
@@ -43,10 +43,10 @@ curl -fsSL https://rvbbit.ai/bigfoot/run_all.sh -o run_all.sh && chmod +x run_al
 RVBBIT_DSN=postgresql://postgres:rvbbit@localhost:55433/rvbbit ./run_all.sh
 ```
 
-Each numbered script is plain SQL — browse them at
+Each numbered script is plain SQL - browse them at
 [rvbbit.ai/bigfoot/](https://rvbbit.ai/bigfoot/00_load.sql) or in the
 [rvbbit-sql repo](https://github.com/ryrobes/rvbbit-sql/tree/main/examples/bigfoot)
-— or skip the runner entirely and paste the sections below into any SQL
+- or skip the runner entirely and paste the sections below into any SQL
 client as you read.
 
 Default run:
@@ -59,9 +59,9 @@ Default run:
   dedupe, extraction, Warren capability operators, and KG examples.
 
 The capability-operator section (`06_capability_operators.sql`) uses three
-local-model packs — GLiNER entity extraction, BGE reranking, and emotion
+local-model packs - GLiNER entity extraction, BGE reranking, and emotion
 classification. Installing them is SQL too: the packs ship in
-`rvbbit.capability_catalog` (seeded at install), and Warren does the rest —
+`rvbbit.capability_catalog` (seeded at install), and Warren does the rest -
 pulls the model, builds the sidecar, probes it, and registers the operators.
 
 ```sql
@@ -745,8 +745,8 @@ triples, receipts, cost events, and graph evidence that can be inspected later.
 Everything so far has been retrieval, classification by meaning, and extraction.
 The same table can also train an ordinary supervised model. BFRO grades each
 report: Class A is a clear first-hand sighting, Class B is an indirect encounter
-(sounds, tracks, something glimpsed). Can the structured columns alone — year,
-season, and location — predict that grade? RVBBIT lets us ask in SQL.
+(sounds, tracks, something glimpsed). Can the structured columns alone - year,
+season, and location - predict that grade? RVBBIT lets us ask in SQL.
 
 A trained model is just another operator. We define it from a `SELECT`, a worker
 fits it with scikit-learn, and we get a `predict_*` function. See
@@ -791,18 +791,18 @@ SELECT rvbbit.train_model(
 
 `train_model` queues a run and returns its id. A worker fits it and brings the
 model online (`--include-unmanaged` lets the watcher claim a plain `train_model`
-run; `--serve-host` is the hostname Postgres uses to reach the worker — `bench`
+run; `--serve-host` is the hostname Postgres uses to reach the worker - `bench`
 is this dev stack's host name, so substitute your own):
 
 ```bash
 rvbbit-trainer watch --include-unmanaged --serve-local --serve-host <your-host>
 ```
 
-That command is the bring-your-own-worker form — handy for running this notebook
+That command is the bring-your-own-worker form - handy for running this notebook
 from `psql`. In production you run no worker at all: with a standing
 [Warren](/docs/warren) agent deployed, `train_model_managed` does the whole thing
 from SQL. It queues the job, the agent claims it (placed by node labels), trains,
-serves, and registers the operator — and you watch it with `training_status`, no
+serves, and registers the operator - and you watch it with `training_status`, no
 terminal:
 
 ```sql
@@ -873,18 +873,18 @@ The confusion matrix over the 129 held-out reports:
 
 Holdout accuracy is 0.62. That sounds fine until you notice the base rate: 81 of
 the 129 reports are Class A, so always guessing "Class A" already scores 0.63.
-The matrix makes the truth obvious — the model calls almost everything Class A.
+The matrix makes the truth obvious - the model calls almost everything Class A.
 Year, season, and location simply do not tell you whether a witness got a clear
 look at the animal.
 
 Why it matters: that is a real finding, not a failure of the tooling.
 `evaluate_model` and the confusion matrix make a weak model legible immediately,
 instead of letting a respectable-looking accuracy hide it. The signal that
-actually separates Class A from Class B lives in the **report text** — exactly
+actually separates Class A from Class B lives in the **report text** - exactly
 what the semantic sections above work with. The natural next step is to engineer
 features from that text (a `semantic_case` encounter type, an extracted detail,
 an embedding-derived label) and feed them into the same `train_model` call. That
-pairing — classical models over semantically derived features — is the point of
+pairing - classical models over semantically derived features - is the point of
 [Predictive Models](/docs/predictive-models).
 
 To run this section end to end, start an `rvbbit-trainer` worker and use the
@@ -898,7 +898,7 @@ pipes the whole resultset through a chain of operators with `THEN`, each produci
 a new resultset. See [Pipelines](/docs/pipelines) for the full surface; here it is
 on the BFRO data.
 
-`THEN` is not valid SQL, so the pipeline lives inside `rvbbit.flow($$ … $$)` — the
+`THEN` is not valid SQL, so the pipeline lives inside `rvbbit.flow($$ … $$)` - the
 `THEN`s are parsed by the engine, not Postgres. That is the form used here, since
 this notebook runs from `psql`. (In Data Rabbit you can drop the wrapper and type
 the bare `select … then …` form; the editor wraps it for you.)
@@ -979,7 +979,7 @@ ORDER BY step_idx;
 
 Why it matters: the same operator + receipts system that powers per-row semantic
 functions also works at the resultset level, and the structural stages keep the
-heavy lifting in native SQL — the model writes the query once, then your data
+heavy lifting in native SQL - the model writes the query once, then your data
 flows through deterministic Postgres.
 
 ## 11. Text-To-SQL
@@ -989,7 +989,7 @@ write a grounded `SELECT` over the actual schema. Generation is always available
 running the result is opt-in.
 
 ```sql
--- See the SQL (never runs it) — grounded by the crawled catalog:
+-- See the SQL (never runs it) - grounded by the crawled catalog:
 SELECT rvbbit.synth_sql('count of sightings by classification, most common first');
 ```
 
@@ -1015,10 +1015,10 @@ SELECT value FROM rvbbit.synth('number of sightings per region');
 {"region": "Northeast", "sighting_count": 2}
 ```
 
-The generated SQL is validated read-only (`PREPARE` + plan check — any write is
+The generated SQL is validated read-only (`PREPARE` + plan check - any write is
 rejected), executed inside a read-only transaction, and cached in
 `rvbbit.synth_cache`, so re-asking the same question costs no model call. A
-destructive request is harmless — the validator only lets a single read-only
+destructive request is harmless - the validator only lets a single read-only
 `SELECT` through:
 
 ```sql
@@ -1044,9 +1044,9 @@ This notebook touches the main RVBBIT story in one realistic dataset:
 - Optional live model triples with receipt/cost observability.
 - A tabular classifier trained from a SQL `SELECT`, served as a `predict_*`
   operator, with an honest held-out evaluation.
-- Resultset pipelines (`THEN pivot / enrich / sample / analyze`) — chained rowset
+- Resultset pipelines (`THEN pivot / enrich / sample / analyze`) - chained rowset
   operators with per-step inspection, structural stages compiled to native SQL.
-- Grounded text-to-SQL (`rvbbit.synth` / `synth_sql`) — a natural-language intent
+- Grounded text-to-SQL (`rvbbit.synth` / `synth_sql`) - a natural-language intent
   compiled to a read-only `SELECT` over the real schema, validated and cached.
 
 That makes the system easier to evaluate than a feature checklist. You can run

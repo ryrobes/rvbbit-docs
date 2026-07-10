@@ -10,10 +10,10 @@ slots.
 | --- | --- | --- |
 | `data-rabbit-desktop.png` | Data Rabbit hero / docs overview | The Data Rabbit desktop with real SQL rows, Finder, Data Search, and Adaptive Routing over a live RVBBIT database. |
 | `operator-canvas.png` | Cascades / Operator Studio | One operator's editable graph, prompts, trust metadata, and execution rail. |
-| `routing-cockpit.png` | Lens showcase | The Adaptive Routing cockpit — the planner choosing native / DataFusion / Duck / heap per query, with live timings. |
-| `model-studio.png` | Lens showcase | Model Studio — the SQL-to-model authoring form, task selection, training options, and queue controls. |
-| `scry.png` | Lens showcase | Scry — the graph explorer spidering from a table to its columns / related entities. |
-| `data-search.png` | Lens showcase | Data Search — free-text semantic search over the catalog, ranking tables/columns by what their data is about. |
+| `routing-cockpit.png` | Lens showcase | The Adaptive Routing cockpit - the planner choosing native / DataFusion / Duck / heap per query, with live timings. |
+| `model-studio.png` | Lens showcase | Model Studio - the SQL-to-model authoring form, task selection, training options, and queue controls. |
+| `scry.png` | Lens showcase | Scry - the graph explorer spidering from a table to its columns / related entities. |
+| `data-search.png` | Lens showcase | Data Search - free-text semantic search over the catalog, ranking tables/columns by what their data is about. |
 | `capabilities.png` | Capability packs docs / showcase | The curated capability catalog, pack metadata, operator names, test counts, and deploy controls. |
 | `connections.png` | Data Rabbit docs | The connection manager with pooled DB connections and RVBBIT status. |
 | `desktop-canvas.png` | Data Rabbit docs | Multiple SQL/chart windows on the desktop canvas. |

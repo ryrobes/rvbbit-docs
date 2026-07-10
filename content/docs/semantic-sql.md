@@ -20,8 +20,8 @@ workflow nodes visible as SQL functions with catalog-backed configuration.
 Operators are the SQL surface. **Cascades** are the multi-step execution logic
 inside an operator. There is no separate cascade object: a Cascade is just an
 operator whose `steps` (set via `create_operator(... op_steps => …)`) are
-non-null. Each step has a `kind` — `llm`, `specialist`, `python`, `code`, `sql`,
-`mcp`, or `n8n` — and later steps can reference earlier ones with
+non-null. Each step has a `kind` - `llm`, `specialist`, `python`, `code`, `sql`,
+`mcp`, or `n8n` - and later steps can reference earlier ones with
 `{{ steps.<name>.<field> }}`.
 
 A Cascade can chain those steps with gates, validators, retries, and ensembles
@@ -82,10 +82,10 @@ Operators can add guardrails without leaving SQL. Flow control is attached
 separately from `create_operator`, with one call per concern (pass `NULL` to
 clear, then run `rvbbit.judgment_purge('<op>')`):
 
-- `rvbbit.set_operator_retry(op_name, retry_config)` — re-run on model failures
+- `rvbbit.set_operator_retry(op_name, retry_config)` - re-run on model failures
   or invalid outputs,
-- `rvbbit.set_operator_wards(op_name, wards_config)` — pre/post validation gates,
-- `rvbbit.set_operator_takes(op_name, takes_config)` — multi-take ensembles for
+- `rvbbit.set_operator_wards(op_name, wards_config)` - pre/post validation gates,
+- `rvbbit.set_operator_takes(op_name, takes_config)` - multi-take ensembles for
   higher confidence,
 - `op_tests` stored with the operator definition (run with `rvbbit.run_tests`).
 

@@ -33,7 +33,7 @@ Postgres-visible SQL to external systems.
 The extension already enforces a baseline here. Writing an MCP server registration
 (`rvbbit.register_mcp_server`, `rvbbit.register_mcp_gateway`) calls
 `rvbbit.require_mcp_gateway_admin()`, which requires a superuser or membership in
-the `rvbbit_warren` role — because a registered server's command and args are
+the `rvbbit_warren` role - because a registered server's command and args are
 spawned on the gateway host. Changing the capability catalog calls
 `rvbbit.require_capability_catalog_admin()`, which requires a superuser. Layer
 your own grants on top of these, rather than relying on them alone.
@@ -115,5 +115,5 @@ LIMIT 20;
 - Put the `rvbbit-duck` binary in a controlled path if Duck/Vortex is enabled.
 - Supervise long-running workers in production.
 - Monitor receipt queue, cost audit gaps, and worker health.
-- Keep the Postgres heap as the source of truth for accelerated tables — accelerator files are rebuildable, the heap is authoritative.
+- Keep the Postgres heap as the source of truth for accelerated tables - accelerator files are rebuildable, the heap is authoritative.
 

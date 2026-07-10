@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# rvbbit installer — https://rvbbit.ai
+# rvbbit installer - https://rvbbit.ai
 #
 #   curl -fsSL https://rvbbit.ai/install.sh | bash
 #
-# What this does (please, read it — it's short):
+# What this does (please, read it - it's short):
 #   1. checks for docker + the compose plugin
 #   2. downloads docker-compose.yml into ./rvbbit/
 #   3. docker compose up -d   (Postgres 18 + rvbbit, lens UI, warren agent)
@@ -22,7 +22,7 @@ COMPOSE_URL="https://rvbbit.ai/docker-compose.yml"
 say() { printf '\033[1;35mrvbbit>\033[0m %s\n' "$*"; }
 die() { printf '\033[1;31mrvbbit>\033[0m %s\n' "$*" >&2; exit 1; }
 
-command -v docker >/dev/null 2>&1 || die "docker not found — install it first: https://docs.docker.com/engine/install/"
+command -v docker >/dev/null 2>&1 || die "docker not found - install it first: https://docs.docker.com/engine/install/"
 docker compose version >/dev/null 2>&1 || die "docker compose (v2 plugin) not found"
 docker info >/dev/null 2>&1 || die "cannot talk to the docker daemon (try: sudo usermod -aG docker \$USER, then re-login)"
 
@@ -44,7 +44,7 @@ for i in $(seq 1 90); do
   [ "$status" = "healthy" ] && break
   sleep 2
 done
-[ "$status" = "healthy" ] || die "Postgres didn't become healthy in 3 minutes — check: docker compose logs postgres"
+[ "$status" = "healthy" ] || die "Postgres didn't become healthy in 3 minutes - check: docker compose logs postgres"
 
 PGPORT="${RVBBIT_POSTGRES_PORT:-55433}"
 LENSPORT="${RVBBIT_LENS_PORT:-3000}"
@@ -59,7 +59,7 @@ say "first accelerated table:"
 say "  CREATE TABLE t USING rvbbit AS SELECT ...;"
 say "  SELECT rvbbit.refresh_acceleration('t'::regclass, true);"
 say ""
-say "semantic operators need a model key — add to ./$INSTALL_DIR/.env and re-run 'docker compose up -d':"
+say "semantic operators need a model key - add to ./$INSTALL_DIR/.env and re-run 'docker compose up -d':"
 say "  OPENROUTER_API_KEY=...   (or OPENAI_API_KEY / ANTHROPIC_API_KEY)"
 say ""
 say "docs: https://rvbbit.ai/docs    GPU/GQE + MCP server: https://rvbbit.ai/docs/gqe"

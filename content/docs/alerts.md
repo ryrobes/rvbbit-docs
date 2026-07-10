@@ -1,6 +1,6 @@
 ---
 title: Alerts
-description: A durable, async, edge-triggered alert engine — a SQL or metric condition over your tables drives an action (SQL, MCP tool, or flow), swept by pg_cron tiers and drained by a paced worker, with full state and firing history as plain rows.
+description: A durable, async, edge-triggered alert engine - a SQL or metric condition over your tables drives an action (SQL, MCP tool, or flow), swept by pg_cron tiers and drained by a paced worker, with full state and firing history as plain rows.
 section: SQL Primitives
 navOrder: 43
 sourceDocs:
@@ -39,7 +39,7 @@ rvbbit.define_alert(
 
 ### Condition: from a metric
 
-The simplest condition reads a [KPI](/docs/metrics-kpis#kpis-the-check-is-part-of-the-definition)'s latest verdict —
+The simplest condition reads a [KPI](/docs/metrics-kpis#kpis-the-check-is-part-of-the-definition)'s latest verdict -
 the alert fires when the metric's check goes from `pass` to `fail`:
 
 ```sql
@@ -95,7 +95,7 @@ single-brace `{rule}` / `{entity}` / `{transition}` tokens.
 
 | `operator` | Spec keys | Does |
 | --- | --- | --- |
-| `noop` | — | Nothing (testing / dry runs). Still logged. |
+| `noop` | - | Nothing (testing / dry runs). Still logged. |
 | `sql` | `sql` | Runs the SQL; `$1` is the alert context JSONB. |
 | `mcp_call` | `server`, `tool`, `args` | Calls `rvbbit.mcp_call(server, tool, …)`; `args` is rendered against the context. |
 | `operator` | `operator_name`, `args` | Invokes a catalogued [operator](/docs/cascades) by name (positional `arg_names`, typed), so a receipt is captured. |
@@ -118,12 +118,12 @@ embedded one (`"Anomaly in {entity}"`) interpolates as text.
 
 State lives in `rvbbit.alert_state`, one row per `(rule, entity_key)`:
 
-- **`pass → fail`** — enqueue the action (the only transition that fires in v1).
-- **`fail → fail`** — nothing (sustained breach does *not* re-fire).
-- **`fail → pass`** — re-arm (so the next breach fires again).
+- **`pass → fail`** - enqueue the action (the only transition that fires in v1).
+- **`fail → fail`** - nothing (sustained breach does *not* re-fire).
+- **`fail → pass`** - re-arm (so the next breach fires again).
 
 `fire_policy.consecutive_n` adds hysteresis: require N consecutive failing sweeps
-before firing — useful to denoise fuzzy or semantic conditions.
+before firing - useful to denoise fuzzy or semantic conditions.
 `fire_policy.cooldown_secs` throttles re-fires for the same `(rule, entity)`
 episode.
 
@@ -172,7 +172,7 @@ SELECT rvbbit.set_category('alert', 'regional_packet_loss', 'Infrastructure', 'N
 ## Inspect
 
 ```sql
--- The rule catalog (latest version + control + category) — the UI's read surface.
+-- The rule catalog (latest version + control + category) - the UI's read surface.
 SELECT name, version, enabled, muted, cadence_tier, category
 FROM   rvbbit.alert_catalog
 WHERE  name = 'high_error_rate';
@@ -194,7 +194,7 @@ SELECT rule_name, entity_key, status, attempts, enqueued_at
 FROM   rvbbit.alert_queue
 WHERE  status IN ('pending', 'failed');
 
--- Sweep heartbeat — did each tier run, and what did it see?
+-- Sweep heartbeat - did each tier run, and what did it see?
 SELECT tier, started_at, finished_at, rules_evaluated, transitions, enqueued, errors
 FROM   rvbbit.alert_sweep_runs
 ORDER  BY started_at DESC LIMIT 3;
@@ -208,19 +208,19 @@ ORDER  BY started_at DESC LIMIT 3;
 | `rvbbit.alert_control` | One mutable row per rule: `enabled`, `muted_until`, `cadence_tier`. |
 | `rvbbit.alert_state` | Reconciler memory: `last_status`, `score`, `consecutive`, `last_fired_at` per `(rule, entity)`. |
 | `rvbbit.alert_queue` | Pending actions enqueued by the sweep, drained by the worker. |
-| `rvbbit.alert_events` | The firing log — one row per executed action (with output / error). |
+| `rvbbit.alert_events` | The firing log - one row per executed action (with output / error). |
 | `rvbbit.alert_sweep_runs` | Per-sweep heartbeat for observability. |
 | `rvbbit.alert_catalog` | View: `alert_rules` (latest) ⋈ `alert_control` ⋈ category. |
 
 ## Notes
 
-- **`per_entity` vs `aggregate`** — `per_entity` tracks each `entity_key` from the
+- **`per_entity` vs `aggregate`** - `per_entity` tracks each `entity_key` from the
   condition independently (one fire per region); `aggregate` collapses to a single
   alert per rule. `fan_out_cap` bounds how many transitions a single sweep enqueues.
-- **Metric conditions don't re-run the metric** — they read the latest verdict
+- **Metric conditions don't re-run the metric** - they read the latest verdict
   already in `metric_observations`, so they follow the metric's own materialization
   cadence. Pair an alert with [`materialize_all_metrics`](/docs/metrics-kpis#materialize-everything).
-- **Fire-and-forget (v1)** — actions are executed and logged, but their downstream
+- **Fire-and-forget (v1)** - actions are executed and logged, but their downstream
   outcome isn't tracked for auto-remediation yet.
 - **Drop it all** with `rvbbit.delete_alert('name')` (every version + control +
   state + queue + events); returns `true` if the rule existed.

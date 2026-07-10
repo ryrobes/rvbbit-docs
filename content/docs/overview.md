@@ -24,7 +24,7 @@ Think about RVBBIT in four layers:
 | --- | --- |
 | Postgres heap | The durable source of truth and universal fallback. |
 | Semantic SQL | Operators, embeddings, KG helpers, MCP calls, model costs, and receipts. |
-| Acceleration registry | Optional: registered heap tables get rebuildable columnar files beside them — Parquet, Vortex, Lance, hot memory, layout variants, and time travel — plus multi-engine routing (DataFusion, Duck, [GPU GQE](/docs/gqe)). |
+| Acceleration registry | Optional: registered heap tables get rebuildable columnar files beside them - Parquet, Vortex, Lance, hot memory, layout variants, and time travel - plus multi-engine routing (DataFusion, Duck, [GPU GQE](/docs/gqe)). |
 | Warren | Capability/runtime nodes for managed sidecars and workflow execution. |
 
 You can use semantic SQL without registering a single table for acceleration.
@@ -34,11 +34,11 @@ are designed to compose, not to force one deployment shape.
 Two more pieces round out the product:
 
 - **The Docker ensemble.** For v1, RVBBIT is distributed as a Docker Compose
-  stack — Postgres 18 with the extension preinstalled, the Duck/Vortex worker,
+  stack - Postgres 18 with the extension preinstalled, the Duck/Vortex worker,
   Data Rabbit, and a Warren agent. Treat it like a database, not like software
   you install into Postgres by hand. See [Quickstart](/docs/quickstart).
 - **[Data Rabbit](/docs/data-rabbit)**, the desktop UI. A fast SQL desktop for
-  any Postgres that lights up with cockpits for the whole rvbbit surface —
+  any Postgres that lights up with cockpits for the whole rvbbit surface -
   operators, receipts, routing, the knowledge graph, cubes, metrics, and more.
 
 ## What Is Novel

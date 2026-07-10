@@ -1,6 +1,6 @@
 ---
 title: Predictive Models
-description: Train scikit-learn models from a SELECT, serve them as operators, and evaluate them — all from SQL.
+description: Train scikit-learn models from a SELECT, serve them as operators, and evaluate them - all from SQL.
 section: SQL Primitives
 navOrder: 38
 sourceDocs:
@@ -47,7 +47,7 @@ SELECT rvbbit.train_model(
 );
 ```
 
-`train_model` returns the run id. It does not block on training — it enqueues a
+`train_model` returns the run id. It does not block on training - it enqueues a
 run into `rvbbit.ml_training_runs` and returns immediately.
 
 Numeric columns (`float8`, `int`) are treated as numeric features; `text`
@@ -123,8 +123,8 @@ WHERE churned IS NULL;
 ```
 
 A regression model returns a numeric `value` instead of a label. Like every
-operator, each prediction is recorded in [receipts](/docs/receipts-costs) — and
-reused when the same input row recurs — so scoring is auditable and idempotent.
+operator, each prediction is recorded in [receipts](/docs/receipts-costs) - and
+reused when the same input row recurs - so scoring is auditable and idempotent.
 
 ## Evaluate
 
@@ -153,7 +153,7 @@ LIMIT 1;
 ```
 
 Evaluate on data the model has not seen. Scoring the training rows will look
-perfect because the model has memorized them — the honest signal comes from a
+perfect because the model has memorized them - the honest signal comes from a
 holdout. The confusion matrix is often more informative than the headline
 accuracy: a model that just predicts the majority class will post a respectable
 accuracy while the matrix shows every row landing in one column.
@@ -184,8 +184,8 @@ SELECT rvbbit.train_model_managed(
 );
 ```
 
-That returns immediately with the run and job ids. Watch the whole lifecycle —
-queued, which node claimed it, training, completed, active — from SQL:
+That returns immediately with the run and job ids. Watch the whole lifecycle -
+queued, which node claimed it, training, completed, active - from SQL:
 
 ```sql
 -- the full queue: each run with its Warren placement and serving state
@@ -200,12 +200,12 @@ FROM rvbbit.training_status('churn_risk');
 ```
 
 When `training_status` shows `model_status = active`, the `predict_churn_risk`
-operator is live — no different from a model you trained by hand.
+operator is live - no different from a model you trained by hand.
 
 The operator that runs this is the Warren agent (`warren-agent`); an operator
 starts it once as a service, exactly like Postgres itself. Running the basic
-`train_model` + `rvbbit-trainer` flow by hand is still supported — it's the
-"bring your own worker" option — but managed training is the SQL-only default.
+`train_model` + `rvbbit-trainer` flow by hand is still supported - it's the
+"bring your own worker" option - but managed training is the SQL-only default.
 
 To deploy serving for an already-trained model, or to move it to a new host:
 
@@ -215,7 +215,7 @@ SELECT rvbbit.deploy_model_serving('churn_risk', '{"host":"gpu-1"}'::jsonb);
 
 ## Training-Free Tabular Prediction
 
-Sometimes you do not want to train and register a model at all — you have a small
+Sometimes you do not want to train and register a model at all - you have a small
 labeled support set and want predictions for new rows right now. `predict_tabular`
 fits in context against a foundation operator and returns predictions in one call.
 
@@ -235,7 +235,7 @@ or, with `dry_run => true`, a preview of the assembled bundle
 and no backend call. It routes through a tabular foundation
 [capability pack](/docs/capability-packs) (default operator
 `predict_tabular_foundation`) rather than producing a persistent operator, so the
-live path requires that a `tabular_foundation` capability is deployed — without one
+live path requires that a `tabular_foundation` capability is deployed - without one
 the call raises. It is the right tool for small, ad-hoc problems; `train_model` is
 better when you want a named, versioned, re-evaluable model.
 
@@ -247,8 +247,8 @@ backend is still being filled in.
 ## Distillation
 
 `distill_model` turns an expensive labeler into a cheap model. It labels up to
-`n_label` rows of the unlabeled query with any SQL expression — an LLM-backed
-operator, a [semantic function](/docs/semantic-functions), a heuristic —
+`n_label` rows of the unlabeled query with any SQL expression - an LLM-backed
+operator, a [semantic function](/docs/semantic-functions), a heuristic -
 materializes the labels into a staging table, infers a feature schema, and trains
 a tabular model on them.
 
@@ -303,17 +303,17 @@ above: a model list with Overview, Evaluate, Predict, Train, and Monitor tabs. I
 auto-builds a prediction form from the feature schema, renders the confusion matrix
 and residual scatter from `ml_evaluations`, and shows per-prediction receipts. Every
 action surfaces the SQL it runs, so anything you do in the UI you can copy into
-`psql` or DataGrip unchanged. Model behavior lives in the SQL functions above —
+`psql` or DataGrip unchanged. Model behavior lives in the SQL functions above -
 Model Studio is sugar over them, not a separate runtime.
 
 ## Are These Still Worth Training?
 
-Yes — and they pair well with the rest of RVBBIT. Large models and LLM calls are
+Yes - and they pair well with the rest of RVBBIT. Large models and LLM calls are
 strong at messy text and reasoning, but a small tabular model is faster, cheaper,
 auditable, and deterministic on structured columns. The interesting move is to
 combine them: use [semantic functions](/docs/semantic-functions) to turn free
 text into structured features (a `semantic_case` bucket, an extracted field, an
-embedding-derived label), then feed those features into a classical model — or
+embedding-derived label), then feed those features into a classical model - or
 use `distill_model` to bake an expensive labeler down into a cheap operator. The
 [Bigfoot field notebook](/docs/examples/bigfoot-field-notebook) walks through a
 worked classifier on a real dataset, including an honest look at when the

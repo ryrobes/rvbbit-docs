@@ -1,6 +1,6 @@
 ---
 title: Duck/Vortex Worker
-description: The rvbbit-duck worker — modes, fallback behavior, telemetry, and deployment shape.
+description: The rvbbit-duck worker - modes, fallback behavior, telemetry, and deployment shape.
 section: Operations
 navOrder: 70
 sourceDocs:
@@ -14,7 +14,7 @@ including Duck over Vortex layouts. The same codebase, compiled for GPU
 hosts, is the bridge behind the [NVIDIA GQE route](/docs/gqe).
 
 This is an optional acceleration path. The Postgres heap stays the source of
-truth, and you do not need a broker service to use the extension — the worker
+truth, and you do not need a broker service to use the extension - the worker
 only serves selected analytical SQL that the router sends to the Duck/Vortex
 route. In the Docker ensemble the binary ships preinstalled in the Postgres
 image (and the uber stack runs a dedicated shared worker pool).
@@ -83,7 +83,7 @@ For minute-level rollups (calls, p50/p95 latency, rows returned) grouped by
 host, node, mode, engine, and layout, read `rvbbit.duck_sidecar_query_summary`.
 
 Telemetry includes `hostname` and `node_id` so the schema supports multiple
-worker nodes over shared storage. Raw SQL text is never stored — query events
+worker nodes over shared storage. Raw SQL text is never stored - query events
 record only a `query_hash` to group repeated shapes.
 
 ## Load Testing

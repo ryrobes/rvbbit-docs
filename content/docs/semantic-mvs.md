@@ -9,8 +9,8 @@ sourceDocs:
 
 Semantic operators are priced per call, so classifying the same million rows
 twice is a bug. A **semantic materialized view** caches an operator's per-row
-results as an ordinary Postgres table — source primary key plus one computed
-column — and refreshes by computing **only the rows it hasn't seen yet**.
+results as an ordinary Postgres table - source primary key plus one computed
+column - and refreshes by computing **only the rows it hasn't seen yet**.
 
 ## Create
 
@@ -46,13 +46,13 @@ only for new primary keys. When the projection is a plain
 operator engine first, so a large catch-up batch runs at full backend
 concurrency (and still writes [receipts](/docs/receipts-costs)).
 
-There is no built-in scheduler — call `semantic_mv_refresh` from pg_cron,
+There is no built-in scheduler - call `semantic_mv_refresh` from pg_cron,
 right where you schedule the other [maintenance
 entrypoints](/docs/accelerator-freshness#scheduled-maintenance-entrypoints).
 
 ## Limits (By Design)
 
-- **Insert-only.** Updates and deletes on source rows are not detected — a
+- **Insert-only.** Updates and deletes on source rows are not detected - a
   cached value is computed once and kept. For a full re-evaluation (say,
   after editing the operator's prompt), drop and recreate:
 

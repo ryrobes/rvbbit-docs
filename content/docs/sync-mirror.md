@@ -12,7 +12,7 @@ The sync mirror pulls remote Postgres tables (over `postgres_fdw`) into local
 as a new generation, so the mirror gets [time travel](/docs/time-travel) for
 free: you can query the warehouse copy *as of* any previous sync.
 
-It is a **mirror, not a system of record** — the remote stays authoritative.
+It is a **mirror, not a system of record** - the remote stays authoritative.
 Unsupported column types are coerced conservatively (`numeric` → `double
 precision`, exotic types → `text`), and remote schema drift is tolerated by
 re-importing the foreign tables.
@@ -37,22 +37,22 @@ SELECT * FROM rvbbit.sync_table(
 
 `sync_table` creates `mirror.orders` as a registered accelerated table if
 missing (adapting DDL, adding new columns), then snapshots the foreign
-table's rows into it — one new generation per sync.
+table's rows into it - one new generation per sync.
 
 ## Jobs
 
 For recurring syncs, define a job row in `rvbbit.sync_jobs` (the `spec` jsonb
-holds the server, schemas, and an optional table list — omit `tables` to
+holds the server, schemas, and an optional table list - omit `tables` to
 mirror the whole schema), then run the executor:
 
 ```sql
 CALL rvbbit.run_sync('warehouse_nightly');
 ```
 
-`run_sync` is a procedure (call it outside an explicit transaction — it
+`run_sync` is a procedure (call it outside an explicit transaction - it
 commits per table so progress is durable and visible mid-run). It:
 
-- takes a self-healing singleton lock, so overlapping calls are safe — a
+- takes a self-healing singleton lock, so overlapping calls are safe - a
   second concurrent call logs "already running" and exits,
 - fingerprints the remote schema and skips the expensive
   `IMPORT FOREIGN SCHEMA` when nothing changed
@@ -61,7 +61,7 @@ commits per table so progress is durable and visible mid-run). It:
 - syncs each table, recording one row per table in `rvbbit.sync_runs`
   (`action` ∈ `import` / `snapshot` / `empty` / `error`) and emitting
   `pg_notify('rvbbit_sync_error', ...)` on failures,
-- leaves heavy columnar-variant builds off the critical path — the
+- leaves heavy columnar-variant builds off the critical path - the
   [freshness heartbeat](/docs/accelerator-freshness) picks those up.
 
 There is no embedded scheduler; `run_sync` is built to be a pg_cron job. In

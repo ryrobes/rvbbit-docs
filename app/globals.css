@@ -384,7 +384,7 @@ main > section {
   justify-self: end;
   min-width: 0;
   /* On wide viewports, let the shot bleed past the 1180px shell toward the
-     right viewport edge — the hero art tolerates the overlap and the card
+     right viewport edge - the hero art tolerates the overlap and the card
      earns the room. --bleed resolves to 0 at/below the shell width, and the
      single-column breakpoints reset width/margin entirely. */
   --bleed: clamp(0px, calc((100vw - var(--max)) / 2 - 24px), 150px);

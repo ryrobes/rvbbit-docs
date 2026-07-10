@@ -1,6 +1,6 @@
 ---
 title: Storage Acceleration
-description: The acceleration registry — ordinary heap tables with rebuildable columnar files beside them.
+description: The acceleration registry - ordinary heap tables with rebuildable columnar files beside them.
 section: Storage
 navOrder: 40
 sourceDocs:
@@ -55,7 +55,7 @@ SELECT * FROM rvbbit.list_tables();
 `CREATE TABLE ... USING rvbbit` still works, and it is deliberately just
 sugar: a DDL event trigger registers the new table in the acceleration
 registry and immediately normalizes it to a **plain heap table**. The `rvbbit`
-access method is a compatibility alias for heap — the registry row is the
+access method is a compatibility alias for heap - the registry row is the
 acceleration contract, not the access method.
 
 ```sql
@@ -93,8 +93,8 @@ SELECT rvbbit.disable_table('events'::regclass);
 | Metadata tables | Watermarks, row groups, stats, generations, operations, phases. |
 
 Most Postgres column types map straight to Arrow (numbers, text, timestamps,
-`date`, `jsonb`, `bytea`, `real[]` vectors). Types without a native Arrow form —
-`uuid`, `numeric`, `inet`/`cidr`/`macaddr`, `time`/`interval`, and enums — are
+`date`, `jsonb`, `bytea`, `real[]` vectors). Types without a native Arrow form -
+`uuid`, `numeric`, `inet`/`cidr`/`macaddr`, `time`/`interval`, and enums - are
 stored as canonical text and reconstructed to the real type on read, so a `uuid`
 column (Salesforce keys, say) stays a `uuid` to SQL with comparisons, joins, and
 `ORDER BY` intact. Genuinely unsupported types (ranges, composites, geometry)
@@ -124,8 +124,8 @@ SELECT rvbbit.rebuild_acceleration('events'::regclass);
 SELECT rvbbit.compact('events'::regclass);
 ```
 
-To automate *when* these run — as a value-vs-cost policy with per-table SLOs,
-budgets, and the `accel_tick` heartbeat — see
+To automate *when* these run - as a value-vs-cost policy with per-table SLOs,
+budgets, and the `accel_tick` heartbeat - see
 [Accelerator Freshness](/docs/accelerator-freshness).
 
 ## Observability
@@ -157,7 +157,7 @@ LIMIT 50;
 ```
 
 For a per-table freshness/demand summary (drift, dirty time, slow-path scans),
-read `rvbbit.accel_freshness` — see
+read `rvbbit.accel_freshness` - see
 [Accelerator Freshness](/docs/accelerator-freshness). For runtime health of
 the execution engines themselves (Duck, DataFusion, [GPU GQE](/docs/gqe)),
 call `rvbbit.accelerator_runtime_status(false)` or the broader

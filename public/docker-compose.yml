@@ -106,7 +106,7 @@ services:
       # First-boot convenience: seed a working connection to this stack's own
       # Postgres so the desktop connects with zero typing (server-side
       # resolution means the service name, not localhost). Only applies when
-      # no connections.json exists yet — user edits/deletions stick.
+      # no connections.json exists yet - user edits/deletions stick.
       RVBBIT_LENS_SEED_DSN: ${RVBBIT_LENS_SEED_DSN:-postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}}
       RVBBIT_LOCAL_WORK_ROOT: ${RVBBIT_LOCAL_WORK_ROOT:-/data}
       RVBBIT_CAPABILITY_ROOT: ${RVBBIT_CAPABILITY_ROOT:-/usr/share/rvbbit/capabilities}
@@ -172,11 +172,11 @@ services:
       - rvbbit_lens:/var/lib/rvbbit/lens
     restart: "no"
 
-  # ── Warehouse MCP — serve the warehouse to Claude (Cowork & Code) ──────────
+  # ── Warehouse MCP - serve the warehouse to Claude (Cowork & Code) ──────────
   # Inbound (Claude -> rvbbit), the OPPOSITE of the capability mcp-gateway. Its own
   # tiny image; connects straight to postgres (never via the gateway). Opt-in:
   #   docker compose -f docker/docker-compose.uber.yml --profile warehouse up -d
-  # AUTH — two modes (the server picks based on WAREHOUSE_PUBLIC_URL):
+  # AUTH - two modes (the server picks based on WAREHOUSE_PUBLIC_URL):
   #   * OAuth (recommended, for Claude Desktop/Cowork's native connector): set
   #     WAREHOUSE_PUBLIC_URL + WAREHOUSE_LOGIN_PASSWORD + WAREHOUSE_JWT_SECRET
   #     (JWT secret MUST differ from WAREHOUSE_MCP_KEY). Terminate TLS at your proxy
@@ -192,7 +192,7 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "127.0.0.1:8765:8765"   # localhost-only — your host nginx/proxy reaches it here
+      - "127.0.0.1:8765:8765"   # localhost-only - your host nginx/proxy reaches it here
     volumes:
       - rvbbit_warehouse_mcp:/app/data   # durable OAuth state (clients + refresh tokens)
     environment:
@@ -208,7 +208,7 @@ services:
       WAREHOUSE_MCP_KEY: ${WAREHOUSE_MCP_KEY:-}
     restart: unless-stopped
 
-  # OPTIONAL Cloudflare QUICK tunnel — only if you have NO proxy of your own. Separate
+  # OPTIONAL Cloudflare QUICK tunnel - only if you have NO proxy of your own. Separate
   # profile so the `warehouse` profile (above) does NOT start it. Instant public HTTPS,
   # ephemeral URL in its logs (`logs warehouse-tunnel | grep trycloudflare`). NOTE:
   # OAuth mode needs a STABLE url, so pair the tunnel with shared-key mode, or use a

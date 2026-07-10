@@ -9,7 +9,7 @@
       "id": "mcp/apollo",
       "name": "apollo",
       "title": "Apollo.io (B2B Enrichment)",
-      "description": "Apollo.io — B2B people/company search + firmographic enrichment. Needs APOLLO_API_KEY (paid plan).",
+      "description": "Apollo.io - B2B people/company search + firmographic enrichment. Needs APOLLO_API_KEY (paid plan).",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -989,7 +989,7 @@
       "id": "mcp/brave",
       "name": "brave",
       "title": "Brave Search",
-      "description": "Brave Search (official) — web/news/image/video/local search + AI summarizer. Needs BRAVE_API_KEY (free tier ~2k/mo).",
+      "description": "Brave Search (official) - web/news/image/video/local search + AI summarizer. Needs BRAVE_API_KEY (free tier ~2k/mo).",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -2277,7 +2277,7 @@
       "id": "mcp/exa",
       "name": "exa",
       "title": "Exa (Neural Search)",
-      "description": "Exa — neural/semantic web search + fetch; composes with embed() for KNN. Needs EXA_API_KEY.",
+      "description": "Exa - neural/semantic web search + fetch; composes with embed() for KNN. Needs EXA_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -2480,7 +2480,7 @@
       "id": "mcp/firecrawl",
       "name": "firecrawl",
       "title": "Firecrawl (MCP)",
-      "description": "Firecrawl MCP server (firecrawl-mcp) over stdio via npx — web scrape/search/crawl/extract. PAT read from FIRECRAWL_API_KEY, resolved by the gateway from its encrypted secret store; only the ${FIRECRAWL_API_KEY} ref is stored in PG.",
+      "description": "Firecrawl MCP server (firecrawl-mcp) over stdio via npx - web scrape/search/crawl/extract. PAT read from FIRECRAWL_API_KEY, resolved by the gateway from its encrypted secret store; only the ${FIRECRAWL_API_KEY} ref is stored in PG.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -3925,7 +3925,7 @@
       "id": "mcp/maps",
       "name": "maps",
       "title": "Google Maps",
-      "description": "Google Maps Platform — geocode/reverse-geocode/places/distance-matrix/directions/timezone/elevation/weather (read-only). Needs GOOGLE_MAPS_API_KEY.",
+      "description": "Google Maps Platform - geocode/reverse-geocode/places/distance-matrix/directions/timezone/elevation/weather (read-only). Needs GOOGLE_MAPS_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -4520,7 +4520,7 @@
       "id": "mcp/ipgeo",
       "name": "ipgeo",
       "title": "ipgeolocation.io",
-      "description": "ipgeolocation.io — IP geolocation + timezone + VPN/security + currency + ASN. Needs IPGEOLOCATION_API_KEY.",
+      "description": "ipgeolocation.io - IP geolocation + timezone + VPN/security + currency + ASN. Needs IPGEOLOCATION_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -4897,7 +4897,7 @@
       "id": "mcp/iplocate",
       "name": "iplocate",
       "title": "IPLocate (IP Geolocation)",
-      "description": "IPLocate.io — read-only IP geolocation/privacy(VPN)/network/company/abuse lookups. Works keyless at low quota; set IPLOCATE_API_KEY for volume.",
+      "description": "IPLocate.io - read-only IP geolocation/privacy(VPN)/network/company/abuse lookups. Works keyless at low quota; set IPLOCATE_API_KEY for volume.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -5318,7 +5318,7 @@
       "id": "mcp/linear",
       "name": "linear",
       "title": "Linear",
-      "description": "Linear (@tacticlaunch/mcp-linear) — issues, projects, teams, cycles, comments. Reads + writes via LINEAR_API_KEY.",
+      "description": "Linear (@tacticlaunch/mcp-linear) - issues, projects, teams, cycles, comments. Reads + writes via LINEAR_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -8907,7 +8907,7 @@
       "id": "mcp/openweather",
       "name": "openweather",
       "title": "OpenWeatherMap",
-      "description": "OpenWeatherMap — current/forecast/hourly/daily/alerts/air-pollution + geocoding. Needs OPENWEATHER_API_KEY (32-hex). SDK pinned to 1.12.1 in args (avoids a FastMCP completions crash with sdk 1.29).",
+      "description": "OpenWeatherMap - current/forecast/hourly/daily/alerts/air-pollution + geocoding. Needs OPENWEATHER_API_KEY (32-hex). SDK pinned to 1.12.1 in args (avoids a FastMCP completions crash with sdk 1.29).",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -9998,7 +9998,7 @@
       "id": "mcp/tavily",
       "name": "tavily",
       "title": "Tavily (Web Search)",
-      "description": "Tavily — web search / extract / crawl / map as read-only enrichment operators. Needs TAVILY_API_KEY.",
+      "description": "Tavily - web search / extract / crawl / map as read-only enrichment operators. Needs TAVILY_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -10144,7 +10144,7 @@
       "id": "mcp/time",
       "name": "time",
       "title": "Time / Timezone",
-      "description": "time-mcp — timezone conversion, relative time, week-of-year, days-in-month. Deterministic local clock + IANA tz DB, no API key.",
+      "description": "time-mcp - timezone conversion, relative time, week-of-year, days-in-month. Deterministic local clock + IANA tz DB, no API key.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [

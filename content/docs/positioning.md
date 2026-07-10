@@ -33,7 +33,7 @@ queries.
 
 One deployment note: for v1, RVBBIT ships as a single Docker ensemble
 (Postgres + extension + workers + UI) rather than as separately installable
-pieces — see [Quickstart](/docs/quickstart). The subsystems above are still
+pieces - see [Quickstart](/docs/quickstart). The subsystems above are still
 opt-in at the SQL level; the ensemble just removes install friction.
 
 ## Why SQL-Native AI
@@ -54,7 +54,7 @@ access, backups, transactions, and data modeling.
 
 Acceleration is a registry beside the heap, not a table type: registered
 tables stay ordinary heap tables while RVBBIT maintains Parquet, Vortex,
-Lance, hot memory, and layout variants for them — with Postgres heap as the
+Lance, hot memory, and layout variants for them - with Postgres heap as the
 source of truth throughout.
 
 Use it for:

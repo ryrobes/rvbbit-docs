@@ -1,6 +1,6 @@
 ---
 title: Accelerator Freshness & Maintenance
-description: rvbbit tables keep a heap plus columnar acceleration files — staleness makes queries slow, never wrong. A per-table policy plane decides when to rebuild as a value-vs-cost decision, and a handful of pg_cron entrypoints keep catalogs, metrics, and cubes current.
+description: rvbbit tables keep a heap plus columnar acceleration files - staleness makes queries slow, never wrong. A per-table policy plane decides when to rebuild as a value-vs-cost decision, and a handful of pg_cron entrypoints keep catalogs, metrics, and cubes current.
 section: Operations
 navOrder: 74
 sourceDocs:
@@ -11,7 +11,7 @@ sourceDocs:
 
 A `USING rvbbit` table has two layers: a live heap for writes, and columnar
 [acceleration files](/docs/acceleration) (parquet / vortex / lance) for fast
-analytical scans. Writes make the acceleration stale — but **stale never means
+analytical scans. Writes make the acceleration stale - but **stale never means
 wrong**. If a table's columnar copy isn't authoritative, the planner simply falls
 back to a correct heap scan (the slow path). That turns freshness from a
 correctness protocol into a **value-vs-cost policy**: not "must we rebuild?" but
@@ -24,7 +24,7 @@ budget, and an **executor** (`accel_tick`) that pg_cron drives on a heartbeat.
 
 ## See Freshness
 
-`rvbbit.accel_freshness` is one row per rvbbit table — supply signals (drift,
+`rvbbit.accel_freshness` is one row per rvbbit table - supply signals (drift,
 parquet rows, rebuild cost) fused with demand (slow-path scans). It's all catalog
 lookups, no heap scans:
 
@@ -40,8 +40,8 @@ ORDER  BY drift_rows * (1 + heap_seq_scans) DESC;   -- "dirty AND in demand" fir
 | --- | --- |
 | `parquet_authoritative` | Can the planner use acceleration (clean), or must it heap-scan? |
 | `shadow_heap_dirty` / `seconds_dirty` | Is the columnar copy stale, and for how long? |
-| `drift_rows` / `drift_ratio` | Un-mirrored inserts + tombstones — how far the heap has drifted past the files. Drives the delta-vs-full choice. |
-| `heap_seq_scans` | Slow-path queries on this table — the "eligible-but-unused" demand signal. |
+| `drift_rows` / `drift_ratio` | Un-mirrored inserts + tombstones - how far the heap has drifted past the files. Drives the delta-vs-full choice. |
+| `heap_seq_scans` | Slow-path queries on this table - the "eligible-but-unused" demand signal. |
 | `last_rebuild_ms` / `last_rebuild_rows` | What the last rebuild cost. |
 
 ## Set A Policy
@@ -80,9 +80,9 @@ rvbbit.set_accel_policy(
 | --- | --- |
 | `manual` | Never (explicit calls only). The default. |
 | `scheduled` | The table is dirty (subject to `min_interval_secs`). |
-| `target` | It's been dirty longer than `freshness_target_secs` — a freshness SLO. |
-| `demand` | It's dirty **and** slow-path scans are climbing — warm-on-miss. |
-| `continuous` | Every tick while dirty — strongest guarantee, highest cost. |
+| `target` | It's been dirty longer than `freshness_target_secs` - a freshness SLO. |
+| `demand` | It's dirty **and** slow-path scans are climbing - warm-on-miss. |
+| `continuous` | Every tick while dirty - strongest guarantee, highest cost. |
 
 `clear_accel_policy('sales.orders'::regclass)` resets a table to the `manual`
 default.
@@ -90,8 +90,8 @@ default.
 ## The Heartbeat
 
 `accel_tick` is the executor. It ranks dirty tables by value, then for each picks
-the cheapest legal action — a delta `refresh_acceleration` over a full
-`rebuild_acceleration` — within budget. Preview it first (lock-free, safe):
+the cheapest legal action - a delta `refresh_acceleration` over a full
+`rebuild_acceleration` - within budget. Preview it first (lock-free, safe):
 
 ```sql
 SELECT table_name, strategy, action, reason, drift_rows, seconds_dirty, status
@@ -148,7 +148,7 @@ WHERE  table_name = 'sales.orders';
 
 ## Exclude A Schema
 
-Some tables are maintained elsewhere and shouldn't be touched by the heartbeat —
+Some tables are maintained elsewhere and shouldn't be touched by the heartbeat -
 [cubes](/docs/cubes), for instance, are fully rebuilt by `refresh_cube`. The
 `rvbbit.accel_exclude_schemas` GUC (default `cubes`) forces every table in those
 schemas to `manual`, so `accel_tick` skips them:
@@ -187,12 +187,12 @@ SELECT cron.schedule('rvbbit_catalog',          '0 2 * * *',   $$CALL rvbbit.cat
 
 ## Notes
 
-- **Why it's safe to be lazy** — a stale table is never wrong; the planner heap-scans
+- **Why it's safe to be lazy** - a stale table is never wrong; the planner heap-scans
   it. So you tune freshness for cost, not correctness.
-- **delta ≫ full** — `accel_tick` prefers cheap delta refreshes; it escalates to a
+- **delta ≫ full** - `accel_tick` prefers cheap delta refreshes; it escalates to a
   full rebuild only when drift crosses `full_rebuild_drift_ratio` (an LSM
   major-compaction trigger).
 - **Lance** datasets are full-overwrite and expensive, so they get a separate,
   stricter `lance_budget` per tick.
-- **History** — every tick's decisions are logged (table, action, reason, status)
+- **History** - every tick's decisions are logged (table, action, reason, status)
   for the cockpit and the rolling daily-budget counter.

@@ -33,17 +33,17 @@ const differentiators = [
   {
     icon: Workflow,
     title: "You build the operators",
-    text: "Not a sealed list of AI functions. Compose model calls, your own validators, retries, and tool calls into one typed SQL function — your operator, your logic."
+    text: "Not a sealed list of AI functions. Compose model calls, your own validators, retries, and tool calls into one typed SQL function - your operator, your logic."
   },
   {
     icon: Cpu,
     title: "Bring your own models",
-    text: "Spin up a Hugging Face specialist or your own model on your own GPU and call it from SQL like any other function — or use the 40-plus packs that ship in the box. Not a vendor's frontier-model menu."
+    text: "Spin up a Hugging Face specialist or your own model on your own GPU and call it from SQL like any other function - or use the 40-plus packs that ship in the box. Not a vendor's frontier-model menu."
   },
   {
     icon: Lock,
     title: "Open, local, no lock-in",
-    text: "It's a Postgres extension you run yourself. Heap stays the source of truth — drop the extension and your data is still ordinary rows."
+    text: "It's a Postgres extension you run yourself. Heap stays the source of truth - drop the extension and your data is still ordinary rows."
   }
 ];
 
@@ -66,7 +66,7 @@ const semanticPillars = [
   {
     icon: Sparkles,
     title: "Bring your own operators",
-    text: "When the built-ins aren't enough, compose your own from models, tools, and validators — same SQL call shape."
+    text: "When the built-ins aren't enough, compose your own from models, tools, and validators - same SQL call shape."
   }
 ];
 
@@ -94,7 +94,7 @@ const metricsFeatures = [
   {
     icon: GitBranch,
     title: "Versioned definitions",
-    text: "Every metric is an append-versioned row. The definition — including the KPI threshold — is part of the record, so you can re-run exactly the rule you shipped last quarter, or apply today's definition going forward."
+    text: "Every metric is an append-versioned row. The definition - including the KPI threshold - is part of the record, so you can re-run exactly the rule you shipped last quarter, or apply today's definition going forward."
   },
   {
     icon: ShieldCheck,
@@ -104,12 +104,12 @@ const metricsFeatures = [
   {
     icon: Database,
     title: "Durable, verdict-stamped history",
-    text: "Observations are written when the data changes — compaction is the trigger — and outlive generation reaping. One immutable row per snapshot: value, verdict, and the threshold it ran against."
+    text: "Observations are written when the data changes - compaction is the trigger - and outlive generation reaping. One immutable row per snapshot: value, verdict, and the threshold it ran against."
   },
   {
     icon: Cable,
     title: "Parameterized and composable",
-    text: "Inject params and reference other metrics inline — {param}, {metric:NAME} — so one definition builds on another instead of copy-pasted SQL."
+    text: "Inject params and reference other metrics inline - {param}, {metric:NAME} - so one definition builds on another instead of copy-pasted SQL."
   }
 ];
 
@@ -176,7 +176,7 @@ export default function Home() {
               <img
                 className="hero-shot"
                 src="/shots/fleet-topology.jpg"
-                alt="A live RVBBIT desktop: the fleet topology (one Postgres brain, cpu and gpu workers with probe latencies), published-artifact water levels, model capabilities, and the adaptive-routing flow — every query pathway visible."
+                alt="A live RVBBIT desktop: the fleet topology (one Postgres brain, cpu and gpu workers with probe latencies), published-artifact water levels, model capabilities, and the adaptive-routing flow - every query pathway visible."
               />
             </div>
           </aside>
@@ -189,7 +189,7 @@ export default function Home() {
           <h2>Call a model from inside a SELECT.</h2>
           <span>
             Classify a column, filter a <code>WHERE</code> by meaning, even
-            file a ticket — with retries, validation, and a cost receipt. We
+            file a ticket - with retries, validation, and a cost receipt. We
             call these operators, and you can build (or deploy) your own.
           </span>
         </div>
@@ -255,8 +255,8 @@ WHERE  created_at > now() - interval '1 day'
       <section className="band" id="dr-proof">
         <Screenshot
           src="shots/data-rabbit-desktop.png"
-          alt="Data Rabbit — a desktop over any Postgres, lit up on an RVBBIT database: adaptive routing, model deploys, the operator canvas, the knowledge graph, and live receipts."
-          caption="Data Rabbit — point it at any Postgres to browse and query; point it at an RVBBIT database and it lights up. Everything here is plain SQL underneath."
+          alt="Data Rabbit - a desktop over any Postgres, lit up on an RVBBIT database: adaptive routing, model deploys, the operator canvas, the knowledge graph, and live receipts."
+          caption="Data Rabbit - point it at any Postgres to browse and query; point it at an RVBBIT database and it lights up. Everything here is plain SQL underneath."
           wide
         />
       </section>
@@ -264,12 +264,12 @@ WHERE  created_at > now() - interval '1 day'
       <section className="band" id="why">
         <div className="section-header">
           <p>Why it&apos;s different</p>
-          <h2>Not a fixed menu of AI functions — a layer you program.</h2>
+          <h2>Not a fixed menu of AI functions - a layer you program.</h2>
           <span>
             Cortex and Databricks hand you a sealed set of AI SQL calls on their
             cloud. RVBBIT hands you the building blocks: compose hosted models,
             your own Hugging Face deployments, tools, retries, and receipts into
-            operators you define — open source, on Postgres, over your own data.
+            operators you define - open source, on Postgres, over your own data.
           </span>
         </div>
         <div className="capability-grid">
@@ -289,13 +289,13 @@ WHERE  created_at > now() - interval '1 day'
       <section className="band mcp-band" id="act">
         <div className="section-header mcp-header">
           <p>SQL that acts</p>
-          <h2>A SELECT can file the ticket — and leave a receipt.</h2>
+          <h2>A SELECT can file the ticket - and leave a receipt.</h2>
           <span>
             An operator is an ordinary SQL function, but inside it can call
-            models, MCP tools, and flows. So Postgres&apos;s own machinery —
-            triggers, <code>pg_cron</code>, Alerts — becomes an automation
+            models, MCP tools, and flows. So Postgres&apos;s own machinery -
+            triggers, <code>pg_cron</code>, Alerts - becomes an automation
             engine. <code>SELECT do_stuff()</code> actually does stuff: opens
-            tickets, posts messages, kicks off analysis — with trackable SQL as
+            tickets, posts messages, kicks off analysis - with trackable SQL as
             the glue.
           </span>
         </div>
@@ -329,7 +329,7 @@ SELECT rvbbit.define_alert(
               <h3>Operators have side effects</h3>
               <p>
                 Compose a model call, an MCP tool, a validator, and a flow into
-                one function. Calling it doesn&apos;t just compute — it acts.
+                one function. Calling it doesn&apos;t just compute - it acts.
               </p>
             </article>
             <article>
@@ -345,8 +345,8 @@ SELECT rvbbit.define_alert(
               <ReceiptText aria-hidden="true" size={20} />
               <h3>Every action is audited</h3>
               <p>
-                Each side effect can leave a receipt — args, sub-calls, latency,
-                cost, errors — so automation stays replayable and reviewable,
+                Each side effect can leave a receipt - args, sub-calls, latency,
+                cost, errors - so automation stays replayable and reviewable,
                 not a black box.
               </p>
             </article>
@@ -363,7 +363,7 @@ SELECT rvbbit.define_alert(
           <p>Receipts</p>
           <h2>Every model call and side effect is logged, costed, replayable.</h2>
           <span>
-            Each operator and action can write a receipt — its inputs, the
+            Each operator and action can write a receipt - its inputs, the
             model, the sub-calls it fanned out to, tokens, cost, latency, and
             any error. Governance isn&apos;t a bolt-on: it&apos;s a row in a
             table you can query, join, and audit like anything else.
@@ -406,9 +406,9 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
           <h2>Ships with 40+ model packs. Add any Hugging Face model in a paste.</h2>
           <span>
             Every operator is backed by a model, and RVBBIT comes with a catalog
-            of curated packs — local specialists (GLiNER, DeBERTa, BGE
+            of curated packs - local specialists (GLiNER, DeBERTa, BGE
             rerankers), embeddings, summarizers, even MCP servers like Brave and
-            Apollo — each exposing ready-made SQL operators. That&apos;s where{" "}
+            Apollo - each exposing ready-made SQL operators. That&apos;s where{" "}
             <code>means()</code>, <code>about()</code>, <code>extract_pii()</code>,
             and <code>classify()</code> come from: they work on day one, no
             prompt-wiring.
@@ -439,7 +439,7 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
               <h3>MCP servers are packs too</h3>
               <p>
                 Register an MCP server and its tools become pseudo-tables or
-                functions — joinable beside your data, audited like everything
+                functions - joinable beside your data, audited like everything
                 else.
               </p>
             </article>
@@ -447,15 +447,15 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
           <div className="mcp-code-stack">
             <Screenshot
               src="shots/hf-deploy.png"
-              alt="Deploy from Hugging Face in Data Rabbit — paste a model ID, inspect it, and run a scaffold → build → register → operator → smoke pipeline that turns it into a typed SQL operator, deployed local or to a managed runtime."
-              caption="Deploy from Hugging Face — paste a model ID, get a typed SQL operator."
+              alt="Deploy from Hugging Face in Data Rabbit - paste a model ID, inspect it, and run a scaffold → build → register → operator → smoke pipeline that turns it into a typed SQL operator, deployed local or to a managed runtime."
+              caption="Deploy from Hugging Face - paste a model ID, get a typed SQL operator."
             />
           </div>
         </div>
         <Screenshot
           src="shots/capabilities.png"
-          alt="The capability catalog in Data Rabbit — 40+ curated packs mixing local specialist models, API embeddings, and MCP servers, each card exposing a set of ready-made SQL operators with call counts, latencies, and test status."
-          caption="The capability catalog — 40+ packs, each exposing ready-made SQL operators."
+          alt="The capability catalog in Data Rabbit - 40+ curated packs mixing local specialist models, API embeddings, and MCP servers, each card exposing a set of ready-made SQL operators with call counts, latencies, and test status."
+          caption="The capability catalog - 40+ packs, each exposing ready-made SQL operators."
           wide
         />
         <Link className="mcp-link" href="/capabilities">
@@ -467,7 +467,7 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
       <section className="band semantic-band" id="semantic">
         <div className="section-header semantic-header">
           <p>Semantic functions</p>
-          <h2>Retrieval, classification, and graph memory — built-in SQL functions.</h2>
+          <h2>Retrieval, classification, and graph memory - built-in SQL functions.</h2>
           <span>
             RVBBIT ships built-in semantic primitives for retrieval,
             classification, clustering, extraction, evidence, graph memory, and
@@ -544,7 +544,7 @@ LIMIT 10;`}</SqlCode>
           <span>
             Plain text-to-SQL is tame in 2026. The interesting part:{" "}
             <code>rvbbit.synth</code> reads your catalog and writes ONE read-only
-            SELECT against your actual tables and foreign keys — and it&apos;s the
+            SELECT against your actual tables and foreign keys - and it&apos;s the
             same operator + receipts machinery as everything else here, so the
             generated SQL is grounded, validated read-only, cached, and
             inspectable.
@@ -569,10 +569,10 @@ SELECT rvbbit.synth_sql('bigfoot sightings in California since 1990');
       <section className="band mcp-band" id="mcp">
         <div className="section-header mcp-header">
           <p>MCP as a SQL primitive</p>
-          <h2>Call any tool from SQL — as a data source, or an action.</h2>
+          <h2>Call any tool from SQL - as a data source, or an action.</h2>
           <span>
             Register MCP servers in Postgres and discover their tools. Read them
-            as JSON or row sources to join beside your data — or call them to
+            as JSON or row sources to join beside your data - or call them to
             make something happen. Every invocation is cataloged and audited,
             and any tool can be a node inside a Cascade.
           </span>
@@ -643,22 +643,22 @@ ORDER BY stars DESC;`}</SqlCode>
           <p>Operators become cascades</p>
           <h2>Multi-step model logic, called like SQL.</h2>
           <span>
-            A Cascade is the execution plan inside a semantic operator — guards,
-            model calls, validators, retries, tool calls, and a receipt — still
+            A Cascade is the execution plan inside a semantic operator - guards,
+            model calls, validators, retries, tool calls, and a receipt - still
             exposed as a single typed Postgres function.
           </span>
         </div>
         <Screenshot
           src="shots/operator-canvas.png"
-          alt="An operator's cascade on the canvas in Data Rabbit — its steps (input, a specialist model node, output parser) wired together, a Try-It panel that runs the operator for real, and a live receipt with latency, tokens, and execution history."
-          caption="One operator's cascade on the canvas — every step, with a live receipt."
+          alt="An operator's cascade on the canvas in Data Rabbit - its steps (input, a specialist model node, output parser) wired together, a Try-It panel that runs the operator for real, and a live receipt with latency, tokens, and execution history."
+          caption="One operator's cascade on the canvas - every step, with a live receipt."
         />
         <div className="cascade-copy">
           <div>
             <h3>The workflow lives next to the data</h3>
             <p>
               Instead of scattering model orchestration across application code,
-              RVBBIT keeps it in the database — observable in SQL, versioned, and
+              RVBBIT keeps it in the database - observable in SQL, versioned, and
               callable from an ordinary query.
             </p>
           </div>
@@ -675,7 +675,7 @@ WHERE created_at >= now() - interval '1 day';`}</SqlCode>
           <h2>Heap is the source of truth; fast paths are optional and earn their place.</h2>
           <span>
             One extension, multiple execution paths. A semantic layer and an
-            optional storage/routing engine sit beside the Postgres heap — which
+            optional storage/routing engine sit beside the Postgres heap - which
             stays authoritative, with fallbacks for correctness and
             pg_dump/restore.
           </span>
@@ -694,7 +694,7 @@ WHERE created_at >= now() - interval '1 day';`}</SqlCode>
       <section className="band" id="metrics">
         <div className="section-header">
           <p>Metrics &amp; KPIs</p>
-          <h2>A versioned BI layer — built in, never required.</h2>
+          <h2>A versioned BI layer - built in, never required.</h2>
           <span>
             A metric is a name and a SELECT. Add one more SELECT that returns a
             boolean and it is a KPI. Every definition is versioned, so you can
@@ -740,7 +740,7 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
           <span>
             Work-in-progress runs compare the default RVBBIT router against
             Postgres, Hydra, Citus, AlloyDB, and ClickHouse. Not final, audited
-            numbers — but real end-to-end measurements, and directionally honest.
+            numbers - but real end-to-end measurements, and directionally honest.
           </span>
         </div>
         <div className="home-benchmark-grid">
@@ -791,7 +791,7 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
           <p>Data Rabbit</p>
           <h2>A Postgres desktop that gets superpowers on RVBBIT.</h2>
           <span>
-            Data Rabbit is a fast desktop for any Postgres — browse, query,
+            Data Rabbit is a fast desktop for any Postgres - browse, query,
             explore. Point it at an RVBBIT database and it lights up: watch the
             planner pick an engine, deploy a specialist model, build operators on
             a canvas, and read live receipts. Works without the extension;
@@ -801,25 +801,25 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
         <div className="shot-row">
           <Screenshot
             src="shots/routing-cockpit.png"
-            alt="The Adaptive Routing cockpit in Data Rabbit — the planner choosing among native, DataFusion, Duck, and heap per query shape, with live timings."
-            caption="Adaptive Routing — watch the planner pick an engine per query."
+            alt="The Adaptive Routing cockpit in Data Rabbit - the planner choosing among native, DataFusion, Duck, and heap per query shape, with live timings."
+            caption="Adaptive Routing - watch the planner pick an engine per query."
           />
           <Screenshot
             src="shots/model-studio.png"
-            alt="Model Studio in Data Rabbit — spinning up a Hugging Face specialist model and wiring it to a SQL operator."
-            caption="Model Studio — spin up a specialist model, call it from SQL."
+            alt="Model Studio in Data Rabbit - spinning up a Hugging Face specialist model and wiring it to a SQL operator."
+            caption="Model Studio - spin up a specialist model, call it from SQL."
           />
         </div>
         <div className="shot-row">
           <Screenshot
             src="shots/scry.png"
-            alt="Scry in Data Rabbit — a graph explorer over the data knowledge graph, spidering from a table to its columns and related entities."
-            caption="Scry — explore your data's knowledge graph."
+            alt="Scry in Data Rabbit - a graph explorer over the data knowledge graph, spidering from a table to its columns and related entities."
+            caption="Scry - explore your data's knowledge graph."
           />
           <Screenshot
             src="shots/data-search.png"
-            alt="Data Search in Data Rabbit — free-text semantic search over the catalog, ranking tables and columns by what their data is about."
-            caption="Data Search — find tables by what their data is about."
+            alt="Data Search in Data Rabbit - free-text semantic search over the catalog, ranking tables and columns by what their data is about."
+            caption="Data Search - find tables by what their data is about."
           />
         </div>
       </section>
@@ -845,10 +845,10 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
           <TerminalSquare aria-hidden="true" size={20} />
           <h2>docker compose up -d</h2>
           <p>
-            One compose file brings up the whole thing — Postgres 18 with the
+            One compose file brings up the whole thing - Postgres 18 with the
             extension preinstalled, the query workers, Data Rabbit, and a
             Warren agent. Start with a single SQL snippet and go as deep as
-            you want — heap stays the source of truth.
+            you want - heap stays the source of truth.
           </p>
         </div>
         <div className="hero-actions">

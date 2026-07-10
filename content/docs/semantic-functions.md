@@ -17,8 +17,8 @@ useful before you design your own operator.
 
 Most of them embed text with the configured embedding backend (set with
 `rvbbit.set_default_embedder(...)`, or pass a specialist name as the last
-argument) and then do the rest of the work — clustering, nearest-neighbour
-search, branching — deterministically in Rust. `rvbbit.extract(...)` is the
+argument) and then do the rest of the work - clustering, nearest-neighbour
+search, branching - deterministically in Rust. `rvbbit.extract(...)` is the
 exception: it is a seeded LLM-backed operator, and `rvbbit.text_evidence(...)`
 is purely lexical (no model at all). All of them compose with ordinary SQL.
 
@@ -116,7 +116,7 @@ backed by a local specialist instead, install the GLiNER
 specialist-backed `rvbbit.extract`.
 
 For evidence snippets, `rvbbit.text_evidence` returns the most relevant
-sentences (a `text[]`) using keyword coverage — it needs no embedding backend
+sentences (a `text[]`) using keyword coverage - it needs no embedding backend
 and runs in microseconds:
 
 ```sql

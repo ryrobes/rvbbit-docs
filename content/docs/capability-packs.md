@@ -19,8 +19,8 @@ Use packs when a feature needs assets and runtime shape, not only a single SQL
 function.
 
 The friendliest install path is the **Capabilities** window in
-[Data Rabbit](/docs/data-rabbit) — browse the catalog, click install, watch
-the deploy graph — which drives the same
+[Data Rabbit](/docs/data-rabbit) - browse the catalog, click install, watch
+the deploy graph - which drives the same
 [Warren SQL deployment](#sql-deployment-through-warren) documented below. The
 shell CLI is the development/repeatable-install path.
 
@@ -95,7 +95,7 @@ ORDER BY title;
 
 ## Where The Familiar Operators Come From
 
-Some friendly names exist out of the box and some arrive with a pack — and a few
+Some friendly names exist out of the box and some arrive with a pack - and a few
 exist in *both* forms. The core extension seeds **LLM-backed** `means`, `about`,
 `classify`, `extract`, `summarize`, `sentiment`, and `triples` as editable rows
 in `rvbbit.operators`, so they work before you install anything. Installing a
@@ -110,16 +110,16 @@ competing pack, whichever you install (or install last) provides that backing.
 | --- | --- | --- |
 | `means(text, criterion)` (infix `~~?` / `MEANS`) | bool | core seeds an LLM version; the BGE/MS-MARCO reranker packs (`rerank/bge-reranker-base`, `rerank/bge-reranker-v2-m3`, `rerank/ms-marco-minilm-l6-v2`) add a local reranker version |
 | `about(text, topic)` (infix `~~%` / `ABOUT`) | float8 | core seeds an LLM version; same three rerank packs add a local reranker version |
-| `semantic_score`, `semantic_matches` | float8 / bool | pack-only — the same three rerank packs (no infix form) |
+| `semantic_score`, `semantic_matches` | float8 / bool | pack-only - the same three rerank packs (no infix form) |
 | `classify(text, categories)`, `semantic_classify` | text | core seeds an LLM `classify`; `classify/deberta-v3-zero-shot` and `classify/deberta-v3-base-zero-shot` add local zero-shot versions |
 | `extract(text, what)` | text | core seeds an LLM version; `extract/gliner-medium-v2.1` (GLiNER) adds a specialist version |
-| `extract_entities`, `extract_pii`, `has_pii` | jsonb / text / bool | pack-only — `extract/gliner-medium-v2.1` (GLiNER) |
-| `semantic_embed(text)`, `similar_to(left, right)` | jsonb / float8 | pack-only — local embedding packs (`embeddings/bge-small-en-v1.5`, `embeddings/bge-m3`, `embeddings/e5-small-v2`) |
+| `extract_entities`, `extract_pii`, `has_pii` | jsonb / text / bool | pack-only - `extract/gliner-medium-v2.1` (GLiNER) |
+| `semantic_embed(text)`, `similar_to(left, right)` | jsonb / float8 | pack-only - local embedding packs (`embeddings/bge-small-en-v1.5`, `embeddings/bge-m3`, `embeddings/e5-small-v2`) |
 
 Only `about` and `means` declare infix forms; `semantic_score` and
 `semantic_matches` are plain functions. The per-pack raw wrappers (for example
 `rerank_bge_base_score`, `embed_bge_small`, `summarize_bart`) keep their own
-prefixed names — the pack's friendly operators above are the multi-step Cascades
+prefixed names - the pack's friendly operators above are the multi-step Cascades
 built on top of them. For canonical retrieval, prefer `rvbbit.embed` /
 `rvbbit.set_default_embedder(...)` over the exploratory `embed_*` raw wrappers.
 See [/docs/semantic-functions](/docs/semantic-functions) for the extension's own

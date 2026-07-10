@@ -18,7 +18,7 @@ Routing is an optional accelerator. The Postgres heap stays the source of truth,
 and the default route is conservative: without an active profile, queries stay on
 the native PostgreSQL/RVBBIT path unless cheap shape rules promote them. The
 adaptive part is rule- and profile-based. A learned router exists only in shadow
-mode today — it observes and explains decisions, it does not take over default
+mode today - it observes and explains decisions, it does not take over default
 routing.
 
 ![Adaptive Routing in Data Rabbit - live route decisions flowing across native, Duck, Vortex, and GPU candidates with timing summaries per engine.](/shots/routing-cockpit.png)
@@ -35,7 +35,7 @@ Common candidates:
 | `duck_vortex` | DuckDB over Vortex-encoded files where they exist. |
 | `datafusion_hive` / `duck_hive` | Hive-style partitioned Parquet variants for filter-friendly workloads. |
 | `datafusion_mem` | Decoded hot-cache path for small hot tables. |
-| `gpu_gqe` | NVIDIA GQE over authoritative Parquet on GPU hosts — see [GPU Execution](/docs/gqe). |
+| `gpu_gqe` | NVIDIA GQE over authoritative Parquet on GPU hosts - see [GPU Execution](/docs/gqe). |
 | `pg_rowstore` | Retained shadow heap rowstore path. |
 
 The candidate names above are the exact route labels the SQL API uses (the
@@ -136,7 +136,7 @@ Beyond profiles and exact-shape pins, the router carries a per-engine
 **latency model** (small gradient-boosted tree ensembles stored as rows in
 `rvbbit.route_model`, evaluated in-process in microseconds). For queries no
 profile or pin covers, the model ranks the *eligible* candidates by predicted
-latency — eligibility stays rule-based, so a misprediction can only cost
+latency - eligibility stays rule-based, so a misprediction can only cost
 speed, never correctness. Fresh installs ship with **factory-trained models**
 (seeded by migration; marked `factory-seed` in `route_model.notes`) so
 routing is informed from the first query, and any retrain overwrites them.
@@ -150,7 +150,7 @@ SELECT rvbbit.route_self_train();
 
 It reads representative SQL captured from *your real traffic*
 (`rvbbit.route_shape_samples`), replays the hottest shapes across **every
-eligible engine** (unbiased — engines the router currently avoids still get
+eligible engine** (unbiased - engines the router currently avoids still get
 measured), records timings to `rvbbit.route_observations`, pins measured
 winners, and refits the models. Guardrails learned the hard way: each shape
 remembers when it was last tested and is only re-benched after a cooldown

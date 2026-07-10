@@ -1,6 +1,6 @@
 ---
 title: Agent Memory (Hindsight)
-description: Long-term agent memory as SQL — retain, recall, and reflect against a registered Hindsight service.
+description: Long-term agent memory as SQL - retain, recall, and reflect against a registered Hindsight service.
 section: SQL Primitives
 navOrder: 46
 sourceDocs:
@@ -8,8 +8,8 @@ sourceDocs:
 ---
 
 Agents need memory that outlives a session. RVBBIT integrates
-[Hindsight](https://github.com/vectorize-io/hindsight) — an external
-long-term-memory service — as a registered *memory service*, with thin SQL
+[Hindsight](https://github.com/vectorize-io/hindsight) - an external
+long-term-memory service - as a registered *memory service*, with thin SQL
 wrappers so retain/recall/reflect are just function calls inside your queries
 and Cascades.
 
@@ -38,7 +38,7 @@ same as other runtime registrations. The default service is tracked in
 
 ## Retain, Recall, Reflect
 
-Memories live in named **banks** — one per agent, tenant, or workflow:
+Memories live in named **banks** - one per agent, tenant, or workflow:
 
 ```sql
 -- Store a memory (async by default).
@@ -68,7 +68,7 @@ optional trailing `service_name` to target a non-default service, and all
 return `jsonb` you can join, filter, and log like any other value.
 
 Because these are ordinary functions, they compose with the rest of the
-system — a [Cascade](/docs/cascades) step can recall context before an LLM
+system - a [Cascade](/docs/cascades) step can recall context before an LLM
 step, and an MCP-facing agent can persist what it learned before the session
 ends. In [Data Rabbit](/docs/data-rabbit), the **Hindsight** desktop icon
 lights up ("detected") when a service is registered and reachable.

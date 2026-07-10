@@ -1,6 +1,6 @@
 ---
 title: GPU Execution (NVIDIA GQE)
-description: The gpu_gqe route — running accelerated scans on NVIDIA GPUs through the RAPIDS GQE engine, with soft fallback everywhere.
+description: The gpu_gqe route - running accelerated scans on NVIDIA GPUs through the RAPIDS GQE engine, with soft fallback everywhere.
 section: Execution
 navOrder: 52
 sourceDocs:
@@ -12,10 +12,10 @@ RVBBIT can execute accelerated analytical queries on an NVIDIA GPU through
 [GQE](https://github.com/rapidsai/gqe), the RAPIDS GPU Query Engine built on
 libcudf. NVIDIA's post
 [Designing GPU-Accelerated Query Engines with NVIDIA GQE](https://developer.nvidia.com/blog/designing-gpu-accelerated-query-engines-with-nvidia-gqe/)
-is the reference for the engine itself — the three-layer query/data/execution
-design on cuDF, nvCOMP, and NVSHMEM — and is what RVBBIT's `gpu_gqe` bridge
-is built against. In routing terms it is simply one more candidate —
-`gpu_gqe` — beside Duck/Vortex, DataFusion, native, and the Postgres
+is the reference for the engine itself - the three-layer query/data/execution
+design on cuDF, nvCOMP, and NVSHMEM - and is what RVBBIT's `gpu_gqe` bridge
+is built against. In routing terms it is simply one more candidate -
+`gpu_gqe` - beside Duck/Vortex, DataFusion, native, and the Postgres
 rowstore. The same contract applies: the heap stays the source of truth, and
 the route is only taken when it can preserve SQL semantics.
 
@@ -26,7 +26,7 @@ need to configure anything to *not* use GQE.
 
 ## What Runs On The GPU
 
-`gpu_gqe` serves SELECTs over accelerated (Parquet-backed) tables — large
+`gpu_gqe` serves SELECTs over accelerated (Parquet-backed) tables - large
 scans, filters, and aggregations are the shapes where a GPU wins. The bridge
 gates unsupported query shapes and falls back rather than guessing; shapes
 that are legal but historically risky can be force-enabled with
@@ -42,7 +42,7 @@ Requirements:
 
 The extension launches a small binary chain, every link of which fails soft:
 
-1. `pg_rvbbit` invokes `/usr/local/bin/rvbbit-gqe` — a shim that probes for a
+1. `pg_rvbbit` invokes `/usr/local/bin/rvbbit-gqe` - a shim that probes for a
    GPU (`nvidia-smi`, `/dev/nvidia*`). No GPU or no GQE install → it reports
    `{"status": "unavailable"}` and the router skips the candidate.
 2. The shim `exec`s the real bridge, `rvbbit-gqe-bridge` (the same codebase as
@@ -64,8 +64,8 @@ self-gate on runtime availability:
 | --- | --- | --- | --- |
 | `rvbbit.gpu_gqe_backend` | `RVBBIT_GPU_GQE_BACKEND` | `true` | Enable the GQE backend at all. |
 | `rvbbit.route_gpu_gqe` | `RVBBIT_ROUTE_GPU_GQE` | `true` | Let the router consider the `gpu_gqe` candidate. |
-| `rvbbit.route_gpu_gqe_prior` | — | `off` | Warm-prior routing (below). |
-| `rvbbit.route_gpu_gqe_prior_min_rows` | — | — | Minimum table size before the prior applies. |
+| `rvbbit.route_gpu_gqe_prior` | - | `off` | Warm-prior routing (below). |
+| `rvbbit.route_gpu_gqe_prior_min_rows` | - | - | Minimum table size before the prior applies. |
 
 Set `RVBBIT_ROUTE_GPU_GQE=0` to force the route off on a GPU host.
 
@@ -75,7 +75,7 @@ this: when `rvbbit.route_gpu_gqe_prior` is enabled, the freshness heartbeat
 ([`accel_tick`](/docs/accelerator-freshness)) periodically calls
 `rvbbit.warm_gpu_gqe()`, which runs a trivial forced-GQE query and records
 success in `rvbbit.gqe_warm_state`. The router's GQE prior only fires while
-that warm state is fresh — so no user query ever pays the cold start.
+that warm state is fresh - so no user query ever pays the cold start.
 
 ```sql
 SELECT rvbbit.warm_gpu_gqe();          -- best-effort warm probe (no-op when prior is off)
@@ -103,7 +103,7 @@ SELECT rvbbit.gpu_gqe_query_json(
 ## Observability
 
 `rvbbit.doctor(false)` includes a `gpu_gqe` block in its `accelerator /
-runtime` row — binary path, config state, probe result, and what happens if
+runtime` row - binary path, config state, probe result, and what happens if
 the route is unavailable:
 
 ```sql
@@ -119,8 +119,8 @@ or why not.
 
 ## Deployment
 
-The GPU image is **prebuilt and published** —
-`ghcr.io/ryrobes/rvbbit-postgres-gqe` (~9GB) — so a GPU deployment is a pull,
+The GPU image is **prebuilt and published** -
+`ghcr.io/ryrobes/rvbbit-postgres-gqe` (~9GB) - so a GPU deployment is a pull,
 not a compile. It is the standard image plus the GQE runtime, and one image
 covers every CUDA compute-capability 8.0+ GPU:
 
@@ -131,7 +131,7 @@ covers every CUDA compute-capability 8.0+ GPU:
 | B100 / B200 / GB200 | `sm_100` SASS |
 | RTX 50-series, RTX PRO Blackwell, DGX Spark | `sm_120` SASS + PTX (forward-compatible) |
 
-Turing (RTX 20-series) and older are not supported — cudf 26.x dropped them.
+Turing (RTX 20-series) and older are not supported - cudf 26.x dropped them.
 On such hosts the plain image behaves identically (the route self-gates).
 
 Start it with the GPU overlay on top of the standard compose:
@@ -143,8 +143,8 @@ docker compose -f docker-compose.yml -f docker-compose.gqe.yml up -d
 ```
 
 The overlay sets the GPU-specific runtime pieces (`gpus: all`, shared memory
-and memlock limits, `NVIDIA_VISIBLE_DEVICES`). Everything else — the
-ensemble, ports, volumes — matches the standard
+and memlock limits, `NVIDIA_VISIBLE_DEVICES`). Everything else - the
+ensemble, ports, volumes - matches the standard
 [quickstart](/docs/quickstart) stack.
 
 Building from source instead (custom GQE/cudf refs or arch lists) remains
@@ -156,7 +156,7 @@ build-from-source and host-mounted GQE trees.
 
 ### GPU host preflight
 
-Before first start, make sure the *host* is actually GPU-ready —
+Before first start, make sure the *host* is actually GPU-ready -
 "GPU instance" does not mean drivers are installed:
 
 ```bash
@@ -175,7 +175,7 @@ docker run --rm --gpus all ghcr.io/ryrobes/rvbbit-postgres:latest nvidia-smi -L
 - **Very large scans on cloud block storage**: GQE reads parquet with
   GPU-direct I/O (KvikIO); on VMs without GPUDirect Storage this can fail at
   large row-group counts. The router's fallback (and its learned latency
-  models) handle this automatically — CPU engines serve those queries.
+  models) handle this automatically - CPU engines serve those queries.
 
 Advanced env knobs for nonstandard layouts: `RVBBIT_GQE_BIN`,
 `RVBBIT_GQE_BRIDGE_BIN`, `RVBBIT_GQE_CLI`, `RVBBIT_GQE_SERVER_URL`,

@@ -1,6 +1,6 @@
 ---
 title: Document Brain
-description: A role-gated document knowledge base — chunked, embedded, ACL-filtered retrieval with graph enrichment, entirely in SQL.
+description: A role-gated document knowledge base - chunked, embedded, ACL-filtered retrieval with graph enrichment, entirely in SQL.
 section: SQL Primitives
 navOrder: 45
 sourceDocs:
@@ -15,7 +15,7 @@ is ACL-filtered vector retrieval; enrichment wires documents into the
 
 Security is the defining design choice, and it is **default-deny**: a
 document with no role grant is visible to nobody, and the ACL filter is
-applied *before* the vector search — a restricted chunk never enters the KNN
+applied *before* the vector search - a restricted chunk never enters the KNN
 candidate set, so it can't leak into an answer by paraphrase.
 
 ## Ingest
@@ -37,7 +37,7 @@ SELECT rvbbit.brain_ingest(
 `brain_ingest` upserts by `(source, uri)`, chunks the body
 (paragraph-packed, ~1,200 characters), embeds each chunk with
 `rvbbit.embed(...)` (the configured default embedder), and assigns roles. It
-is idempotent — re-ingesting an unchanged document is cheap.
+is idempotent - re-ingesting an unchanged document is cheap.
 
 ## Access Control
 
@@ -52,8 +52,8 @@ SELECT rvbbit.brain_exclude(42, 'subject@example.com', 'about this person');
 ```
 
 Every retrieval function takes the caller's email as its first argument and
-intersects with `rvbbit.brain_visible_docs(email)` — the single security
-predicate — before anything else happens.
+intersects with `rvbbit.brain_visible_docs(email)` - the single security
+predicate - before anything else happens.
 
 ## Search And Retrieval
 
@@ -87,7 +87,7 @@ window)` returns neighboring chunks.
 
 A separate, budgeted pass (not inlined into ingest) runs triple extraction
 over chunks and writes entities and `mentions`/`links_to` edges into the KG
-graph `brain` — re-running only when a document's content hash changes:
+graph `brain` - re-running only when a document's content hash changes:
 
 ```sql
 SELECT rvbbit.brain_enrich_doc(42);          -- one document
@@ -110,9 +110,9 @@ Two strategies bring external content in:
   connector sidecar named in the source's `config`. `rvbbit.brain_sync_source
   (source_id)` requests a manifest from the connector, extracts binary bodies
   to markdown, and applies adds/updates/tombstones.
-  The connector services are external — bring your own endpoint; the SQL
+  The connector services are external - bring your own endpoint; the SQL
   diff/ingest/ACL engine works standalone.
-- **Query sources** (Linear, JIRA, GitHub — anything reachable from SQL,
+- **Query sources** (Linear, JIRA, GitHub - anything reachable from SQL,
   including [MCP](/docs/mcp) row sources) are defined by a provider with a
   `list_sql` / `item_sql` pair (`rvbbit.brain_define_provider(...)`,
   `rvbbit.brain_add_query_source(...)`) and synced with
@@ -120,7 +120,7 @@ Two strategies bring external content in:
 
 Sharing flows through ACLs conservatively: each synced folder becomes a
 synthetic role whose members are the folder's individually-shared emails,
-while group/domain/"anyone" shares are **not** auto-granted — they queue in
+while group/domain/"anyone" shares are **not** auto-granted - they queue in
 `rvbbit.brain_pending_grants` for an explicit
 `rvbbit.brain_approve_pending_grant(...)`.
 
@@ -133,7 +133,7 @@ SELECT rvbbit.brain_nightly();   -- sync sources → enrich pending → refresh 
 ## In Data Rabbit
 
 The **Document Brain** window ([Data Rabbit](/docs/data-rabbit)) is a browser
-over all of this — sources panel, ingest-by-drag, and a "View as <email>" ACL
+over all of this - sources panel, ingest-by-drag, and a "View as <email>" ACL
 inspector that shows exactly what a given principal can retrieve. The
 [Warehouse MCP server](/docs/warehouse-mcp) exposes the same role-gated
 retrieval to Claude and other MCP clients.

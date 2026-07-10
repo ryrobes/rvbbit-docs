@@ -13,7 +13,7 @@ sourceDocs:
   - ../rvbbit-sql/docs/DIAGNOSTICS.md
 ---
 
-This page is a compact map of the SQL surface — names and shapes at a glance.
+This page is a compact map of the SQL surface - names and shapes at a glance.
 The linked guides for each area go deeper into arguments and behavior.
 
 ## Semantic Operators
@@ -29,7 +29,7 @@ The core extension seeds LLM-backed operators (`means`, `about`, `classify`,
 `about` and pack-only operators like `extract_pii` arrive when you install the
 matching [capability pack](/docs/capability-packs#where-the-familiar-operators-come-from).
 Trained scikit-learn models register as `predict_<model>` operators the same way
-— see [Predictive Models](/docs/predictive-models).
+- see [Predictive Models](/docs/predictive-models).
 
 Cascade inspection:
 
@@ -104,7 +104,7 @@ is `refresh_mcp_server` (probe a server with `rvbbit.mcp_probe(server)`). See
 
 ## Acceleration Registry
 
-Acceleration is the optional columnar tier — a registry that ordinary heap
+Acceleration is the optional columnar tier - a registry that ordinary heap
 tables are added to; the heap stays the source of truth. See
 [Storage Acceleration](/docs/acceleration).
 
@@ -166,7 +166,7 @@ GUC `rvbbit.as_of_timestamp` (or `rvbbit.set_as_of`) pins a session. See
 SELECT rvbbit.route_status();
 SELECT rvbbit.route_explain('SELECT count(*) FROM events');
 
--- NVIDIA GQE (GPU) — see /docs/gqe
+-- NVIDIA GQE (GPU) - see /docs/gqe
 SELECT rvbbit.warm_gpu_gqe();
 SELECT detail->'gpu_gqe' FROM rvbbit.doctor(false) WHERE name = 'runtime';
 ```
