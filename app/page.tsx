@@ -139,12 +139,16 @@ export default function Home() {
           <div className="hero-lede">
             <p className="eyebrow">Open-source Postgres extension</p>
             <h1 className="hero-title">
-              Call a model from <span className="accent">inside a SELECT</span>.
+              Keep Postgres boring.{" "}
+              <span className="accent">Put the exciting parts around it.</span>
             </h1>
             <p className="hero-copy">
-              Classify a column, filter a <code>WHERE</code> by meaning, even
-              file a ticket — with retries, validation, and a cost receipt. We
-              call these operators, and you can build (or deploy) your own.
+              RVBBIT keeps Postgres as the source of truth while routing
+              analytical queries across specialized engines, exposing models
+              and tools through SQL, and writing down every decision it makes.
+            </p>
+            <p className="hero-beats">
+              Route queries. Call models. Rewind tables. Keep receipts.
             </p>
             <div className="hero-actions">
               <Link className="button primary" href="/docs/quickstart">
@@ -157,68 +161,105 @@ export default function Home() {
               </Link>
             </div>
             <p className="hero-foot">Your hardware · your data · no lock-in.</p>
+            <ul className="hero-teasers" aria-label="A few of the exciting parts">
+              <li>GPU query routing</li>
+              <li>time-travel tables</li>
+              <li>a router that learns</li>
+              <li>LLMs in a WHERE clause</li>
+              <li>distributed read fleet</li>
+              <li>every call receipted</li>
+            </ul>
           </div>
 
-          <aside
-            className="hero-demo"
-            aria-label="An operator you define, called from ordinary SQL"
-          >
-            <div className="hero-card">
+          <aside className="hero-demo" aria-label="The RVBBIT fleet topology">
+            {/* TODO(hero-graphic): Fleet topology shot/animation — brain at
+                center, engines + models orbiting, a query pulse and a receipt.
+                Capture from the Fleet window once 3.1.5 is live on GCP. */}
+            <div className="hero-card hero-placeholder">
               <div className="hero-card-bar">
                 <span className="hero-card-dots" aria-hidden="true">
                   <i />
                   <i />
                   <i />
                 </span>
-                <span className="hero-card-title">your operators + a built-in semantic filter</span>
+                <span className="hero-card-title">fleet topology · live shot coming</span>
               </div>
-              <SqlCode ariaLabel="Operators you define plus a built-in semantic filter, in one SQL query">
-                {`-- your operators + a built-in semantic filter, one query
+              <div className="hero-placeholder-body">
+                <span className="hero-placeholder-node">postgres</span>
+                <span className="hero-placeholder-orbit">duckdb · datafusion · gpu · models · warrens</span>
+                <span className="hero-placeholder-note">one boring database · a fleet of exciting engines</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section className="band" id="semantic-sql">
+        <div className="section-header">
+          <p>Semantic SQL</p>
+          <h2>Call a model from inside a SELECT.</h2>
+          <span>
+            Classify a column, filter a <code>WHERE</code> by meaning, even
+            file a ticket — with retries, validation, and a cost receipt. We
+            call these operators, and you can build (or deploy) your own.
+          </span>
+        </div>
+        <div className="band-demo">
+          <div className="hero-card">
+            <div className="hero-card-bar">
+              <span className="hero-card-dots" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className="hero-card-title">your operators + a built-in semantic filter</span>
+            </div>
+            <SqlCode ariaLabel="Operators you define plus a built-in semantic filter, in one SQL query">
+              {`-- your operators + a built-in semantic filter, one query
 SELECT ticket_id,
        triage(body)    AS priority,   -- your classifier
        sentiment(body) AS mood        -- another operator
 FROM   support_tickets
 WHERE  created_at > now() - interval '1 day'
   AND  rvbbit.means(body, 'a customer about to cancel');`}
-              </SqlCode>
-              <div className="hero-result">
-                <div className="hero-result-head">
-                  <span>2 matches</span>
-                  <span>semantic filter</span>
-                  <span className="ok">receipts logged ✓</span>
-                </div>
-                <table className="hero-result-table">
-                  <thead>
-                    <tr>
-                      <th>ticket_id</th>
-                      <th>priority</th>
-                      <th>mood</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1842</td>
-                      <td>
-                        <span className="hero-pill">urgent</span>
-                      </td>
-                      <td>
-                        <span className="hero-pill cool">angry</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1907</td>
-                      <td>
-                        <span className="hero-pill">urgent</span>
-                      </td>
-                      <td>
-                        <span className="hero-pill cool">frustrated</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+            </SqlCode>
+            <div className="hero-result">
+              <div className="hero-result-head">
+                <span>2 matches</span>
+                <span>semantic filter</span>
+                <span className="ok">receipts logged ✓</span>
               </div>
+              <table className="hero-result-table">
+                <thead>
+                  <tr>
+                    <th>ticket_id</th>
+                    <th>priority</th>
+                    <th>mood</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1842</td>
+                    <td>
+                      <span className="hero-pill">urgent</span>
+                    </td>
+                    <td>
+                      <span className="hero-pill cool">angry</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>1907</td>
+                    <td>
+                      <span className="hero-pill">urgent</span>
+                    </td>
+                    <td>
+                      <span className="hero-pill cool">frustrated</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </aside>
+          </div>
         </div>
       </section>
 
