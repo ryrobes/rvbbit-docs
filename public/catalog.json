@@ -1,0 +1,298 @@
+{
+ "schema_version": 1,
+ "generated_at": "2026-07-12",
+ "capabilities": [
+  {
+   "id": "managed/clover-ml",
+   "name": "clover-ml",
+   "title": "Clover-ML",
+   "description": "Batteries-included semantic ML for SQL: 13 operators over a vetted, calibrated specialist model set \u2014 hosted, versioned, and battery-verified by rvbbit. The models that passed.",
+   "tags": [
+    "managed",
+    "clover",
+    "bundle",
+    "specialists",
+    "verified"
+   ],
+   "kind": "managed",
+   "catalog_visibility": "public",
+   "device": "cloud",
+   "operators": [
+    "clover_means",
+    "clover_relevance",
+    "clover_similar",
+    "clover_entails",
+    "clover_contradicts",
+    "clover_sentiment",
+    "clover_sentiment_score",
+    "clover_classify",
+    "clover_toxic",
+    "clover_moderate",
+    "clover_language",
+    "clover_extract",
+    "clover_pii"
+   ],
+   "backend_name": "embed",
+   "capability_manifest": {
+    "api_version": "v1",
+    "kind": "managed",
+    "name": "clover-ml",
+    "title": "Clover-ML",
+    "description": "Batteries-included semantic ML for SQL: 13 operators over a vetted, calibrated specialist model set \u2014 hosted, versioned, and battery-verified by rvbbit. The models that passed.",
+    "tags": [
+     "managed",
+     "clover",
+     "bundle",
+     "specialists",
+     "verified"
+    ],
+    "operators": [
+     {
+      "name": "clover_means",
+      "description": "TRUE if text semantically matches a criterion (cross-encoder)"
+     },
+     {
+      "name": "clover_relevance",
+      "description": "Relevance score 0..1 of text to criterion"
+     },
+     {
+      "name": "clover_similar",
+      "description": "Embedding cosine similarity of two texts"
+     },
+     {
+      "name": "clover_entails",
+      "description": "TRUE if premise entails hypothesis (NLI)"
+     },
+     {
+      "name": "clover_contradicts",
+      "description": "TRUE if two statements contradict (NLI 3-class)"
+     },
+     {
+      "name": "clover_sentiment",
+      "description": "Sentiment label + score for a text"
+     },
+     {
+      "name": "clover_sentiment_score",
+      "description": "Continuous sentiment in [-1, 1]"
+     },
+     {
+      "name": "clover_classify",
+      "description": "Zero-shot classification over your labels"
+     },
+     {
+      "name": "clover_toxic",
+      "description": "TRUE if text is toxic"
+     },
+     {
+      "name": "clover_moderate",
+      "description": "Full moderation category scores"
+     },
+     {
+      "name": "clover_language",
+      "description": "ISO language code of text"
+     },
+     {
+      "name": "clover_extract",
+      "description": "Entity extraction (GLiNER) over your types"
+     },
+     {
+      "name": "clover_pii",
+      "description": "PII detection preset (person, email, phone, ssn, ...)"
+     }
+    ],
+    "managed": {
+     "vendor": "rvbbit.ai",
+     "status": "available",
+     "entitlement": "clover",
+     "key_env": "RVBBIT_CLOVER_KEY",
+     "pricing": {
+      "monthly_usd": 99,
+      "checkout_url": "https://sandbox.polar.sh/data-rabbit"
+     },
+     "endpoint": {
+      "base_url": "http://8.231.39.55:8090"
+     },
+     "verified": {
+      "tests": 56,
+      "passed": 55,
+      "battery_date": "2026-07-12",
+      "regime": "clover-v1.0",
+      "note": "one known-red NLI entailment case, tracked openly"
+     },
+     "models": [
+      {
+       "slot": "embed",
+       "model": "Snowflake/snowflake-arctic-embed-l-v2.0",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "rerank",
+       "model": "BAAI/bge-reranker-v2-m3",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "sentiment",
+       "model": "cardiffnlp/twitter-xlm-roberta-base-sentiment",
+       "version": "clover-v1.0"
+      },
+      {
+       "slot": "nli",
+       "model": "MoritzLaurer/deberta-v3-large-zeroshot-v2.0",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "extract",
+       "model": "urchade/gliner_large-v2.1",
+       "version": "clover-v1"
+      }
+     ],
+     "install": {
+      "sql": [
+       "SELECT rvbbit.register_backend('embed',     'http://8.231.39.55:8090/b/embed/predict',     'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('sentiment', 'http://8.231.39.55:8090/b/sentiment/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('rerank',    'http://8.231.39.55:8090/b/rerank/predict',    'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "DELETE FROM rvbbit.embedding_cache WHERE specialist = 'embed';",
+       "SELECT rvbbit.reload_backends();",
+       "SELECT rvbbit.create_operator('clover_sentiment', ARRAY['t'], 'text',\n  op_description := 'Clover-ML: sentiment {score,label} for a text (hosted twitter-roberta)',\n  op_steps := '[{\"name\":\"s\",\"kind\":\"specialist\",\"specialist\":\"sentiment\",\"inputs\":{\"text\":\"{{t}}\"}}]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_relevance', ARRAY['t','criterion'], 'float8',\n  op_description := 'Clover-ML: cross-encoder relevance of t to criterion, 0..1 (hosted bge-reranker-v2-m3)',\n  op_steps := '[{\"name\":\"r\",\"kind\":\"specialist\",\"specialist\":\"rerank\",\"inputs\":{\"query\":\"{{criterion}}\",\"text\":\"{{t}}\"}}]'::jsonb);",
+       "SELECT rvbbit.register_backend('nli',      'http://8.231.39.55:8090/b/nli/predict',      'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('nli3',     'http://8.231.39.55:8090/b/nli3/predict',     'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('classify', 'http://8.231.39.55:8090/b/classify/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('toxicity', 'http://8.231.39.55:8090/b/toxicity/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('language', 'http://8.231.39.55:8090/b/language/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('extract',  'http://8.231.39.55:8090/b/extract/predict',  'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.reload_backends();",
+       "SELECT rvbbit.create_operator('clover_means', ARRAY['t','criterion'], 'bool',\n  op_description := 'Clover-ML: TRUE if t semantically matches criterion (cross-encoder, threshold 0.5)',\n  op_steps := '[\n    {\"name\":\"r\",\"kind\":\"specialist\",\"specialist\":\"rerank\",\"inputs\":{\"query\":\"{{criterion}}\",\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"number_gte\",\"inputs\":{\"value\":\"{{steps.r.output}}\",\"threshold\":0.5}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_entails', ARRAY['premise','hypothesis'], 'bool',\n  op_description := 'Clover-ML: TRUE if premise entails hypothesis (NLI 2-class)',\n  op_steps := '[\n    {\"name\":\"n\",\"kind\":\"specialist\",\"specialist\":\"nli\",\"inputs\":{\"premise\":\"{{premise}}\",\"hypothesis\":\"{{hypothesis}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"number_gte\",\"inputs\":{\"value\":\"{{steps.n.output.scores.entailment}}\",\"threshold\":0.5}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_contradicts', ARRAY['a','b'], 'bool',\n  op_description := 'Clover-ML: TRUE if a and b contradict (NLI 3-class)',\n  op_steps := '[\n    {\"name\":\"n\",\"kind\":\"specialist\",\"specialist\":\"nli3\",\"inputs\":{\"premise\":\"{{a}}\",\"hypothesis\":\"{{b}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"number_gte\",\"inputs\":{\"value\":\"{{steps.n.output.scores.contradiction}}\",\"threshold\":0.5}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_sentiment_score', ARRAY['t'], 'float8', op_parser := 'strip',\n  op_description := 'Clover-ML: continuous sentiment in [-1,1]',\n  op_steps := '[\n    {\"name\":\"s\",\"kind\":\"specialist\",\"specialist\":\"sentiment\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.s.output}}\",\"path\":\"score\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_classify', ARRAY['t','labels'], 'text',\n  op_description := 'Clover-ML: zero-shot classification \u2014 top label from comma-separated candidates',\n  op_steps := '[\n    {\"name\":\"c\",\"kind\":\"specialist\",\"specialist\":\"classify\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"{{labels}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.c.output}}\",\"path\":\"label\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_toxic', ARRAY['t'], 'bool',\n  op_description := 'Clover-ML: TRUE if text is toxic (toxic-bert, threshold 0.5)',\n  op_steps := '[\n    {\"name\":\"x\",\"kind\":\"specialist\",\"specialist\":\"toxicity\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.x.output}}\",\"path\":\"toxic\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_language', ARRAY['t'], 'text',\n  op_description := 'Clover-ML: ISO language code of text',\n  op_steps := '[\n    {\"name\":\"l\",\"kind\":\"specialist\",\"specialist\":\"language\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.l.output}}\",\"path\":\"language\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_extract', ARRAY['t','entity_types'], 'jsonb',\n  op_description := 'Clover-ML: GLiNER entity extraction \u2014 types is comma-separated',\n  op_steps := '[\n    {\"name\":\"e\",\"kind\":\"specialist\",\"specialist\":\"extract\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"{{entity_types}}\"}}\n  ]'::jsonb);",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"dessert+\", \"sql\": \"SELECT rvbbit.clover_means(''apple pie recipe'',''dessert recipes'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"LarSQL heritage case\"}, {\"name\": \"sports-\", \"sql\": \"SELECT rvbbit.clover_means(''basketball game results'',''cooking recipes'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"delivery+\", \"sql\": \"SELECT rvbbit.clover_means(''customer complaint about shipping delay'',''delivery issues'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"energy+\", \"sql\": \"SELECT rvbbit.clover_means(''renewable energy investments'',''clean energy'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_means';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"close\", \"sql\": \"SELECT rvbbit.clover_relevance(''quick sql engine'',''fast database'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.8\"}, \"description\": \"\"}, {\"name\": \"far\", \"sql\": \"SELECT rvbbit.clover_relevance(''a nice sandwich'',''fast database'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.3\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_relevance';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"paid+\", \"sql\": \"SELECT rvbbit.clover_entails(''The invoice was paid on March 3rd'',''The invoice was paid'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"overdue-\", \"sql\": \"SELECT rvbbit.clover_entails(''The invoice was paid on March 3rd'',''The invoice is overdue'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"subset+\", \"sql\": \"SELECT rvbbit.clover_entails(''All employees received a bonus in December'',''Some employees received a bonus'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"unrelated-\", \"sql\": \"SELECT rvbbit.clover_entails(''The cat sat on the mat'',''The stock market rose today'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_entails';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"cancelled+\", \"sql\": \"SELECT rvbbit.clover_contradicts(''The meeting is at 9am'',''The meeting is cancelled'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"morning-\", \"sql\": \"SELECT rvbbit.clover_contradicts(''The meeting is at 9am'',''The meeting starts in the morning'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"open-closed+\", \"sql\": \"SELECT rvbbit.clover_contradicts(''The store is open until 9pm'',''The store closed at noon'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"neutral-\", \"sql\": \"SELECT rvbbit.clover_contradicts(''The report covers Q3 revenue'',''The office has new chairs'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_contradicts';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"love\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''i absolutely love this'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.2\"}, \"description\": \"\"}, {\"name\": \"best_purchase\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''best purchase I have made all year'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.2\"}, \"description\": \"\"}, {\"name\": \"support_good\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''the support team resolved everything quickly, great experience'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.2\"}, \"description\": \"\"}, {\"name\": \"astonish_fast\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''this warehouse is astonishingly fast'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.2\"}, \"description\": \"\"}, {\"name\": \"as_advertised\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''works exactly as advertised'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.2\"}, \"description\": \"\"}, {\"name\": \"delighted\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''delighted with the upgrade'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.2\"}, \"description\": \"\"}, {\"name\": \"recommend\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''10/10 would recommend'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.2\"}, \"description\": \"\"}, {\"name\": \"disappointing\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''utterly disappointing'')\", \"expect\": {\"type\": \"max\", \"value\": \"-0.2\"}, \"description\": \"\"}, {\"name\": \"crashes\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''the app crashes every time I open it'')\", \"expect\": {\"type\": \"max\", \"value\": \"-0.2\"}, \"description\": \"\"}, {\"name\": \"worst_service\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''worst customer service imaginable'')\", \"expect\": {\"type\": \"max\", \"value\": \"-0.2\"}, \"description\": \"\"}, {\"name\": \"waste\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''total waste of money'')\", \"expect\": {\"type\": \"max\", \"value\": \"-0.2\"}, \"description\": \"\"}, {\"name\": \"crushed_box\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''shipping took forever and the box arrived crushed'')\", \"expect\": {\"type\": \"max\", \"value\": \"-0.2\"}, \"description\": \"\"}, {\"name\": \"regret\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''i regret buying this'')\", \"expect\": {\"type\": \"max\", \"value\": \"-0.2\"}, \"description\": \"\"}, {\"name\": \"slower\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''the update made everything slower'')\", \"expect\": {\"type\": \"max\", \"value\": \"-0.2\"}, \"description\": \"\"}, {\"name\": \"neutral_lo\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''the invoice was sent on tuesday'')\", \"expect\": {\"type\": \"min\", \"value\": \"-0.4\"}, \"description\": \"\"}, {\"name\": \"neutral_hi\", \"sql\": \"SELECT rvbbit.clover_sentiment_score(''the invoice was sent on tuesday'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.4\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_sentiment_score';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"label+\", \"sql\": \"SELECT rvbbit.clover_sentiment(''i love this database'')\", \"expect\": {\"type\": \"contains\", \"value\": \"positive\"}, \"description\": \"\"}, {\"name\": \"label-\", \"sql\": \"SELECT rvbbit.clover_sentiment(''terrible experience'')\", \"expect\": {\"type\": \"contains\", \"value\": \"negative\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_sentiment';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"returns\", \"sql\": \"SELECT rvbbit.clover_classify(''refund request for damaged item'',''billing, shipping, returns, technical support'')\", \"expect\": {\"type\": \"exact\", \"value\": \"returns\"}, \"description\": \"\"}, {\"name\": \"billing\", \"sql\": \"SELECT rvbbit.clover_classify(''I was charged twice this month'',''billing, shipping, returns, technical support'')\", \"expect\": {\"type\": \"exact\", \"value\": \"billing\"}, \"description\": \"\"}, {\"name\": \"tech\", \"sql\": \"SELECT rvbbit.clover_classify(''the app will not connect to wifi'',''billing, shipping, returns, technical support'')\", \"expect\": {\"type\": \"exact\", \"value\": \"technical support\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_classify';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"kind-\", \"sql\": \"SELECT rvbbit.clover_toxic(''have a wonderful day'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"insult+\", \"sql\": \"SELECT rvbbit.clover_toxic(''you are a worthless idiot'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"neutral-\", \"sql\": \"SELECT rvbbit.clover_toxic(''the quarterly report is attached'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"threat+\", \"sql\": \"SELECT rvbbit.clover_toxic(''i will hurt you if you come here'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_toxic';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"fr\", \"sql\": \"SELECT rvbbit.clover_language(''bonjour mes amis'')\", \"expect\": {\"type\": \"exact\", \"value\": \"fr\"}, \"description\": \"\"}, {\"name\": \"de\", \"sql\": \"SELECT rvbbit.clover_language(''guten morgen alle zusammen'')\", \"expect\": {\"type\": \"exact\", \"value\": \"de\"}, \"description\": \"\"}, {\"name\": \"es\", \"sql\": \"SELECT rvbbit.clover_language(''buenos dias, como estas hoy'')\", \"expect\": {\"type\": \"exact\", \"value\": \"es\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_language';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"entities\", \"sql\": \"SELECT rvbbit.clover_extract(''Sarah Chen paid $450 to Acme Corp in Denver on May 5th'',''person, organization, money, location, date'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"Sarah Chen\"}, \"description\": \"\"}, {\"name\": \"nonempty\", \"sql\": \"SELECT rvbbit.clover_extract(''Meeting with Bob at Initech tomorrow'',''person, organization'')::text\", \"expect\": {\"type\": \"not_empty\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_extract';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"email\", \"sql\": \"SELECT rvbbit.clover_pii(''Contact Sarah Chen at sarah@acme.com or 555-867-5309'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"sarah@acme.com\"}, \"description\": \"\"}, {\"name\": \"ssn\", \"sql\": \"SELECT rvbbit.clover_pii(''SSN on file: 123-45-6789'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"123-45-6789\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_pii';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"close\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''quick sql engine'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.45\"}, \"description\": \"\"}, {\"name\": \"far\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''a nice sandwich'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.35\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_similar';",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"scores\", \"sql\": \"SELECT rvbbit.clover_moderate(''you are a worthless idiot'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"insult\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_moderate';"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "managed/gemma-lanes",
+   "name": "gemma-lanes",
+   "title": "Gemma Lanes",
+   "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows \u2014 OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
+   "tags": [
+    "managed",
+    "llm",
+    "gemma",
+    "lanes"
+   ],
+   "kind": "managed",
+   "catalog_visibility": "public",
+   "device": "cloud",
+   "operators": [
+    "hutch_ask"
+   ],
+   "backend_name": "hutch_llm",
+   "capability_manifest": {
+    "api_version": "v1",
+    "kind": "managed",
+    "name": "gemma-lanes",
+    "title": "Gemma Lanes",
+    "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows \u2014 OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
+    "tags": [
+     "managed",
+     "llm",
+     "gemma",
+     "lanes"
+    ],
+    "operators": [
+     {
+      "name": "hutch_ask",
+      "description": "Example: ask the hosted generalist from SQL"
+     }
+    ],
+    "managed": {
+     "vendor": "rvbbit.ai",
+     "status": "available",
+     "entitlement": "gemma",
+     "key_env": "RVBBIT_GEMMA_KEY",
+     "pricing": {
+      "monthly_usd": 199,
+      "checkout_url": "https://sandbox.polar.sh/data-rabbit",
+      "note": "3 concurrent lanes; larger lane packs available"
+     },
+     "endpoint": {
+      "base_url": "http://8.231.39.55:8090"
+     },
+     "models": [
+      {
+       "slot": "generalist",
+       "model": "nvidia/Gemma-4-31B-IT-NVFP4",
+       "version": "gemma-4-31b-it-nvfp4"
+      }
+     ],
+     "install": {
+      "sql": [
+       "SELECT rvbbit.register_backend('hutch_llm', 'http://8.231.39.55:8090/v1/chat/completions', 'openai_chat', 32, 4, 120000, 'RVBBIT_GEMMA_KEY');",
+       "SELECT rvbbit.create_operator('hutch_ask', ARRAY['q'], 'text', op_steps := '[{\"name\":\"main\",\"kind\":\"llm\",\"provider\":\"hutch_llm\",\"model\":\"gemma4\",\"user\":\"{{q}}\",\"max_tokens\":400}]'::jsonb);",
+       "SELECT rvbbit.reload_backends();"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "managed/hare-slots",
+   "name": "hare-slots",
+   "title": "Hare Slots",
+   "description": "Serverless query offload: your database mints self-expiring capsules, our pool answers them with per-request isolation at any width. Buy concurrency for your local Postgres.",
+   "tags": [
+    "managed",
+    "hare",
+    "offload",
+    "serverless"
+   ],
+   "kind": "managed",
+   "catalog_visibility": "public",
+   "device": "cloud",
+   "operators": [],
+   "backend_name": null,
+   "capability_manifest": {
+    "api_version": "v1",
+    "kind": "managed",
+    "name": "hare-slots",
+    "title": "Hare Slots",
+    "description": "Serverless query offload: your database mints self-expiring capsules, our pool answers them with per-request isolation at any width. Buy concurrency for your local Postgres.",
+    "tags": [
+     "managed",
+     "hare",
+     "offload",
+     "serverless"
+    ],
+    "operators": [],
+    "managed": {
+     "vendor": "rvbbit.ai",
+     "status": "coming_soon",
+     "entitlement": "hare",
+     "key_env": "RVBBIT_HARE_KEY",
+     "pricing": {
+      "note": "in private testing"
+     }
+    }
+   }
+  }
+ ]
+}

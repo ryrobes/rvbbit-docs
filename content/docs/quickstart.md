@@ -17,13 +17,12 @@ Postgres 18 with the extension preinstalled, the Duck/Vortex query worker, the
 [Data Rabbit](/docs/data-rabbit) desktop UI, and a [Warren](/docs/warren)
 agent for deploying capability sidecars.
 
-> **v1 install policy.** The Docker ensemble is the only supported install
-> path right now. Piecemeal installation - building the extension into an
-> existing Postgres and wiring the sidecars by hand - works, but it is not yet
-> streamlined or documented; it will come back as a first-class path in a
-> later release. If you have used TimescaleDB or similar "it's really an
-> extension" databases, the shape is the same: pretend it is a database and
-> start it with Docker.
+> **Already run Postgres?** The Docker ensemble is the simplest way in, but
+> RVBBIT is additive onto a Postgres 18 you already have — start with just the
+> extension and add the query worker and self-hosted models only as you need
+> them. See [Existing Postgres](/docs/existing-postgres). If you have used
+> TimescaleDB or similar "it's really an extension" databases, the shape is
+> the same.
 
 ## Start The Stack
 
