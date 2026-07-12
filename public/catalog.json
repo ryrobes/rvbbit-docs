@@ -107,7 +107,34 @@
      "key_env": "RVBBIT_CLOVER_KEY",
      "pricing": {
       "monthly_usd": 99,
-      "checkout_url": "https://sandbox.polar.sh/data-rabbit"
+      "from": true,
+      "note": "a lane = one operation in flight",
+      "tiers": [
+       {
+        "name": "Free",
+        "lanes": 1,
+        "monthly_usd": 0,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_T8FEko6oOFteVfRlV8I35v9QrdpfFJbX1pjPL3Oww8C/redirect"
+       },
+       {
+        "name": "Starter",
+        "lanes": 2,
+        "monthly_usd": 99,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_zHpQBVNWcYNQUCjvlW1j1DzbjKrJTM776gYnR37f8pZ/redirect"
+       },
+       {
+        "name": "Pro",
+        "lanes": 8,
+        "monthly_usd": 299,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_QXFwyyEn2tB4B1tGktxUI4DebHa0Pgr7CZeKH0neBcR/redirect"
+       },
+       {
+        "name": "Scale",
+        "lanes": 24,
+        "monthly_usd": 799,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_Mc9vjWAVMzMeB7jUD5Tk5aYP98TWeLv665etC1SVk2W/redirect"
+       }
+      ]
      },
      "endpoint": {
       "base_url": "http://8.231.39.55:8090"
@@ -201,13 +228,20 @@
       }
      ],
      "free_tier": {
-      "note": "Evaluate the full operator set on your own data \u2014 a single lane, no credit card. When a real workload outgrows one lane, add more."
+      "note": "Evaluate the full operator set on your own data \u2014 a single lane, no credit card. When a real workload outgrows one lane, add more.",
+      "cta_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_T8FEko6oOFteVfRlV8I35v9QrdpfFJbX1pjPL3Oww8C/redirect"
      },
      "highlights": [
       "13 semantic operators: means, classify, sentiment, extract, PII, language, and more",
       "Install is metadata only \u2014 nothing runs on your box",
       "Every answer carries a receipt naming the exact model version that produced it",
       "You could self-host this \u2014 the operators are open. This is the paved road."
+     ],
+     "privacy": [
+      "Your data never leaves your database \u2014 operators send inputs, never tables",
+      "We never store your inputs or outputs \u2014 metering records counts, timings, and token totals only",
+      "Never used for training \u2014 your traffic trains nothing",
+      "The full audit trail lives in YOUR receipts, not ours"
      ]
     }
    }
@@ -255,8 +289,34 @@
      "key_env": "RVBBIT_GEMMA_KEY",
      "pricing": {
       "monthly_usd": 199,
-      "checkout_url": "https://sandbox.polar.sh/data-rabbit",
-      "note": "3 concurrent lanes; larger lane packs available"
+      "from": true,
+      "note": "a lane = one operation in flight",
+      "tiers": [
+       {
+        "name": "Free",
+        "lanes": 1,
+        "monthly_usd": 0,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_NMIrKgM2AuiKj3McyqVelypzoZuymbybSbszS3xGCxG/redirect"
+       },
+       {
+        "name": "Starter",
+        "lanes": 3,
+        "monthly_usd": 199,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_1395vy4JUxLyH1a7m7NlfNo1uycopaMvB548Q17SMuV/redirect"
+       },
+       {
+        "name": "Pro",
+        "lanes": 10,
+        "monthly_usd": 499,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_gRdM5GoGPdLzYaClJyJwAhdOELvuCyf6QfHrQ3caMza/redirect"
+       },
+       {
+        "name": "Scale",
+        "lanes": 25,
+        "monthly_usd": 999,
+        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_m2WqKYYmDENsk1kpNGm9oJbPV6zYMRQrg147F3XN3F4/redirect"
+       }
+      ]
      },
      "endpoint": {
       "base_url": "http://8.231.39.55:8090"
@@ -291,11 +351,18 @@
       }
      ],
      "free_tier": {
-      "note": "Try the generalist on a single lane at no cost \u2014 enough to feel it work on your data before you scale up lanes."
+      "note": "Try the generalist on a single lane at no cost \u2014 enough to feel it work on your data before you scale up lanes.",
+      "cta_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_NMIrKgM2AuiKj3McyqVelypzoZuymbybSbszS3xGCxG/redirect"
      },
      "highlights": [
       "Drop-in for any operator, agent(), or flow that calls an LLM",
       "Scale by lanes as your usage grows \u2014 no per-token anxiety on big ad-hoc queries"
+     ],
+     "privacy": [
+      "Your data never leaves your database \u2014 operators send inputs, never tables",
+      "We never store your inputs or outputs \u2014 metering records counts, timings, and token totals only",
+      "Never used for training \u2014 your traffic trains nothing",
+      "The full audit trail lives in YOUR receipts, not ours"
      ]
     }
    }
@@ -355,6 +422,11 @@
      "highlights": [
       "A relief valve for Postgres under bursty analytical load",
       "Unusual for a mixed on-prem database \u2014 buy concurrency without moving your data"
+     ],
+     "privacy": [
+      "We never store your inputs or outputs \u2014 metering records counts, timings, and token totals only",
+      "Never used for training \u2014 your traffic trains nothing",
+      "No standing credentials \u2014 your database presigns its own storage URLs; capsules expire in minutes"
      ]
     }
    }
