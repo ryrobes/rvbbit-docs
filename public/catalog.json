@@ -184,7 +184,31 @@
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"close\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''quick sql engine'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.45\"}, \"description\": \"\"}, {\"name\": \"far\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''a nice sandwich'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.35\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_similar';",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"scores\", \"sql\": \"SELECT rvbbit.clover_moderate(''you are a worthless idiot'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"insult\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_moderate';"
       ]
-     }
+     },
+     "tagline": "Batteries-included semantic ML for SQL \u2014 the models that passed our harness, hosted and versioned so your verdicts don't drift.",
+     "value_props": [
+      {
+       "title": "Tested",
+       "detail": "Every operator vetted against a public battery; the model set is calibrated to agree with itself."
+      },
+      {
+       "title": "Fast",
+       "detail": "GPU-batched inference, off your database \u2014 no CPU models stealing cycles from Postgres."
+      },
+      {
+       "title": "Stable",
+       "detail": "Pinned model versions; verdicts don't move unless you choose to upgrade."
+      }
+     ],
+     "free_tier": {
+      "note": "Evaluate the full operator set on your own data \u2014 a single lane, no credit card. When a real workload outgrows one lane, add more."
+     },
+     "highlights": [
+      "13 semantic operators: means, classify, sentiment, extract, PII, language, and more",
+      "Install is metadata only \u2014 nothing runs on your box",
+      "Every answer carries a receipt naming the exact model version that produced it",
+      "You could self-host this \u2014 the operators are open. This is the paved road."
+     ]
     }
    }
   },
@@ -250,7 +274,29 @@
        "SELECT rvbbit.create_operator('hutch_ask', ARRAY['q'], 'text', op_steps := '[{\"name\":\"main\",\"kind\":\"llm\",\"provider\":\"hutch_llm\",\"model\":\"gemma4\",\"user\":\"{{q}}\",\"max_tokens\":400}]'::jsonb);",
        "SELECT rvbbit.reload_backends();"
       ]
-     }
+     },
+     "tagline": "A hosted generalist LLM for semantic SQL, agent() steps, and flows \u2014 you pay for concurrency, not per call.",
+     "value_props": [
+      {
+       "title": "Lane-priced",
+       "detail": "Unlimited inference within your concurrent lanes. Metered pricing taxes curiosity; capacity pricing taxes only impatience."
+      },
+      {
+       "title": "OpenAI-compatible",
+       "detail": "Works anywhere rvbbit calls an LLM \u2014 operators, agents, workflows."
+      },
+      {
+       "title": "Receipted",
+       "detail": "Token usage recorded on both sides of the wire, with your would-be \u00e0 la carte cost."
+      }
+     ],
+     "free_tier": {
+      "note": "Try the generalist on a single lane at no cost \u2014 enough to feel it work on your data before you scale up lanes."
+     },
+     "highlights": [
+      "Drop-in for any operator, agent(), or flow that calls an LLM",
+      "Scale by lanes as your usage grows \u2014 no per-token anxiety on big ad-hoc queries"
+     ]
     }
    }
   },
@@ -290,7 +336,26 @@
      "key_env": "RVBBIT_HARE_KEY",
      "pricing": {
       "note": "in private testing"
-     }
+     },
+     "tagline": "Serverless query offload \u2014 your database mints self-expiring capsules, our pool answers them. Buy concurrency for your local Postgres.",
+     "value_props": [
+      {
+       "title": "Per-request isolation",
+       "detail": "Every offloaded query gets its own worker; a dashboard refresh storm never touches your database."
+      },
+      {
+       "title": "Zero standing creds",
+       "detail": "Your brain presigns its own bucket URLs; the pool holds nothing and expires in minutes."
+      },
+      {
+       "title": "Scale-to-zero",
+       "detail": "Idle costs nothing; bursts spin up capacity on demand."
+      }
+     ],
+     "highlights": [
+      "A relief valve for Postgres under bursty analytical load",
+      "Unusual for a mixed on-prem database \u2014 buy concurrency without moving your data"
+     ]
     }
    }
   }
