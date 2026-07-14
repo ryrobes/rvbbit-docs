@@ -193,10 +193,10 @@
      },
      "verified": {
       "tests": 61,
-      "passed": 57,
-      "regime": "clover-v1.1 wave-b",
+      "passed": 60,
+      "regime": "clover-v1.1 @ 4.0.0",
       "battery_date": "2026-07-14",
-      "note": "22-operator battery incl. OCR/transcribe/forecast/TabPFN/anomaly/relations; 3 asset-URL tests pending site deploy; one known-red NLI case tracked openly"
+      "note": "22-operator battery: text, OCR, transcription, forecasting, TabPFN, anomaly, relations. One known-red NLI entailment case, tracked openly."
      },
      "models": [
       {
