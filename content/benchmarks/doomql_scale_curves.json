@@ -1,0 +1,727 @@
+{
+  "format": "doomql-scale-curves-v1",
+  "generated_at": "2026-07-14T12:47:24+00:00",
+  "benchmark": {
+    "world": "episode1",
+    "frames": 321,
+    "warmups": 1,
+    "width": 210,
+    "height": 60,
+    "draw_distance": 96,
+    "turn_degrees": 15,
+    "grid_scale": 16,
+    "render_type": "ansi-half",
+    "maps": [
+      "E1M1",
+      "E1M2",
+      "E1M3",
+      "E1M4",
+      "E1M5",
+      "E1M6",
+      "E1M7",
+      "E1M8",
+      "E1M9"
+    ],
+    "replay_session_sha256": "c6fdaf0c48b66fae6fb592c6b1fad5f992528255224dffda521084ba286d9950"
+  },
+  "scales": [
+    5000000,
+    15000000,
+    50000000,
+    100000000,
+    200000000
+  ],
+  "systems": [
+    {
+      "id": "auto",
+      "label": "RVBBIT Auto"
+    },
+    {
+      "id": "rvbbit_native",
+      "label": "RVBBIT Native"
+    },
+    {
+      "id": "duck_vector",
+      "label": "RVBBIT Duck Vector"
+    },
+    {
+      "id": "duck_vortex",
+      "label": "RVBBIT Duck Vortex"
+    },
+    {
+      "id": "datafusion_vector",
+      "label": "RVBBIT DataFusion Vector"
+    },
+    {
+      "id": "datafusion_vortex",
+      "label": "RVBBIT DataFusion Vortex"
+    },
+    {
+      "id": "duckdb",
+      "label": "DuckDB"
+    },
+    {
+      "id": "postgres",
+      "label": "PostgreSQL"
+    },
+    {
+      "id": "citus",
+      "label": "Citus Columnar"
+    },
+    {
+      "id": "hydra",
+      "label": "Hydra Columnar"
+    },
+    {
+      "id": "alloydb",
+      "label": "AlloyDB Omni"
+    },
+    {
+      "id": "clickhouse",
+      "label": "ClickHouse"
+    }
+  ],
+  "all_parity_ok": true,
+  "points": [
+    {
+      "rows": 5000000,
+      "table": "doomql_episode1",
+      "generated_at": "2026-07-14T08:03:59+00:00",
+      "source": "bench/doomql/results/scale-episode1-5000000.json",
+      "results": {
+        "auto": {
+          "status": "ok",
+          "route": "duck_vortex",
+          "first_ms": 168.7691300176084,
+          "median_ms": 44.3682880140841,
+          "p95_ms": 60.03641802817583,
+          "fps": 22.53862036963346,
+          "parity_ok": true,
+          "error": null
+        },
+        "rvbbit_native": {
+          "status": "ok",
+          "route": "rvbbit_native",
+          "first_ms": 239.41469006240368,
+          "median_ms": 106.58822488039732,
+          "p95_ms": 131.04992010630667,
+          "fps": 9.381899371362083,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vector": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 191.16448587737978,
+          "median_ms": 98.23192516341805,
+          "p95_ms": 119.28813299164176,
+          "fps": 10.179989838704737,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vortex": {
+          "status": "ok",
+          "route": "duck_vortex",
+          "first_ms": 151.1993990279734,
+          "median_ms": 39.70379987731576,
+          "p95_ms": 55.14147784560919,
+          "fps": 25.1865061553299,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vector": {
+          "status": "ok",
+          "route": "datafusion_vector",
+          "first_ms": 100.73853400535882,
+          "median_ms": 89.62619700469077,
+          "p95_ms": 113.64344414323568,
+          "fps": 11.157452100167355,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vortex": {
+          "status": "ok",
+          "route": "datafusion_vortex",
+          "first_ms": 122.12345306761563,
+          "median_ms": 121.36841518804431,
+          "p95_ms": 148.27015902847052,
+          "fps": 8.23937594019525,
+          "parity_ok": true,
+          "error": null
+        },
+        "duckdb": {
+          "status": "ok",
+          "route": "duckdb",
+          "first_ms": 33.56341808103025,
+          "median_ms": 35.73669004254043,
+          "p95_ms": 48.0394521728158,
+          "fps": 27.982446018632803,
+          "parity_ok": true,
+          "error": null
+        },
+        "postgres": {
+          "status": "ok",
+          "route": "postgres_heap",
+          "first_ms": 211.30235702730715,
+          "median_ms": 127.49337102286518,
+          "p95_ms": 141.5323701221496,
+          "fps": 7.843545056320269,
+          "parity_ok": true,
+          "error": null
+        },
+        "citus": {
+          "status": "ok",
+          "route": "citus_columnar",
+          "first_ms": 113.59948385506868,
+          "median_ms": 133.4160768892616,
+          "p95_ms": 173.86793391779065,
+          "fps": 7.4953485615532145,
+          "parity_ok": true,
+          "error": null
+        },
+        "hydra": {
+          "status": "ok",
+          "route": "hydra_columnar",
+          "first_ms": 91.13927790895104,
+          "median_ms": 109.71762496046722,
+          "p95_ms": 144.33568506501615,
+          "fps": 9.114305931798231,
+          "parity_ok": true,
+          "error": null
+        },
+        "alloydb": {
+          "status": "ok",
+          "route": "alloydb_omni",
+          "first_ms": 231.50289407931268,
+          "median_ms": 216.7222590651363,
+          "p95_ms": 240.46424613334239,
+          "fps": 4.614200702381235,
+          "parity_ok": true,
+          "error": null
+        },
+        "clickhouse": {
+          "status": "ok",
+          "route": "clickhouse_mergetree",
+          "first_ms": 42.89014381356537,
+          "median_ms": 32.81127195805311,
+          "p95_ms": 45.67507514730096,
+          "fps": 30.477331122012863,
+          "parity_ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "rows": 15000000,
+      "table": "doomql_episode1_15m",
+      "generated_at": "2026-07-14T08:24:02+00:00",
+      "source": "bench/doomql/results/scale-episode1-15000000.json",
+      "results": {
+        "auto": {
+          "status": "ok",
+          "route": "duck_vortex",
+          "first_ms": 220.83259117789567,
+          "median_ms": 70.77713590115309,
+          "p95_ms": 108.53968700394034,
+          "fps": 14.128856547636993,
+          "parity_ok": true,
+          "error": null
+        },
+        "rvbbit_native": {
+          "status": "ok",
+          "route": "rvbbit_native",
+          "first_ms": 270.3859880566597,
+          "median_ms": 233.4162548650056,
+          "p95_ms": 300.6085630040616,
+          "fps": 4.284191778239017,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vector": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 306.7753410432488,
+          "median_ms": 141.40344597399235,
+          "p95_ms": 184.10579208284616,
+          "fps": 7.071963438457682,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vortex": {
+          "status": "ok",
+          "route": "duck_vortex",
+          "first_ms": 169.52821798622608,
+          "median_ms": 53.08065190911293,
+          "p95_ms": 75.45945909805596,
+          "fps": 18.839256189095885,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vector": {
+          "status": "ok",
+          "route": "datafusion_vector",
+          "first_ms": 133.20135790854692,
+          "median_ms": 136.2858598586172,
+          "p95_ms": 183.40645590797067,
+          "fps": 7.3375183679172515,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vortex": {
+          "status": "ok",
+          "route": "datafusion_vortex",
+          "first_ms": 182.21355299465358,
+          "median_ms": 211.53962099924684,
+          "p95_ms": 280.11635201983154,
+          "fps": 4.7272468168200055,
+          "parity_ok": true,
+          "error": null
+        },
+        "duckdb": {
+          "status": "ok",
+          "route": "duckdb",
+          "first_ms": 71.37908996082842,
+          "median_ms": 59.19766589067876,
+          "p95_ms": 73.9021459594369,
+          "fps": 16.892557923596435,
+          "parity_ok": true,
+          "error": null
+        },
+        "postgres": {
+          "status": "ok",
+          "route": "postgres_heap",
+          "first_ms": 715.961862821132,
+          "median_ms": 338.0385059863329,
+          "p95_ms": 360.8254899736494,
+          "fps": 2.9582428696464262,
+          "parity_ok": true,
+          "error": null
+        },
+        "citus": {
+          "status": "ok",
+          "route": "citus_columnar",
+          "first_ms": 305.53861800581217,
+          "median_ms": 363.07766288518906,
+          "p95_ms": 481.5843370743096,
+          "fps": 2.7542316760924397,
+          "parity_ok": true,
+          "error": null
+        },
+        "hydra": {
+          "status": "ok",
+          "route": "hydra_columnar",
+          "first_ms": 148.944882908836,
+          "median_ms": 193.47747904248536,
+          "p95_ms": 248.21523297578096,
+          "fps": 5.168560211498372,
+          "parity_ok": true,
+          "error": null
+        },
+        "alloydb": {
+          "status": "ok",
+          "route": "alloydb_omni",
+          "first_ms": 948.5294090118259,
+          "median_ms": 582.8037508763373,
+          "p95_ms": 621.9090111553669,
+          "fps": 1.71584345244234,
+          "parity_ok": true,
+          "error": null
+        },
+        "clickhouse": {
+          "status": "ok",
+          "route": "clickhouse_mergetree",
+          "first_ms": 46.347483061254025,
+          "median_ms": 44.30850385688245,
+          "p95_ms": 52.86086699925363,
+          "fps": 22.569031065233535,
+          "parity_ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "rows": 50000000,
+      "table": "doomql_episode1_50m",
+      "generated_at": "2026-07-14T09:06:31+00:00",
+      "source": "bench/doomql/results/scale-episode1-50000000.json",
+      "results": {
+        "auto": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 309.3255660496652,
+          "median_ms": 152.9426439665258,
+          "p95_ms": 195.314547047019,
+          "fps": 6.538398801441328,
+          "parity_ok": true,
+          "error": null
+        },
+        "rvbbit_native": {
+          "status": "ok",
+          "route": "rvbbit_native",
+          "first_ms": 758.9927578810602,
+          "median_ms": 689.7600190714002,
+          "p95_ms": 877.6872651651502,
+          "fps": 1.4497795934102777,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vector": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 291.02144995704293,
+          "median_ms": 144.58154095336795,
+          "p95_ms": 185.65121106803417,
+          "fps": 6.916512256032263,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vortex": {
+          "status": "ok",
+          "route": "duck_vortex",
+          "first_ms": 228.85768488049507,
+          "median_ms": 96.71772411093116,
+          "p95_ms": 143.44418002292514,
+          "fps": 10.339366534856032,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vector": {
+          "status": "ok",
+          "route": "datafusion_vector",
+          "first_ms": 260.02639485523105,
+          "median_ms": 318.81932192482054,
+          "p95_ms": 440.6525690574199,
+          "fps": 3.136572758397014,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vortex": {
+          "status": "ok",
+          "route": "datafusion_vortex",
+          "first_ms": 393.6040089465678,
+          "median_ms": 520.1199189759791,
+          "p95_ms": 738.1717329844832,
+          "fps": 1.9226335379902715,
+          "parity_ok": true,
+          "error": null
+        },
+        "duckdb": {
+          "status": "ok",
+          "route": "duckdb",
+          "first_ms": 82.825249992311,
+          "median_ms": 71.2278950959444,
+          "p95_ms": 89.65678000822663,
+          "fps": 14.039443376123835,
+          "parity_ok": true,
+          "error": null
+        },
+        "postgres": {
+          "status": "ok",
+          "route": "postgres_heap",
+          "first_ms": 2093.8864699564874,
+          "median_ms": 807.2999499272555,
+          "p95_ms": 888.4584039915353,
+          "fps": 1.238696967700925,
+          "parity_ok": true,
+          "error": null
+        },
+        "citus": {
+          "status": "ok",
+          "route": "citus_columnar",
+          "first_ms": 923.3483360148966,
+          "median_ms": 1187.8094680141658,
+          "p95_ms": 1552.761852974072,
+          "fps": 0.8418858637924866,
+          "parity_ok": true,
+          "error": null
+        },
+        "hydra": {
+          "status": "ok",
+          "route": "hydra_columnar",
+          "first_ms": 428.73383197002113,
+          "median_ms": 581.7934088408947,
+          "p95_ms": 759.7291690763086,
+          "fps": 1.7188231850070235,
+          "parity_ok": true,
+          "error": null
+        },
+        "alloydb": {
+          "status": "ok",
+          "route": "alloydb_omni",
+          "first_ms": 3246.4697209652513,
+          "median_ms": 2056.8086109124124,
+          "p95_ms": 2183.2560610491782,
+          "fps": 0.4861901076719015,
+          "parity_ok": true,
+          "error": null
+        },
+        "clickhouse": {
+          "status": "ok",
+          "route": "clickhouse_mergetree",
+          "first_ms": 95.74065404012799,
+          "median_ms": 99.15048815310001,
+          "p95_ms": 128.49243800155818,
+          "fps": 10.085679038270415,
+          "parity_ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "rows": 100000000,
+      "table": "doomql_episode1_100m",
+      "generated_at": "2026-07-14T10:21:55+00:00",
+      "source": "bench/doomql/results/scale-episode1-100000000.json",
+      "results": {
+        "auto": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 415.4860652051866,
+          "median_ms": 194.81318583711982,
+          "p95_ms": 315.8976580016315,
+          "fps": 5.13312276940065,
+          "parity_ok": true,
+          "error": null
+        },
+        "rvbbit_native": {
+          "status": "ok",
+          "route": "rvbbit_native",
+          "first_ms": 1237.4459260609,
+          "median_ms": 996.0027469787747,
+          "p95_ms": 1281.6049039829522,
+          "fps": 1.0040132951774987,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vector": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 385.13181498274207,
+          "median_ms": 189.35715197585523,
+          "p95_ms": 313.6389220599085,
+          "fps": 5.281025773600087,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vortex": {
+          "status": "ok",
+          "route": "duck_vortex",
+          "first_ms": 368.5793220065534,
+          "median_ms": 169.66698598116636,
+          "p95_ms": 308.25689109042287,
+          "fps": 5.893898534338339,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vector": {
+          "status": "ok",
+          "route": "datafusion_vector",
+          "first_ms": 496.2758249603212,
+          "median_ms": 574.8403349425644,
+          "p95_ms": 803.7923560477793,
+          "fps": 1.739613487804254,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vortex": {
+          "status": "ok",
+          "route": "datafusion_vortex",
+          "first_ms": 839.449399150908,
+          "median_ms": 960.6640439014882,
+          "p95_ms": 1378.3708279952407,
+          "fps": 1.0409466309770052,
+          "parity_ok": true,
+          "error": null
+        },
+        "duckdb": {
+          "status": "ok",
+          "route": "duckdb",
+          "first_ms": 95.94753803685308,
+          "median_ms": 97.63995907269418,
+          "p95_ms": 133.41319700703025,
+          "fps": 10.24170851255158,
+          "parity_ok": true,
+          "error": null
+        },
+        "postgres": {
+          "status": "ok",
+          "route": "postgres_heap",
+          "first_ms": 4025.343468878418,
+          "median_ms": 1534.7434980794787,
+          "p95_ms": 1692.854817956686,
+          "fps": 0.651574677626172,
+          "parity_ok": true,
+          "error": null
+        },
+        "citus": {
+          "status": "ok",
+          "route": "citus_columnar",
+          "first_ms": 1849.96009292081,
+          "median_ms": 2419.556586071849,
+          "p95_ms": 3238.084505079314,
+          "fps": 0.4132988687912856,
+          "parity_ok": true,
+          "error": null
+        },
+        "hydra": {
+          "status": "ok",
+          "route": "hydra_columnar",
+          "first_ms": 846.8582411296666,
+          "median_ms": 1172.0137079246342,
+          "p95_ms": 1490.4777351766825,
+          "fps": 0.8532323412588486,
+          "parity_ok": true,
+          "error": null
+        },
+        "alloydb": {
+          "status": "ok",
+          "route": "alloydb_omni",
+          "first_ms": 5785.737837897614,
+          "median_ms": 4156.569677172229,
+          "p95_ms": 4416.4021159522235,
+          "fps": 0.24058299936410873,
+          "parity_ok": true,
+          "error": null
+        },
+        "clickhouse": {
+          "status": "ok",
+          "route": "clickhouse_mergetree",
+          "first_ms": 173.39619691483676,
+          "median_ms": 176.07104289345443,
+          "p95_ms": 232.88526688702404,
+          "fps": 5.6795256253757085,
+          "parity_ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "rows": 200000000,
+      "table": "doomql_episode1_200m",
+      "generated_at": "2026-07-14T12:46:56+00:00",
+      "source": "bench/doomql/results/scale-episode1-200000000.json",
+      "results": {
+        "auto": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 530.7539200875908,
+          "median_ms": 345.3125960659236,
+          "p95_ms": 550.5667789839208,
+          "fps": 2.895926796163237,
+          "parity_ok": true,
+          "error": null
+        },
+        "rvbbit_native": {
+          "status": "ok",
+          "route": "rvbbit_native",
+          "first_ms": 2246.0729270242155,
+          "median_ms": 1871.9102509785444,
+          "p95_ms": 2717.860951088369,
+          "fps": 0.5342136459145134,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vector": {
+          "status": "ok",
+          "route": "duck_vector",
+          "first_ms": 496.41748308204114,
+          "median_ms": 338.75690889544785,
+          "p95_ms": 563.062391942367,
+          "fps": 2.951969314103745,
+          "parity_ok": true,
+          "error": null
+        },
+        "duck_vortex": {
+          "status": "ok",
+          "route": "duck_vortex",
+          "first_ms": 575.7854939438403,
+          "median_ms": 350.49432213418186,
+          "p95_ms": 592.7383210510015,
+          "fps": 2.85311326560424,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vector": {
+          "status": "ok",
+          "route": "datafusion_vector",
+          "first_ms": 862.4980798922479,
+          "median_ms": 1100.4006010480225,
+          "p95_ms": 1559.3212191015482,
+          "fps": 0.9087599543726158,
+          "parity_ok": true,
+          "error": null
+        },
+        "datafusion_vortex": {
+          "status": "ok",
+          "route": "datafusion_vortex",
+          "first_ms": 1429.6096679754555,
+          "median_ms": 1846.307243919,
+          "p95_ms": 2622.0859070308506,
+          "fps": 0.5416216630756345,
+          "parity_ok": true,
+          "error": null
+        },
+        "duckdb": {
+          "status": "ok",
+          "route": "duckdb",
+          "first_ms": 158.1021558959037,
+          "median_ms": 184.85591211356223,
+          "p95_ms": 261.06687798164785,
+          "fps": 5.409618705544411,
+          "parity_ok": true,
+          "error": null
+        },
+        "postgres": {
+          "status": "ok",
+          "route": "postgres_heap",
+          "first_ms": 7764.730599010363,
+          "median_ms": 2992.617683019489,
+          "p95_ms": 3333.5271060932428,
+          "fps": 0.33415561422166723,
+          "parity_ok": true,
+          "error": null
+        },
+        "citus": {
+          "status": "ok",
+          "route": "citus_columnar",
+          "first_ms": 3860.663586994633,
+          "median_ms": 4942.51017505303,
+          "p95_ms": 6550.339319976047,
+          "fps": 0.20232634118740495,
+          "parity_ok": true,
+          "error": null
+        },
+        "hydra": {
+          "status": "ok",
+          "route": "hydra_columnar",
+          "first_ms": 1736.7020871024579,
+          "median_ms": 2327.614052221179,
+          "p95_ms": 3029.8839129973203,
+          "fps": 0.42962448995602476,
+          "parity_ok": true,
+          "error": null
+        },
+        "alloydb": {
+          "status": "ok",
+          "route": "alloydb_omni",
+          "first_ms": 9682.614947902039,
+          "median_ms": 8641.724363900721,
+          "p95_ms": 9476.204512873664,
+          "fps": 0.11571764591073092,
+          "parity_ok": true,
+          "error": null
+        },
+        "clickhouse": {
+          "status": "ok",
+          "route": "clickhouse_mergetree",
+          "first_ms": 238.48599009215832,
+          "median_ms": 322.58433592505753,
+          "p95_ms": 438.5272499639541,
+          "fps": 3.099964532165998,
+          "parity_ok": true,
+          "error": null
+        }
+      }
+    }
+  ]
+}

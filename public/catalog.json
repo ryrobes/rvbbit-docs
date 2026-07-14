@@ -6,7 +6,7 @@
    "id": "managed/clover-ml",
    "name": "clover-ml",
    "title": "Clover-ML",
-   "description": "Batteries-included semantic ML for SQL: 13 operators over a vetted, calibrated specialist model set \u2014 hosted, versioned, and battery-verified by rvbbit. The models that passed.",
+   "description": "Batteries-included semantic ML for SQL: 22 operators over a vetted, calibrated specialist model set — text, documents, audio, images, tabular AutoML, anomaly detection, and time-series forecasting. Hosted, versioned, and battery-tested.",
    "tags": [
     "managed",
     "clover",
@@ -30,7 +30,16 @@
     "clover_moderate",
     "clover_language",
     "clover_extract",
-    "clover_pii"
+    "clover_pii",
+    "clover_ocr",
+    "clover_transcribe",
+    "clover_forecast",
+    "clover_image_similar",
+    "clover_fit",
+    "clover_predict",
+    "clover_anomaly_fit",
+    "clover_anomaly_score",
+    "clover_relations"
    ],
    "backend_name": "embed",
    "capability_manifest": {
@@ -38,7 +47,7 @@
     "kind": "managed",
     "name": "clover-ml",
     "title": "Clover-ML",
-    "description": "Batteries-included semantic ML for SQL: 13 operators over a vetted, calibrated specialist model set \u2014 hosted, versioned, and battery-verified by rvbbit. The models that passed.",
+    "description": "Batteries-included semantic ML for SQL: 22 operators over a vetted, calibrated specialist model set — text, documents, audio, images, tabular AutoML, anomaly detection, and time-series forecasting. Hosted, versioned, and battery-tested.",
     "tags": [
      "managed",
      "clover",
@@ -98,6 +107,42 @@
      {
       "name": "clover_pii",
       "description": "PII detection preset (person, email, phone, ssn, ...)"
+     },
+     {
+      "name": "clover_ocr",
+      "description": "OCR a document (image or PDF; URL or data URI) to plain text"
+     },
+     {
+      "name": "clover_transcribe",
+      "description": "Transcribe audio to text (Whisper large-v3-turbo)"
+     },
+     {
+      "name": "clover_forecast",
+      "description": "Forecast a numeric series N steps ahead — median + quantile bands"
+     },
+     {
+      "name": "clover_image_similar",
+      "description": "Similarity of two images, or an image and a text description"
+     },
+     {
+      "name": "clover_fit",
+      "description": "Fit a TabPFN model on tabular rows — the fitted model is returned to you"
+     },
+     {
+      "name": "clover_predict",
+      "description": "Predict with a clover_fit model — classifications or regressions"
+     },
+     {
+      "name": "clover_anomaly_fit",
+      "description": "Fit an anomaly detector on numeric rows (client-held model)"
+     },
+     {
+      "name": "clover_anomaly_score",
+      "description": "Score rows for anomalousness against a fitted detector"
+     },
+     {
+      "name": "clover_relations",
+      "description": "Extract (subject, predicate, object) relation triples from text"
      }
     ],
     "managed": {
@@ -171,32 +216,62 @@
        "slot": "extract",
        "model": "urchade/gliner_large-v2.1",
        "version": "clover-v1"
+      },
+      {
+       "slot": "ocr",
+       "model": "stepfun-ai/GOT-OCR-2.0-hf",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "transcribe",
+       "model": "openai/whisper-large-v3-turbo",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "forecast",
+       "model": "amazon/chronos-bolt-base",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "image_embed",
+       "model": "google/siglip2-so400m-patch16-384",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "tabular",
+       "model": "Prior-Labs/TabPFN-v2 (clf+reg)",
+       "version": "clover-v1"
+      },
+      {
+       "slot": "relations",
+       "model": "Babelscape/rebel-large",
+       "version": "clover-v1"
       }
      ],
      "install": {
       "sql": [
-       "SELECT rvbbit.register_backend('embed',     'http://8.231.39.55:8090/b/embed/predict',     'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
-       "SELECT rvbbit.register_backend('sentiment', 'http://8.231.39.55:8090/b/sentiment/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
-       "SELECT rvbbit.register_backend('rerank',    'http://8.231.39.55:8090/b/rerank/predict',    'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('embed',     'http://hutch.rvbbit.ai:8090/b/embed/predict',     'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('sentiment', 'http://hutch.rvbbit.ai:8090/b/sentiment/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('rerank',    'http://hutch.rvbbit.ai:8090/b/rerank/predict',    'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
        "DELETE FROM rvbbit.embedding_cache WHERE specialist = 'embed';",
        "SELECT rvbbit.reload_backends();",
        "SELECT rvbbit.create_operator('clover_sentiment', ARRAY['t'], 'text',\n  op_description := 'Clover-ML: sentiment {score,label} for a text (hosted twitter-roberta)',\n  op_steps := '[{\"name\":\"s\",\"kind\":\"specialist\",\"specialist\":\"sentiment\",\"inputs\":{\"text\":\"{{t}}\"}}]'::jsonb);",
        "SELECT rvbbit.create_operator('clover_relevance', ARRAY['t','criterion'], 'float8',\n  op_description := 'Clover-ML: cross-encoder relevance of t to criterion, 0..1 (hosted bge-reranker-v2-m3)',\n  op_steps := '[{\"name\":\"r\",\"kind\":\"specialist\",\"specialist\":\"rerank\",\"inputs\":{\"query\":\"{{criterion}}\",\"text\":\"{{t}}\"}}]'::jsonb);",
-       "SELECT rvbbit.register_backend('nli',      'http://8.231.39.55:8090/b/nli/predict',      'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
-       "SELECT rvbbit.register_backend('nli3',     'http://8.231.39.55:8090/b/nli3/predict',     'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
-       "SELECT rvbbit.register_backend('classify', 'http://8.231.39.55:8090/b/classify/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
-       "SELECT rvbbit.register_backend('toxicity', 'http://8.231.39.55:8090/b/toxicity/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
-       "SELECT rvbbit.register_backend('language', 'http://8.231.39.55:8090/b/language/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
-       "SELECT rvbbit.register_backend('extract',  'http://8.231.39.55:8090/b/extract/predict',  'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('nli',      'http://hutch.rvbbit.ai:8090/b/nli/predict',      'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('nli3',     'http://hutch.rvbbit.ai:8090/b/nli3/predict',     'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('classify', 'http://hutch.rvbbit.ai:8090/b/classify/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('toxicity', 'http://hutch.rvbbit.ai:8090/b/toxicity/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('language', 'http://hutch.rvbbit.ai:8090/b/language/predict', 'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('extract',  'http://hutch.rvbbit.ai:8090/b/extract/predict',  'rvbbit', 32, 4, 30000, 'RVBBIT_CLOVER_KEY');",
        "SELECT rvbbit.reload_backends();",
        "SELECT rvbbit.create_operator('clover_means', ARRAY['t','criterion'], 'bool',\n  op_description := 'Clover-ML: TRUE if t semantically matches criterion (cross-encoder, threshold 0.5)',\n  op_steps := '[\n    {\"name\":\"r\",\"kind\":\"specialist\",\"specialist\":\"rerank\",\"inputs\":{\"query\":\"{{criterion}}\",\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"number_gte\",\"inputs\":{\"value\":\"{{steps.r.output}}\",\"threshold\":0.5}}\n  ]'::jsonb);",
        "SELECT rvbbit.create_operator('clover_entails', ARRAY['premise','hypothesis'], 'bool',\n  op_description := 'Clover-ML: TRUE if premise entails hypothesis (NLI 2-class)',\n  op_steps := '[\n    {\"name\":\"n\",\"kind\":\"specialist\",\"specialist\":\"nli\",\"inputs\":{\"premise\":\"{{premise}}\",\"hypothesis\":\"{{hypothesis}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"number_gte\",\"inputs\":{\"value\":\"{{steps.n.output.scores.entailment}}\",\"threshold\":0.5}}\n  ]'::jsonb);",
        "SELECT rvbbit.create_operator('clover_contradicts', ARRAY['a','b'], 'bool',\n  op_description := 'Clover-ML: TRUE if a and b contradict (NLI 3-class)',\n  op_steps := '[\n    {\"name\":\"n\",\"kind\":\"specialist\",\"specialist\":\"nli3\",\"inputs\":{\"premise\":\"{{a}}\",\"hypothesis\":\"{{b}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"number_gte\",\"inputs\":{\"value\":\"{{steps.n.output.scores.contradiction}}\",\"threshold\":0.5}}\n  ]'::jsonb);",
        "SELECT rvbbit.create_operator('clover_sentiment_score', ARRAY['t'], 'float8', op_parser := 'strip',\n  op_description := 'Clover-ML: continuous sentiment in [-1,1]',\n  op_steps := '[\n    {\"name\":\"s\",\"kind\":\"specialist\",\"specialist\":\"sentiment\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.s.output}}\",\"path\":\"score\"}}\n  ]'::jsonb);",
-       "SELECT rvbbit.create_operator('clover_classify', ARRAY['t','labels'], 'text',\n  op_description := 'Clover-ML: zero-shot classification \u2014 top label from comma-separated candidates',\n  op_steps := '[\n    {\"name\":\"c\",\"kind\":\"specialist\",\"specialist\":\"classify\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"{{labels}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.c.output}}\",\"path\":\"label\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_classify', ARRAY['t','labels'], 'text',\n  op_description := 'Clover-ML: zero-shot classification — top label from comma-separated candidates',\n  op_steps := '[\n    {\"name\":\"c\",\"kind\":\"specialist\",\"specialist\":\"classify\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"{{labels}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.c.output}}\",\"path\":\"label\"}}\n  ]'::jsonb);",
        "SELECT rvbbit.create_operator('clover_toxic', ARRAY['t'], 'bool',\n  op_description := 'Clover-ML: TRUE if text is toxic (toxic-bert, threshold 0.5)',\n  op_steps := '[\n    {\"name\":\"x\",\"kind\":\"specialist\",\"specialist\":\"toxicity\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.x.output}}\",\"path\":\"toxic\"}}\n  ]'::jsonb);",
        "SELECT rvbbit.create_operator('clover_language', ARRAY['t'], 'text',\n  op_description := 'Clover-ML: ISO language code of text',\n  op_steps := '[\n    {\"name\":\"l\",\"kind\":\"specialist\",\"specialist\":\"language\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.l.output}}\",\"path\":\"language\"}}\n  ]'::jsonb);",
-       "SELECT rvbbit.create_operator('clover_extract', ARRAY['t','entity_types'], 'jsonb',\n  op_description := 'Clover-ML: GLiNER entity extraction \u2014 types is comma-separated',\n  op_steps := '[\n    {\"name\":\"e\",\"kind\":\"specialist\",\"specialist\":\"extract\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"{{entity_types}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_extract', ARRAY['t','entity_types'], 'jsonb',\n  op_description := 'Clover-ML: GLiNER entity extraction — types is comma-separated',\n  op_steps := '[\n    {\"name\":\"e\",\"kind\":\"specialist\",\"specialist\":\"extract\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"{{entity_types}}\"}}\n  ]'::jsonb);",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"dessert+\", \"sql\": \"SELECT rvbbit.clover_means(''apple pie recipe'',''dessert recipes'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"LarSQL heritage case\"}, {\"name\": \"sports-\", \"sql\": \"SELECT rvbbit.clover_means(''basketball game results'',''cooking recipes'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"delivery+\", \"sql\": \"SELECT rvbbit.clover_means(''customer complaint about shipping delay'',''delivery issues'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"energy+\", \"sql\": \"SELECT rvbbit.clover_means(''renewable energy investments'',''clean energy'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_means';",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"close\", \"sql\": \"SELECT rvbbit.clover_relevance(''quick sql engine'',''fast database'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.8\"}, \"description\": \"\"}, {\"name\": \"far\", \"sql\": \"SELECT rvbbit.clover_relevance(''a nice sandwich'',''fast database'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.3\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_relevance';",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"paid+\", \"sql\": \"SELECT rvbbit.clover_entails(''The invoice was paid on March 3rd'',''The invoice was paid'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"overdue-\", \"sql\": \"SELECT rvbbit.clover_entails(''The invoice was paid on March 3rd'',''The invoice is overdue'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"subset+\", \"sql\": \"SELECT rvbbit.clover_entails(''All employees received a bonus in December'',''Some employees received a bonus'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"unrelated-\", \"sql\": \"SELECT rvbbit.clover_entails(''The cat sat on the mat'',''The stock market rose today'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_entails';",
@@ -209,10 +284,40 @@
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"entities\", \"sql\": \"SELECT rvbbit.clover_extract(''Sarah Chen paid $450 to Acme Corp in Denver on May 5th'',''person, organization, money, location, date'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"Sarah Chen\"}, \"description\": \"\"}, {\"name\": \"nonempty\", \"sql\": \"SELECT rvbbit.clover_extract(''Meeting with Bob at Initech tomorrow'',''person, organization'')::text\", \"expect\": {\"type\": \"not_empty\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_extract';",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"email\", \"sql\": \"SELECT rvbbit.clover_pii(''Contact Sarah Chen at sarah@acme.com or 555-867-5309'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"sarah@acme.com\"}, \"description\": \"\"}, {\"name\": \"ssn\", \"sql\": \"SELECT rvbbit.clover_pii(''SSN on file: 123-45-6789'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"123-45-6789\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_pii';",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"close\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''quick sql engine'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.45\"}, \"description\": \"\"}, {\"name\": \"far\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''a nice sandwich'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.35\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_similar';",
-       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"scores\", \"sql\": \"SELECT rvbbit.clover_moderate(''you are a worthless idiot'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"insult\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_moderate';"
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"scores\", \"sql\": \"SELECT rvbbit.clover_moderate(''you are a worthless idiot'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"insult\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_moderate';",
+       "SELECT rvbbit.register_backend('ocr',             'http://hutch.rvbbit.ai:8090/b/ocr/predict',             'rvbbit', 4, 2, 180000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('transcribe',      'http://hutch.rvbbit.ai:8090/b/transcribe/predict',      'rvbbit', 4, 2, 300000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('forecast',        'http://hutch.rvbbit.ai:8090/b/forecast/predict',        'rvbbit', 8, 2, 60000,  'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('image_embed',     'http://hutch.rvbbit.ai:8090/b/image_embed/predict',     'rvbbit', 16, 4, 120000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('tabular_fit',     'http://hutch.rvbbit.ai:8090/b/tabular_fit/predict',     'rvbbit', 1, 1, 300000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('tabular_predict', 'http://hutch.rvbbit.ai:8090/b/tabular_predict/predict', 'rvbbit', 1, 1, 600000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('anomaly_fit',     'http://hutch.rvbbit.ai:8090/b/anomaly_fit/predict',     'rvbbit', 1, 1, 120000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('anomaly_score',   'http://hutch.rvbbit.ai:8090/b/anomaly_score/predict',   'rvbbit', 1, 1, 60000,  'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.register_backend('relations',       'http://hutch.rvbbit.ai:8090/b/relations/predict',       'rvbbit', 16, 4, 120000, 'RVBBIT_CLOVER_KEY');",
+       "SELECT rvbbit.reload_backends();",
+       "SELECT rvbbit.create_operator('clover_pii', ARRAY['t'], 'jsonb',\n  op_description := 'Clover-ML: detect PII entities (GLiNER preset: person, email, phone, address, ssn, cc, dob, ip)',\n  op_steps := '[{\"name\":\"e\",\"kind\":\"specialist\",\"specialist\":\"extract\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"person, email, phone number, street address, social security number, credit card number, date of birth, ip address\"}}]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_similar', ARRAY['a','b'], 'float8', op_parser := 'strip',\n  op_description := 'Clover-ML: embedding cosine similarity of two texts (arctic-embed)',\n  op_steps := '[\n    {\"name\":\"ea\",\"kind\":\"specialist\",\"specialist\":\"embed\",\"inputs\":{\"text\":\"{{a}}\"}},\n    {\"name\":\"eb\",\"kind\":\"specialist\",\"specialist\":\"embed\",\"inputs\":{\"text\":\"{{b}}\"}},\n    {\"name\":\"c\",\"kind\":\"code\",\"fn\":\"cosine_similarity\",\"inputs\":{\"left\":\"{{steps.ea.output}}\",\"right\":\"{{steps.eb.output}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_moderate', ARRAY['t'], 'jsonb',\n  op_description := 'Clover-ML: full moderation category scores (toxic/severe/obscene/threat/insult/identity_hate)',\n  op_steps := '[\n    {\"name\":\"x\",\"kind\":\"specialist\",\"specialist\":\"toxicity\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.x.output}}\",\"path\":\"scores\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_ocr', ARRAY['doc'], 'text',\n  op_description := 'Clover-ML: OCR a document (image or PDF; URL or data URI) to plain text (Donut)',\n  op_steps := '[\n    {\"name\":\"o\",\"kind\":\"specialist\",\"specialist\":\"ocr\",\"inputs\":{\"document\":\"{{doc}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.o.output}}\",\"path\":\"text\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_transcribe', ARRAY['audio'], 'text',\n  op_description := 'Clover-ML: transcribe audio (URL or data URI) to text (Whisper large-v3-turbo)',\n  op_steps := '[\n    {\"name\":\"w\",\"kind\":\"specialist\",\"specialist\":\"transcribe\",\"inputs\":{\"audio\":\"{{audio}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.w.output}}\",\"path\":\"text\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_forecast', ARRAY['series','horizon'], 'jsonb',\n  op_description := 'Clover-ML: forecast a numeric series (JSON array) N steps ahead — {median, quantiles} (Chronos-Bolt)',\n  op_steps := '[\n    {\"name\":\"f\",\"kind\":\"specialist\",\"specialist\":\"forecast\",\"inputs\":{\"context\":\"{{series}}\",\"horizon\":\"{{horizon}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_image_similar', ARRAY['a','b'], 'float8', op_parser := 'strip',\n  op_description := 'Clover-ML: similarity of two images, or an image and a text description (SigLIP 2 dual-tower; URL/data-URI/text inputs)',\n  op_steps := '[\n    {\"name\":\"ea\",\"kind\":\"specialist\",\"specialist\":\"image_embed\",\"inputs\":{\"text\":\"{{a}}\"}},\n    {\"name\":\"eb\",\"kind\":\"specialist\",\"specialist\":\"image_embed\",\"inputs\":{\"text\":\"{{b}}\"}},\n    {\"name\":\"c\",\"kind\":\"code\",\"fn\":\"cosine_similarity\",\"inputs\":{\"left\":\"{{steps.ea.output}}\",\"right\":\"{{steps.eb.output}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_fit', ARRAY['task','features','labels'], 'jsonb',\n  op_description := 'Clover-ML: fit a TabPFN model — task ''classifier''|''regressor'', features = JSON array of rows, labels = JSON array. Returns {blob_b64, blob_sha256, ...}: the fitted model stays YOURS, nothing persists server-side.',\n  op_steps := '[\n    {\"name\":\"f\",\"kind\":\"specialist\",\"specialist\":\"tabular_fit\",\"inputs\":{\"task\":\"{{task}}\",\"X\":\"{{features}}\",\"y\":\"{{labels}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_predict', ARRAY['model_blob_b64','features'], 'jsonb',\n  op_description := 'Clover-ML: predict with a clover_fit model blob — features = JSON array of rows. Returns {predictions, probabilities, class_labels}.',\n  op_steps := '[\n    {\"name\":\"p\",\"kind\":\"specialist\",\"specialist\":\"tabular_predict\",\"inputs\":{\"model_blob_b64\":\"{{model_blob_b64}}\",\"X\":\"{{features}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_anomaly_fit', ARRAY['features'], 'jsonb',\n  op_description := 'Clover-ML: fit an anomaly detector (isolation forest) on JSON rows. Returns {blob_b64, ...} — client-held model, higher score = more anomalous.',\n  op_steps := '[\n    {\"name\":\"f\",\"kind\":\"specialist\",\"specialist\":\"anomaly_fit\",\"inputs\":{\"X\":\"{{features}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_anomaly_score', ARRAY['model_blob_b64','features'], 'jsonb',\n  op_description := 'Clover-ML: score JSON rows against a clover_anomaly_fit model — {scores:[...]}, higher = more anomalous.',\n  op_steps := '[\n    {\"name\":\"s\",\"kind\":\"specialist\",\"specialist\":\"anomaly_score\",\"inputs\":{\"model_blob_b64\":\"{{model_blob_b64}}\",\"X\":\"{{features}}\"}}\n  ]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_relations', ARRAY['t'], 'jsonb',\n  op_description := 'Clover-ML: extract (subject, predicate, object) relation triples from text (REBEL)',\n  op_steps := '[\n    {\"name\":\"r\",\"kind\":\"specialist\",\"specialist\":\"relations\",\"inputs\":{\"text\":\"{{t}}\"}}\n  ]'::jsonb);",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"invoice\", \"sql\": \"SELECT rvbbit.clover_ocr(''https://rvbbit.ai/data/clover-tests/invoice.png'')\", \"expect\": {\"type\": \"contains\", \"value\": \"12345\"}, \"description\": \"rendered INVOICE 12345 card\"}\n]'::jsonb WHERE name = 'clover_ocr';",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"fox\", \"sql\": \"SELECT lower(rvbbit.clover_transcribe(''https://rvbbit.ai/data/clover-tests/speech.wav''))\", \"expect\": {\"type\": \"contains\", \"value\": \"quick brown fox\"}, \"description\": \"espeak-generated speech\"}\n]'::jsonb WHERE name = 'clover_transcribe';",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"horizon_len\", \"sql\": \"SELECT (jsonb_array_length(rvbbit.clover_forecast(''[1,2,3,4,5,6,7,8,9,10]'',''4'')->''median'') = 4)::text\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"},\n  {\"name\": \"ramp_next\", \"sql\": \"SELECT ((rvbbit.clover_forecast(''[1,2,3,4,5,6,7,8,9,10]'',''4'')->''median''->>0)::float8 BETWEEN 8 AND 14)::text\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"linear ramp continues near 11\"}\n]'::jsonb WHERE name = 'clover_forecast';",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"identical\", \"sql\": \"SELECT rvbbit.clover_image_similar(''https://rvbbit.ai/data/clover-tests/red-square.png'',''https://rvbbit.ai/data/clover-tests/red-square.png'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.98\"}, \"description\": \"\"},\n  {\"name\": \"different\", \"sql\": \"SELECT rvbbit.clover_image_similar(''https://rvbbit.ai/data/clover-tests/red-square.png'',''https://rvbbit.ai/data/clover-tests/noise.png'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.9\"}, \"description\": \"\"}\n]'::jsonb WHERE name = 'clover_image_similar';",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"fit_predict\", \"sql\": \"WITH m AS (SELECT rvbbit.clover_fit(''classifier'', ''[[1,1],[2,1],[1,2],[8,9],[9,8],[9,9]]'', ''[\\\"small\\\",\\\"small\\\",\\\"small\\\",\\\"big\\\",\\\"big\\\",\\\"big\\\"]'') AS j) SELECT rvbbit.clover_predict(m.j->>''blob_b64'', ''[[9,9]]'')->''predictions''->>0 FROM m\", \"expect\": {\"type\": \"exact\", \"value\": \"big\"}, \"description\": \"TabPFN in-context 2-feature split\"}\n]'::jsonb WHERE name = 'clover_fit';",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"regression\", \"sql\": \"WITH m AS (SELECT rvbbit.clover_fit(''regressor'', ''[[1],[2],[3],[4],[5],[6]]'', ''[2,4,6,8,10,12]'') AS j) SELECT ((rvbbit.clover_predict(m.j->>''blob_b64'', ''[[7]]'')->''predictions''->>0)::float8 BETWEEN 11 AND 17)::text FROM m\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"y=2x extrapolation\"}\n]'::jsonb WHERE name = 'clover_predict';",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"outlier_ranks_higher\", \"sql\": \"WITH m AS (SELECT rvbbit.clover_anomaly_fit(''[[1,1],[1.1,0.9],[0.9,1.1],[1.05,1.0],[0.95,0.98],[1.02,1.03],[1.0,0.97]]'') AS j) SELECT ((rvbbit.clover_anomaly_score(m.j->>''blob_b64'', ''[[9,9]]'')->''scores''->>0)::float8 > (rvbbit.clover_anomaly_score(m.j->>''blob_b64'', ''[[1,1]]'')->''scores''->>0)::float8)::text FROM m\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"far point scores above cluster center\"}\n]'::jsonb WHERE name = 'clover_anomaly_fit';",
+       "UPDATE rvbbit.operators SET tests = '[\n  {\"name\": \"curie\", \"sql\": \"SELECT rvbbit.clover_relations(''Marie Curie discovered radium in 1898'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"Curie\"}, \"description\": \"REBEL triple extraction\"}\n]'::jsonb WHERE name = 'clover_relations';"
       ]
      },
-     "tagline": "Batteries-included semantic ML for SQL \u2014 the models that passed our harness, hosted and versioned so your verdicts don't drift.",
+     "tagline": "Batteries-included semantic ML for SQL — the models that passed our harness, hosted and versioned so your verdicts don't drift.",
      "value_props": [
       {
        "title": "Tested",
@@ -220,27 +325,35 @@
       },
       {
        "title": "Fast",
-       "detail": "GPU-batched inference, off your database \u2014 no CPU models stealing cycles from Postgres."
+       "detail": "GPU-batched inference, off your database — no CPU models stealing cycles from Postgres."
       },
       {
        "title": "Stable",
        "detail": "Pinned model versions; verdicts don't move unless you choose to upgrade."
+      },
+      {
+       "title": "Yours",
+       "detail": "Fitted models (TabPFN, anomaly) are returned to YOUR database as blobs — nothing a customer makes persists on our side."
+      },
+      {
+       "title": "Yours",
+       "detail": "Fitted models (TabPFN, anomaly) are returned to YOUR database as blobs — nothing a customer makes persists on our side."
       }
      ],
      "free_tier": {
-      "note": "Evaluate the full operator set on your own data \u2014 a single lane, no credit card. When a real workload outgrows one lane, add more.",
+      "note": "Evaluate the full operator set on your own data — a single lane, no credit card. When a real workload outgrows one lane, add more.",
       "cta_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_T8FEko6oOFteVfRlV8I35v9QrdpfFJbX1pjPL3Oww8C/redirect"
      },
      "highlights": [
-      "13 semantic operators: means, classify, sentiment, extract, PII, language, and more",
-      "Install is metadata only \u2014 nothing runs on your box",
+      "22 semantic operators: means, classify, sentiment, extract, PII, OCR, transcribe, forecast, fit/predict (TabPFN), anomaly, relations, and more",
+      "Install is metadata only — nothing runs on your box",
       "Every answer carries a receipt naming the exact model version that produced it",
-      "You could self-host this \u2014 the operators are open. This is the paved road."
+      "You could self-host this — the operators are open. This is the paved road."
      ],
      "privacy": [
-      "Your data never leaves your database \u2014 operators send inputs, never tables",
-      "We never store your inputs or outputs \u2014 metering records counts, timings, and token totals only",
-      "Never used for training \u2014 your traffic trains nothing",
+      "Your data never leaves your database — operators send inputs, never tables",
+      "We never store your inputs or outputs — metering records counts, timings, and token totals only",
+      "Never used for training — your traffic trains nothing",
       "The full audit trail lives in YOUR receipts, not ours"
      ]
     }
@@ -250,7 +363,7 @@
    "id": "managed/gemma-lanes",
    "name": "gemma-lanes",
    "title": "Gemma Lanes",
-   "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows \u2014 OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
+   "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows — OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
    "tags": [
     "managed",
     "llm",
@@ -269,7 +382,7 @@
     "kind": "managed",
     "name": "gemma-lanes",
     "title": "Gemma Lanes",
-    "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows \u2014 OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
+    "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows — OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
     "tags": [
      "managed",
      "llm",
@@ -335,7 +448,7 @@
        "SELECT rvbbit.reload_backends();"
       ]
      },
-     "tagline": "A hosted generalist LLM for semantic SQL, agent() steps, and flows \u2014 you pay for concurrency, not per call.",
+     "tagline": "A hosted generalist LLM for semantic SQL, agent() steps, and flows — you pay for concurrency, not per call.",
      "value_props": [
       {
        "title": "Lane-priced",
@@ -343,25 +456,25 @@
       },
       {
        "title": "OpenAI-compatible",
-       "detail": "Works anywhere rvbbit calls an LLM \u2014 operators, agents, workflows."
+       "detail": "Works anywhere rvbbit calls an LLM — operators, agents, workflows."
       },
       {
        "title": "Receipted",
-       "detail": "Token usage recorded on both sides of the wire, with your would-be \u00e0 la carte cost."
+       "detail": "Token usage recorded on both sides of the wire, with your would-be à la carte cost."
       }
      ],
      "free_tier": {
-      "note": "Try the generalist on a single lane at no cost \u2014 enough to feel it work on your data before you scale up lanes.",
+      "note": "Try the generalist on a single lane at no cost — enough to feel it work on your data before you scale up lanes.",
       "cta_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_NMIrKgM2AuiKj3McyqVelypzoZuymbybSbszS3xGCxG/redirect"
      },
      "highlights": [
       "Drop-in for any operator, agent(), or flow that calls an LLM",
-      "Scale by lanes as your usage grows \u2014 no per-token anxiety on big ad-hoc queries"
+      "Scale by lanes as your usage grows — no per-token anxiety on big ad-hoc queries"
      ],
      "privacy": [
-      "Your data never leaves your database \u2014 operators send inputs, never tables",
-      "We never store your inputs or outputs \u2014 metering records counts, timings, and token totals only",
-      "Never used for training \u2014 your traffic trains nothing",
+      "Your data never leaves your database — operators send inputs, never tables",
+      "We never store your inputs or outputs — metering records counts, timings, and token totals only",
+      "Never used for training — your traffic trains nothing",
       "The full audit trail lives in YOUR receipts, not ours"
      ]
     }
@@ -404,7 +517,7 @@
      "pricing": {
       "note": "in private testing"
      },
-     "tagline": "Serverless query offload \u2014 your database mints self-expiring capsules, our pool answers them. Buy concurrency for your local Postgres.",
+     "tagline": "Serverless query offload — your database mints self-expiring capsules, our pool answers them. Buy concurrency for your local Postgres.",
      "value_props": [
       {
        "title": "Per-request isolation",
@@ -421,12 +534,12 @@
      ],
      "highlights": [
       "A relief valve for Postgres under bursty analytical load",
-      "Unusual for a mixed on-prem database \u2014 buy concurrency without moving your data"
+      "Unusual for a mixed on-prem database — buy concurrency without moving your data"
      ],
      "privacy": [
-      "We never store your inputs or outputs \u2014 metering records counts, timings, and token totals only",
-      "Never used for training \u2014 your traffic trains nothing",
-      "No standing credentials \u2014 your database presigns its own storage URLs; capsules expire in minutes"
+      "We never store your inputs or outputs — metering records counts, timings, and token totals only",
+      "Never used for training — your traffic trains nothing",
+      "No standing credentials — your database presigns its own storage URLs; capsules expire in minutes"
      ]
     }
    }

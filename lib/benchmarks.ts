@@ -1,4 +1,4 @@
-import benchmarkData from "@/content/benchmarks/gpu_bench_test12.json";
+import benchmarkData from "@/content/benchmarks/web_bench_2026_07_14.json";
 
 export type BenchmarkSystem = string;
 

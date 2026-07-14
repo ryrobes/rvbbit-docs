@@ -3,6 +3,7 @@ import {
   BarChart3,
   BookOpen,
   Boxes,
+  Crosshair,
   PackageSearch,
   TerminalSquare,
   Workflow
@@ -14,6 +15,7 @@ const navItems = [
   { href: "/docs/cascades", label: "Cascades", icon: Workflow },
   { href: "/capabilities", label: "Capabilities", icon: PackageSearch },
   { href: "/benchmarks", label: "Benchmarks", icon: BarChart3 },
+  { href: "/doomql", label: "DoomQL", icon: Crosshair },
   { href: "/docs/acceleration", label: "Acceleration", icon: Boxes },
   { href: "/docs/quickstart", label: "Quickstart", icon: TerminalSquare }
 ];

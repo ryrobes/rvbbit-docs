@@ -1,0 +1,2870 @@
+{
+  "note": "Work-in-progress benchmark snapshot from local bench_history. Median latency in milliseconds; lower is better.",
+  "runs": [
+    {
+      "host": "f13f926e148f",
+      "runId": "clickbench_20260714T131921Z",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "repeats": 3,
+      "systems": [
+        "pg_baseline",
+        "citus",
+        "hydra",
+        "alloydb",
+        "rvbbit",
+        "clickhouse",
+        "duckdb"
+      ],
+      "gitDirty": true,
+      "rowCount": 5000000,
+      "gitCommit": "052c164acf60",
+      "startedAt": "2026-07-14T13:19:21+00:00",
+      "queryCount": 43,
+      "recordedAt": "2026-07-14T14:12:31.316019+00:00",
+      "reportPath": "bench/clickbench/results/clickbench_5000000_20260714T131921Z.txt",
+      "resultsPath": "bench/clickbench/results/last_run.json"
+    },
+    {
+      "host": "f13f926e148f",
+      "runId": "tpch_sf1_20260714T141641Z",
+      "scale": "1",
+      "suite": "TPC-H",
+      "repeats": 3,
+      "systems": [
+        "rvbbit",
+        "duckdb",
+        "clickhouse",
+        "pg_baseline",
+        "citus",
+        "hydra",
+        "alloydb"
+      ],
+      "gitDirty": true,
+      "rowCount": null,
+      "gitCommit": "052c164acf60",
+      "startedAt": "2026-07-14T14:16:41+00:00",
+      "queryCount": 22,
+      "recordedAt": "2026-07-14T14:42:23.636345+00:00",
+      "reportPath": "bench/tpch/results/tpch_sf1_20260714T141641Z.txt",
+      "resultsPath": "bench/tpch/results/last_run.json"
+    },
+    {
+      "host": "f13f926e148f",
+      "runId": "clickbench_20260714T151843Z",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "repeats": 3,
+      "systems": [
+        "alloydb"
+      ],
+      "gitDirty": true,
+      "rowCount": 5000000,
+      "gitCommit": "052c164acf60",
+      "startedAt": "2026-07-14T15:18:43+00:00",
+      "queryCount": 43,
+      "recordedAt": "2026-07-14T15:18:43.407962+00:00",
+      "reportPath": "bench/clickbench/results/clickbench_5000000_20260714T151843Z.txt",
+      "resultsPath": "bench/clickbench/results/last_run.json"
+    },
+    {
+      "host": "f13f926e148f",
+      "runId": "tpch_sf1_20260714T155548Z",
+      "scale": "1",
+      "suite": "TPC-H",
+      "repeats": 3,
+      "systems": [
+        "alloydb"
+      ],
+      "gitDirty": true,
+      "rowCount": null,
+      "gitCommit": "052c164acf60",
+      "startedAt": "2026-07-14T15:55:48+00:00",
+      "queryCount": 22,
+      "recordedAt": "2026-07-14T15:55:48.897567+00:00",
+      "reportPath": "bench/tpch/results/tpch_sf1_20260714T155548Z.txt",
+      "resultsPath": "bench/tpch/results/last_run.json"
+    }
+  ],
+  "routes": [
+    {
+      "route": "gpu_gqe",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "queries": 16,
+      "suiteMs": 1644.052,
+      "geomeanMs": 94.604,
+      "routeSource": "overlay"
+    },
+    {
+      "route": "duck_vortex",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "queries": 9,
+      "suiteMs": 1040.502,
+      "geomeanMs": 50.24,
+      "routeSource": "overlay"
+    },
+    {
+      "route": "native",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "queries": 8,
+      "suiteMs": 59.884,
+      "geomeanMs": 3.192,
+      "routeSource": "overlay"
+    },
+    {
+      "route": "native",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "queries": 4,
+      "suiteMs": 1176.101,
+      "geomeanMs": 100.874,
+      "routeSource": "hard-rule"
+    },
+    {
+      "route": "duck_vortex",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "queries": 3,
+      "suiteMs": 135.753,
+      "geomeanMs": 32.724,
+      "routeSource": "ml"
+    },
+    {
+      "route": "native",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "queries": 3,
+      "suiteMs": 261.969,
+      "geomeanMs": 84.44,
+      "routeSource": "ml"
+    },
+    {
+      "route": "duck_vortex",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 12,
+      "suiteMs": 2849.648,
+      "geomeanMs": 108.515,
+      "routeSource": "ml"
+    },
+    {
+      "route": "duck_hive",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 2,
+      "suiteMs": 140.824,
+      "geomeanMs": 70.41,
+      "routeSource": "ml"
+    },
+    {
+      "route": "native",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 2,
+      "suiteMs": 4458.276,
+      "geomeanMs": 1978.728,
+      "routeSource": "ml"
+    },
+    {
+      "route": "postgres_rowstore",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 2,
+      "suiteMs": 282.097,
+      "geomeanMs": 140.824,
+      "routeSource": "ml"
+    },
+    {
+      "route": "datafusion",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 1,
+      "suiteMs": 905.652,
+      "geomeanMs": 905.652,
+      "routeSource": "ml"
+    },
+    {
+      "route": "duck",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 1,
+      "suiteMs": 370.018,
+      "geomeanMs": 370.018,
+      "routeSource": "ml"
+    },
+    {
+      "route": "gpu_gqe",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 1,
+      "suiteMs": 106.272,
+      "geomeanMs": 106.272,
+      "routeSource": "ml"
+    },
+    {
+      "route": "native",
+      "scale": "1",
+      "suite": "TPC-H",
+      "queries": 1,
+      "suiteMs": 61.065,
+      "geomeanMs": 61.065,
+      "routeSource": "hard-rule"
+    }
+  ],
+  "queries": [
+    {
+      "qid": "Q0",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 0.934,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "count(*)",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 174.688
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 17.02
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 0.934
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1.067
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 1.861
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 378.073
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q1",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 1.475,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "count(*) with filter",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 148
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 17.2
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.475
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1.926
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 5.245
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 535.6
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q2",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 1.962,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "sum/count/avg over big table",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 316.277
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 42.15
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.962
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 13.516
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 6.647
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 524.726
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q3",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 1.792,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "avg(UserID)",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 227.078
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 33.175
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.792
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 5.928
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 6.697
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 381.799
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q4",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 63.686,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "count distinct UserID",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 567.354
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 735.135
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 94.012
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 978.664
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 63.686
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1125.62
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q5",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 68.373,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "count distinct SearchPhrase",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3329.075
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 3859.623
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 97.678
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2040.339
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 68.373
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 4522.426
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q6",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 3.412,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "min/max EventDate",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 243.385
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 36.172
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 7.271
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 3.412
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 4.266
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 410.829
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q7",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 1.54,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "AdvEngineID group + filter",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 160.735
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 21.73
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1.54
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2.464
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 6.192
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 592.504
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q8",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 51.766,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "RegionID top 10 unique users",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1942.208
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1078.07
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 51.766
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1339.834
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 77.676
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2899.163
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q9",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 41.062,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "RegionID rollup",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2094.652
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1123.099
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 41.062
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2000.814
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 81.273
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3270.038
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q10",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 16.193,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "MobilePhoneModel filter+groupby",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 338.389
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 92.873
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 16.193
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 112.63
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 18.449
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 547.1
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q11",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 17.921,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "MobilePhone+Model groupby",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 442.058
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 105.635
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 17.921
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 159.487
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 21.75
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 631.999
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q12",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 88.374,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "SearchPhrase top 10 count",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 654.513
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 472.514
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 114.606
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 486.805
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 88.374
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1717.218
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q13",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 109.688,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "SearchPhrase top 10 unique users",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3444.542
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1657.813
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 109.688
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1214.339
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 113.463
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2237.092
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q14",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 93.486,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "SearchEngineID+Phrase top 10",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 672.609
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 550.975
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 109.153
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 552.05
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 93.486
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1731.396
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q15",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 38.806,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "UserID top 10",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 857.103
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 533.21
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 38.806
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 802.851
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 44.895
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1024.561
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q16",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 109.476,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "UserID+SearchPhrase ordered top 10",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1253.104
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 917.273
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 109.476
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1091.156
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 137.033
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2242.003
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q17",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 90.908,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "UserID+SearchPhrase any 10",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 951.271
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 184.87
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 111.618
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 620.671
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 90.908
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 948.452
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q18",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 115.113,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "UserID+minute+SearchPhrase groupby",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2935.818
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1629.144
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 115.113
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2358.413
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 243.968
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3450.885
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q19",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 0.234,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "UserID point lookup",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 163.103
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 20.481
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 4.967
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 0.234
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 7.729
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 359.573
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q20",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 83.95,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "LIKE URL %google%",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 900.988
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 158.81
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 83.95
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 205.953
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 102.541
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 458.613
+        }
+      },
+      "rvbbitRouteReason": "native filtered count metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q21",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 39.942,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "LIKE URL + SearchPhrase top 10",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 992.54
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 147.386
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 39.942
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 210.333
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 136.77
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 589.139
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; Rvbbit native parquet path available for clean accelerated row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q22",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 47.987,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "LIKE Title + URL NOT LIKE rollup",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1642.618
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 328.817
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 47.987
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 439.439
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 365.496
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 646.991
+        }
+      },
+      "rvbbitRouteReason": "native vector function rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q23",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 214.745,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "SELECT * filter LIKE",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 5114.25
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1552.437
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 574.934
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 214.745
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 455.865
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 520.596
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q24",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 17.957,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "SearchPhrase order by EventTime",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 410.215
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 70.086
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 197.807
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 17.957
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 36.14
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 522.764
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q25",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 47.808,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "SearchPhrase order by SearchPhrase",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 322.199
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 60.139
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 109.469
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 53.178
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 47.808
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 538.763
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.490)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q26",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 18.141,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "SearchPhrase order EventTime+Phrase",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 409.048
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 71.953
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 58.526
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 18.141
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 34.047
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 528.984
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.490)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q27",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 95.208,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "CounterID avg URL length",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1444.071
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 253.146
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 95.208
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 433.869
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 132.495
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 548.931
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.266)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q28",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 818.226,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "regex_replace Referer",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 20829.977
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 4766.821
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1018.939
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 7895.991
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 818.226
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 4976.458
+        }
+      },
+      "rvbbitRouteReason": "postgres regex semantics",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q29",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 25.224,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "90 sum exprs (wide tlist)",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1874.547
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 640.912
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 25.224
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 595.293
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 258.576
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1233.975
+        }
+      },
+      "rvbbitRouteReason": "native simple aggregate metadata",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q30",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 89.767,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "SearchEngineID+ClientIP rollup",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 854.758
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 534.09
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 112.369
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 412.261
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 89.767
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1971.28
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q31",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 116.679,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "WatchID+ClientIP rollup (filtered)",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1420.462
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1002.66
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 124.59
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 530.999
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 116.679
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2327.708
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q32",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 66.759,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "WatchID+ClientIP rollup (full)",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 4610.942
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 2720.541
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 66.759
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2865.542
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 361.654
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 7729.775
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q33",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 179.614,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "URL top 10",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2488.891
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 7839.579
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 179.614
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2972.013
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 407.761
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2331.638
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q34",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 167.744,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "literal 1 + URL top 10",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2378.992
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 7823.03
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 167.744
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 3025.3
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 423.215
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2281.983
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; GPU/GQE execution over authoritative Rvbbit parquet row groups",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q35",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 46.5,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "ClientIP+N rollups",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1061.566
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 613.559
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 93.975
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1178.116
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 46.5
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1166.999
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: no eligible engine confidently beats native",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q36",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 49.501,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "selective filter date range",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 295.631
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 3969.338
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 49.501
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 425.499
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 58.319
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1009.904
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q37",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 24.989,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "Title selective filter",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 155.806
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 947.209
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 28.276
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 24.989
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 29.795
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 953.411
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q38",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 9.02,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "URL link clicks offset 1000",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 107.509
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 38.74
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 26.824
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 9.02
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 27.687
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 652.882
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 3.584)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q39",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 112.356,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "Src/Dst rollup",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 517.646
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 484.43
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 116.216
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1275.154
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 112.356
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1007.346
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q40",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 13.721,
+      "rowCount": 5000000,
+      "bestSystem": "rvbbit",
+      "description": "URLHash+EventDate IN filter",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 84.346
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 36.306
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 13.721
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 22.666
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 16.957
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 863.55
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 2.809)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q41",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 10.7,
+      "rowCount": 5000000,
+      "bestSystem": "alloydb",
+      "description": "WindowClientWidth+Height filter",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 82.772
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 36.573
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 23.47
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 10.7
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 14.418
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 818.479
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q42",
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "bestMs": 15.441,
+      "rowCount": 5000000,
+      "bestSystem": "clickhouse",
+      "description": "DATE_TRUNC minute groupby",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 135.518
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 67.207
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 16.185
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 72.121
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 15.441
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 659.53
+        }
+      },
+      "rvbbitRouteReason": "tested overlay pin; DuckDB Vortex accelerator files available and authoritative",
+      "rvbbitRouteSource": "overlay"
+    },
+    {
+      "qid": "Q1",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 113.847,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 1",
+      "rvbbitRoute": "duck",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1722.112
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 277.194
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 370.018
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 122.765
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 113.847
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 364.193
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 5.590)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q2",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 71.27,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 2",
+      "rvbbitRoute": "postgres_rowstore",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 195.636
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 134.33
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 133.084
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 73.139
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 71.27
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 114.868
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.888)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q3",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 57.609,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 3",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 750.052
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 158.819
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 57.609
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 75.114
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 243.739
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 211.381
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.442)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q4",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 176.082,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 4",
+      "rvbbitRoute": "datafusion",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1061.187
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 903.209
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 905.652
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1302.622
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 176.082
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1286.552
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 6.535)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q5",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 69.935,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 5",
+      "rvbbitRoute": "duck_hive",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 760.579
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 134.233
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 69.935
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 409.251
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 400.811
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 155.844
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.523)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q6",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 4.863,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 6",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 495.299
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 69.295
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 61.065
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 4.863
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 29.25
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 110.508
+        }
+      },
+      "rvbbitRouteReason": "native vector function rewrite",
+      "rvbbitRouteSource": "hard-rule"
+    },
+    {
+      "qid": "Q7",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 64.194,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 7",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 753.62
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 142.912
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 487.921
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 64.194
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 661.993
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 176.331
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 5.137)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q8",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 70.889,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 8",
+      "rvbbitRoute": "duck_hive",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 765.122
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 472.335
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 70.889
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 77.629
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 1014.884
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 203.584
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.794)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q9",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 400.802,
+      "rowCount": null,
+      "bestSystem": "pg_baseline",
+      "description": "TPC-H query 9",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1673.306
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 584.117
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1026.982
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 487.613
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 3564.254
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 400.802
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 5.861)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q10",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 81.467,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 10",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 818.27
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 260.018
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 81.467
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 115.401
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 221.57
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 202.952
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.635)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q11",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 16.687,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 11",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 140.322
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 46.819
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 16.687
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 23.004
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 29.929
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 32.892
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 3.239)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q12",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 54.651,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 12",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 762.582
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 138.343
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 499.68
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 57.93
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 54.651
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 206.584
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 6.092)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q13",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 106.272,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 13",
+      "rvbbitRoute": "gpu_gqe",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 988.559
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 723.025
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 106.272
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 458.846
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 365.803
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 893.325
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.315)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q14",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 34.751,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 14",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 436.356
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 91.248
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 48.062
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 34.751
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 51.237
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 113.429
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 3.938)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q15",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 37.802,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 15",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 411.922
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 70.982
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 37.802
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 61.373
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 79.435
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 110.528
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.126)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q16",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 42.99,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 16",
+      "rvbbitRoute": "postgres_rowstore",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 370.7
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 159.991
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 149.013
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 155.331
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 42.99
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 136.65
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 5.009)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q17",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 98.019,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 17",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 2244.786
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 1796.548
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 98.019
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1017.088
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 162.376
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 2976.918
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.456)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q18",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 77.839,
+      "rowCount": null,
+      "bestSystem": "rvbbit",
+      "description": "TPC-H query 18",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 1708.096
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 2874.009
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 77.839
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 1086.186
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 88.287
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1323.129
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 4.451)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q19",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 17.199,
+      "rowCount": null,
+      "bestSystem": "alloydb",
+      "description": "TPC-H query 19",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 800.685
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 166.878
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 24.982
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 17.199
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 104.109
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 152.232
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 3.741)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q20",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 180.944,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 20",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 762.252
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 384.233
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 1202.643
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 467.309
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 180.944
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 1696.226
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 6.695)",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q21",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 552.326,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 21",
+      "rvbbitRoute": "native",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 3555.276
+        },
+        "hydra": {
+          "status": "ok",
+          "medianMs": 3657.442
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 3255.633
+        },
+        "alloydb": {
+          "status": "ok",
+          "medianMs": 2816.536
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 552.326
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 3676.093
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: no eligible engine confidently beats native",
+      "rvbbitRouteSource": "ml"
+    },
+    {
+      "qid": "Q22",
+      "scale": "1",
+      "suite": "TPC-H",
+      "bestMs": 21.757,
+      "rowCount": null,
+      "bestSystem": "clickhouse",
+      "description": "TPC-H query 22",
+      "rvbbitRoute": "duck_vortex",
+      "measurements": {
+        "citus": {
+          "status": "ok",
+          "medianMs": 360.747
+        },
+        "hydra": {
+          "status": "canceling statement due to statement timeout",
+          "medianMs": null
+        },
+        "rvbbit": {
+          "status": "ok",
+          "medianMs": 392.598
+        },
+        "alloydb": {
+          "status": "canceling statement due to statement timeout",
+          "medianMs": null
+        },
+        "clickhouse": {
+          "status": "ok",
+          "medianMs": 21.757
+        },
+        "pg_baseline": {
+          "status": "ok",
+          "medianMs": 382.638
+        }
+      },
+      "rvbbitRouteReason": "ML latency model: predicted-fastest eligible engine (score 5.317)",
+      "rvbbitRouteSource": "ml"
+    }
+  ],
+  "systems": [
+    "rvbbit",
+    "clickhouse",
+    "alloydb",
+    "pg_baseline",
+    "hydra",
+    "citus"
+  ],
+  "testName": "web_bench_2026_07_14",
+  "summaries": [
+    {
+      "ok": 43,
+      "wins": 23,
+      "maxMs": 1018.939,
+      "p95Ms": 195.988,
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "system": "rvbbit",
+      "queries": 43,
+      "suiteMs": 4318.26,
+      "failures": 0,
+      "geomeanMs": 40.881,
+      "within5Pct": 25
+    },
+    {
+      "ok": 43,
+      "wins": 12,
+      "maxMs": 818.226,
+      "p95Ms": 421.67,
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "system": "clickhouse",
+      "queries": 43,
+      "suiteMs": 5290.482,
+      "failures": 0,
+      "geomeanMs": 53.951,
+      "within5Pct": 13
+    },
+    {
+      "ok": 43,
+      "wins": 8,
+      "maxMs": 7895.991,
+      "p95Ms": 2961.366,
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "system": "alloydb",
+      "queries": 43,
+      "suiteMs": 36695.879,
+      "failures": 0,
+      "geomeanMs": 157.028,
+      "within5Pct": 8
+    },
+    {
+      "ok": 43,
+      "wins": 0,
+      "maxMs": 7729.775,
+      "p95Ms": 4415.272,
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "system": "pg_baseline",
+      "queries": 43,
+      "suiteMs": 63870.757,
+      "failures": 0,
+      "geomeanMs": 1051.887,
+      "within5Pct": 0
+    },
+    {
+      "ok": 43,
+      "wins": 0,
+      "maxMs": 7839.579,
+      "p95Ms": 4687.073,
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "system": "hydra",
+      "queries": 43,
+      "suiteMs": 47291.934,
+      "failures": 0,
+      "geomeanMs": 293.946,
+      "within5Pct": 0
+    },
+    {
+      "ok": 43,
+      "wins": 0,
+      "maxMs": 20829.977,
+      "p95Ms": 4494.302,
+      "scale": "5000000",
+      "suite": "ClickBench",
+      "system": "citus",
+      "queries": 43,
+      "suiteMs": 69051.255,
+      "failures": 0,
+      "geomeanMs": 690.462,
+      "within5Pct": 0
+    },
+    {
+      "ok": 22,
+      "wins": 9,
+      "maxMs": 3255.633,
+      "p95Ms": 1193.86,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "rvbbit",
+      "queries": 22,
+      "suiteMs": 9173.852,
+      "failures": 0,
+      "geomeanMs": 157.64,
+      "within5Pct": 9
+    },
+    {
+      "ok": 22,
+      "wins": 8,
+      "maxMs": 3564.254,
+      "p95Ms": 997.24,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "clickhouse",
+      "queries": 22,
+      "suiteMs": 8231.543,
+      "failures": 0,
+      "geomeanMs": 149.887,
+      "within5Pct": 8
+    },
+    {
+      "ok": 21,
+      "wins": 4,
+      "maxMs": 2816.536,
+      "p95Ms": 1302.622,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "alloydb",
+      "queries": 22,
+      "suiteMs": 8928.144,
+      "failures": 1,
+      "geomeanMs": 145.102,
+      "within5Pct": 5
+    },
+    {
+      "ok": 22,
+      "wins": 1,
+      "maxMs": 3676.093,
+      "p95Ms": 2912.883,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "pg_baseline",
+      "queries": 22,
+      "suiteMs": 14927.66,
+      "failures": 0,
+      "geomeanMs": 313.921,
+      "within5Pct": 1
+    },
+    {
+      "ok": 21,
+      "wins": 0,
+      "maxMs": 3657.442,
+      "p95Ms": 2874.009,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "hydra",
+      "queries": 22,
+      "suiteMs": 13245.979,
+      "failures": 1,
+      "geomeanMs": 282.647,
+      "within5Pct": 0
+    },
+    {
+      "ok": 22,
+      "wins": 0,
+      "maxMs": 3555.276,
+      "p95Ms": 2218.652,
+      "scale": "1",
+      "suite": "TPC-H",
+      "system": "citus",
+      "queries": 22,
+      "suiteMs": 21537.465,
+      "failures": 0,
+      "geomeanMs": 748.105,
+      "within5Pct": 0
+    }
+  ],
+  "exportedAt": "2026-07-14T16:03:33.354929+00:00",
+  "sourceQuery": "select * from bench_history.query_results where test_name = 'web_bench_2026_07_14'"
+}

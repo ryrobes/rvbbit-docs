@@ -219,6 +219,11 @@ export default function BenchmarksPage() {
             Missing or failed rows are included in failure counts and shown as
             failed cells in the query table.
           </li>
+          <li>
+            For a deliberately non-standard, latency-shaped workload — Doom
+            E1M1 rendered one SQL query per frame — see{" "}
+            <a href="/doomql">DoomQL</a>.
+          </li>
         </ul>
       </section>
     </main>
