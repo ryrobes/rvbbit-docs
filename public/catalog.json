@@ -159,25 +159,32 @@
         "name": "Free",
         "lanes": 1,
         "monthly_usd": 0,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_T8FEko6oOFteVfRlV8I35v9QrdpfFJbX1pjPL3Oww8C/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/clover-free"
        },
        {
         "name": "Starter",
-        "lanes": 2,
+        "lanes": 3,
         "monthly_usd": 99,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_zHpQBVNWcYNQUCjvlW1j1DzbjKrJTM776gYnR37f8pZ/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/clover-starter"
        },
        {
         "name": "Pro",
-        "lanes": 8,
+        "lanes": 10,
         "monthly_usd": 299,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_QXFwyyEn2tB4B1tGktxUI4DebHa0Pgr7CZeKH0neBcR/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/clover-pro"
        },
        {
         "name": "Scale",
-        "lanes": 24,
+        "lanes": 25,
         "monthly_usd": 799,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_Mc9vjWAVMzMeB7jUD5Tk5aYP98TWeLv665etC1SVk2W/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/clover-scale"
+       },
+       {
+        "name": "Custom",
+        "lanes": null,
+        "monthly_usd": null,
+        "contact_email": "ryan@rvbbit.ai",
+        "note": "Need more lanes, a dedicated box, or a private model set? Email us."
        }
       ]
      },
@@ -185,11 +192,11 @@
       "base_url": "http://8.231.39.55:8090"
      },
      "verified": {
-      "tests": 56,
-      "passed": 55,
-      "battery_date": "2026-07-12",
-      "regime": "clover-v1.0",
-      "note": "one known-red NLI entailment case, tracked openly"
+      "tests": 61,
+      "passed": 57,
+      "regime": "clover-v1.1 wave-b",
+      "battery_date": "2026-07-14",
+      "note": "22-operator battery incl. OCR/transcribe/forecast/TabPFN/anomaly/relations; 3 asset-URL tests pending site deploy; one known-red NLI case tracked openly"
      },
      "models": [
       {
@@ -334,18 +341,16 @@
       {
        "title": "Yours",
        "detail": "Fitted models (TabPFN, anomaly) are returned to YOUR database as blobs — nothing a customer makes persists on our side."
-      },
-      {
-       "title": "Yours",
-       "detail": "Fitted models (TabPFN, anomaly) are returned to YOUR database as blobs — nothing a customer makes persists on our side."
       }
      ],
      "free_tier": {
       "note": "Evaluate the full operator set on your own data — a single lane, no credit card. When a real workload outgrows one lane, add more.",
-      "cta_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_T8FEko6oOFteVfRlV8I35v9QrdpfFJbX1pjPL3Oww8C/redirect"
+      "cta_url": "https://rvbbit.ai/buy/clover-free"
      },
      "highlights": [
-      "22 semantic operators: means, classify, sentiment, extract, PII, OCR, transcribe, forecast, fit/predict (TabPFN), anomaly, relations, and more",
+      "22 operators across text, documents, audio, images, tabular ML, anomaly detection & forecasting",
+      "match, classify, sentiment, extract, PII, OCR, transcribe, forecast, fit/predict, relations — one flat sub",
+      "Fitted models (TabPFN, anomaly) return to YOUR database — nothing you make persists on our side",
       "Install is metadata only — nothing runs on your box",
       "Every answer carries a receipt naming the exact model version that produced it",
       "You could self-host this — the operators are open. This is the paved road."
@@ -409,25 +414,32 @@
         "name": "Free",
         "lanes": 1,
         "monthly_usd": 0,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_NMIrKgM2AuiKj3McyqVelypzoZuymbybSbszS3xGCxG/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/gemma-free"
        },
        {
         "name": "Starter",
         "lanes": 3,
         "monthly_usd": 199,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_1395vy4JUxLyH1a7m7NlfNo1uycopaMvB548Q17SMuV/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/gemma-starter"
        },
        {
         "name": "Pro",
         "lanes": 10,
         "monthly_usd": 499,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_gRdM5GoGPdLzYaClJyJwAhdOELvuCyf6QfHrQ3caMza/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/gemma-pro"
        },
        {
         "name": "Scale",
         "lanes": 25,
         "monthly_usd": 999,
-        "checkout_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_m2WqKYYmDENsk1kpNGm9oJbPV6zYMRQrg147F3XN3F4/redirect"
+        "checkout_url": "https://rvbbit.ai/buy/gemma-scale"
+       },
+       {
+        "name": "Custom",
+        "lanes": null,
+        "monthly_usd": null,
+        "contact_email": "ryan@rvbbit.ai",
+        "note": "Need more lanes, a dedicated box, or a private model set? Email us."
        }
       ]
      },
@@ -465,10 +477,11 @@
      ],
      "free_tier": {
       "note": "Try the generalist on a single lane at no cost — enough to feel it work on your data before you scale up lanes.",
-      "cta_url": "https://sandbox-api.polar.sh/v1/checkout-links/polar_cl_NMIrKgM2AuiKj3McyqVelypzoZuymbybSbszS3xGCxG/redirect"
+      "cta_url": "https://rvbbit.ai/buy/gemma-free"
      },
      "highlights": [
       "Drop-in for any operator, agent(), or flow that calls an LLM",
+      "Gemma-4-31B, pinned and versioned — the model under your verdicts never changes silently",
       "Scale by lanes as your usage grows — no per-token anxiety on big ad-hoc queries"
      ],
      "privacy": [
