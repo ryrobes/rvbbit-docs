@@ -191,6 +191,10 @@ export async function getDocBySlug(slugParts: string[] = []): Promise<DocPage> {
   }
 
   const { content, meta } = readDocFile(filePath);
+  if (meta.hidden) {
+    // Drafts are unreachable even by direct URL, not just absent from nav.
+    throw new Error(`Unknown doc slug: ${slug}`);
+  }
   const processed = await unified()
     .use(remarkParse)
     .use(remarkGfm)
