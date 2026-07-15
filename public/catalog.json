@@ -432,7 +432,7 @@
    "id": "managed/clover-llm",
    "name": "clover-llm",
    "title": "Clover-LLM",
-   "description": "13 LLM operators for SQL — ask, apply, extract-to-JSON, translate, anonymize, canonicalize, fix, date-parse, score, supports, validate, steelman, fallacy-check — on a hosted, pinned generalist. OpenAI-compatible endpoint included; lane-priced concurrency.",
+   "description": "16 LLM operators for SQL — fuzzy judgment (means, implies, contradicts, score, supports, valid), rewriting (translate, anonymize, canonical, fix, date), structure (apply, extract-to-JSON), and argument intelligence (steelman, fallacies) — on a hosted, pinned generalist with lane-priced concurrency.",
    "tags": [
     "managed",
     "llm",
@@ -451,6 +451,9 @@
     "clover_llm_canonical",
     "clover_llm_fix",
     "clover_llm_date",
+    "clover_llm_means",
+    "clover_llm_implies",
+    "clover_llm_contradicts",
     "clover_llm_score",
     "clover_llm_supports",
     "clover_llm_valid",
@@ -463,7 +466,7 @@
     "kind": "managed",
     "name": "clover-llm",
     "title": "Clover-LLM",
-    "description": "13 LLM operators for SQL — ask, apply, extract-to-JSON, translate, anonymize, canonicalize, fix, date-parse, score, supports, validate, steelman, fallacy-check — on a hosted, pinned generalist. OpenAI-compatible endpoint included; lane-priced concurrency.",
+    "description": "16 LLM operators for SQL — fuzzy judgment (means, implies, contradicts, score, supports, valid), rewriting (translate, anonymize, canonical, fix, date), structure (apply, extract-to-JSON), and argument intelligence (steelman, fallacies) — on a hosted, pinned generalist with lane-priced concurrency.",
     "tags": [
      "managed",
      "llm",
@@ -502,6 +505,18 @@
      {
       "name": "clover_llm_date",
       "description": "Messy text to ISO 8601 date, or NULL"
+     },
+     {
+      "name": "clover_llm_means",
+      "description": "TRUE if text semantically matches a criterion — LLM-judged for inputs that need thought"
+     },
+     {
+      "name": "clover_llm_implies",
+      "description": "TRUE if premise implies conclusion — incl. the quantifier logic fast NLI misses"
+     },
+     {
+      "name": "clover_llm_contradicts",
+      "description": "TRUE if two texts oppose each other on the same subject"
      },
      {
       "name": "clover_llm_score",
@@ -581,6 +596,7 @@
       "sql": [
        "SELECT rvbbit.register_backend('clover_llm', 'http://hutch.rvbbit.ai:8090/v1/chat/completions', 'openai_chat', 32, 4, 120000, 'RVBBIT_CLOVER_LLM_KEY');",
        "SELECT rvbbit.create_operator('clover_llm_ask', ARRAY['q'], 'text', op_description := 'Clover-LLM: one-shot ask against the hosted generalist', op_steps := '[{\"name\":\"main\",\"kind\":\"llm\",\"provider\":\"clover_llm\",\"model\":\"gemma4\",\"user\":\"{{q}}\",\"max_tokens\":400}]'::jsonb);",
+       "SELECT rvbbit.create_operator('clover_llm_apply', ARRAY['t', 'instruction'], 'text',\n  op_description := 'Clover-LLM: apply an instruction or question to a text — answers ONLY from the text, returns NULL when the text lacks the answer',\n  op_steps := '[{\"name\": \"main\", \"kind\": \"llm\", \"provider\": \"clover_llm\", \"model\": \"gemma4\", \"user\": \"You are a text analysis assistant. Answer the question or follow the instruction using ONLY the given text.\\n\\nRules:\\n- Answer based ONLY on the text provided\\n- Return ONLY the answer - no preamble, no explanation\\n- Be concise and direct\\n- If the text doesn''t contain the answer, return exactly NULL\\n\\nExamples:\\nText: \\\"The sky is blue\\\" + Question: \\\"What color is the sky?\\\" -> blue\\nText: \\\"Price: $99.99\\\" + Question: \\\"How much?\\\" -> $99.99\\nText: \\\"Meeting at 3pm\\\" + Question: \\\"When?\\\" -> 3pm\\n\\nTEXT:\\n{{t}}\\n\\nQUESTION/INSTRUCTION:\\n{{instruction}}\", \"max_tokens\": 400}]'::jsonb);",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"answer\", \"sql\": \"SELECT lower(rvbbit.clover_llm_apply(''The conference was moved to Denver due to weather'', ''What city?''))\", \"expect\": {\"type\": \"contains\", \"value\": \"denver\"}, \"description\": \"\"}, {\"name\": \"null_when_absent\", \"sql\": \"SELECT rvbbit.clover_llm_apply(''The sky is blue'', ''What is the CEO''''s name?'')\", \"expect\": {\"type\": \"contains\", \"value\": \"NULL\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_apply';",
        "SELECT rvbbit.create_operator('clover_llm_extract', ARRAY['t', 'schema'], 'jsonb',\n  op_description := 'Clover-LLM: extract a JSON object from freeform text per a schema you describe (fields, types, enums) — every field present, null when absent',\n  op_steps := '[{\"name\": \"main\", \"kind\": \"llm\", \"provider\": \"clover_llm\", \"model\": \"gemma4\", \"user\": \"You are a structured-data extractor. Given a text and a target schema, you output a SINGLE valid JSON object matching the schema and nothing else.\\n\\nRules:\\n- The output must be a single JSON object. No markdown fences, no prose.\\n- Every field from the schema MUST appear in the output. Use null when the text doesn''t contain that information.\\n- Coerce types to the schema: integer -> numeric, decimal -> numeric with decimals, date -> YYYY-MM-DD string, boolean -> true/false, string -> short string.\\n- For enum-like fields (e.g. \\\"urgency: 1-5\\\"), pick ONE specific value, never ranges or lists.\\n- For nested objects, mirror the schema''s nesting.\\n\\nSCHEMA:\\n{{schema}}\\n\\nTEXT:\\n{{t}}\\n\\nReturn the JSON object.\", \"max_tokens\": 700}]'::jsonb);",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"invoice\", \"sql\": \"SELECT (rvbbit.clover_llm_extract(''Invoice #4451 from Acme Corp, due March 5 2024, total $1,250.50'', ''vendor: string, invoice_number: string, total: decimal, due_date: date''))->>''vendor''\", \"expect\": {\"type\": \"contains\", \"value\": \"Acme\"}, \"description\": \"\"}, {\"name\": \"null_field\", \"sql\": \"SELECT ((rvbbit.clover_llm_extract(''Order shipped yesterday'', ''tracking_number: string, carrier: string''))->''tracking_number'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"null\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_extract';",
@@ -603,7 +619,13 @@
        "SELECT rvbbit.create_operator('clover_llm_steelman', ARRAY['argument'], 'text',\n  op_description := 'Clover-LLM: rewrite an argument in its strongest, most defensible form — the good-faith opposite of a strawman',\n  op_steps := '[{\"name\": \"main\", \"kind\": \"llm\", \"provider\": \"clover_llm\", \"model\": \"gemma4\", \"user\": \"You are a steelmanning specialist. Present the argument in its most compelling, well-reasoned, defensible form.\\n\\nGuidelines:\\n1. Assume intelligence: what would the smartest, most informed person making this argument say?\\n2. Add supporting evidence: facts, data, or examples that strengthen the position.\\n3. Address obvious objections preemptively.\\n4. Clarify scope: define reasonable boundaries - it probably isn''t meant to be absolute.\\n5. Ground it in values reasonable people share.\\n6. Drop weak elements.\\n\\nReturn ONLY the steelmanned argument (2-4 sentences). No preamble.\\n\\nORIGINAL ARGUMENT:\\n{{argument}}\", \"max_tokens\": 700}]'::jsonb);",
        "UPDATE rvbbit.operators SET tests = '[{\"name\": \"nonempty\", \"sql\": \"SELECT length(rvbbit.clover_llm_steelman(''remote work is bad'')) > 80\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_steelman';",
        "SELECT rvbbit.create_operator('clover_llm_fallacies', ARRAY['argument'], 'jsonb',\n  op_description := 'Clover-LLM: detect logical fallacies in an argument — JSON array of {fallacy, explanation} with snake_case fallacy names',\n  op_steps := '[{\"name\": \"main\", \"kind\": \"llm\", \"provider\": \"clover_llm\", \"model\": \"gemma4\", \"user\": \"You are a logical fallacy detection expert. Identify fallacies in the argument.\\n\\nCheck for (snake_case names): ad_hominem, appeal_to_authority, appeal_to_emotion, appeal_to_popularity, appeal_to_tradition, appeal_to_nature, genetic_fallacy, tu_quoque, red_herring, false_dichotomy, false_cause, slippery_slope, circular_reasoning, hasty_generalization, straw_man, no_true_scotsman, equivocation.\\n\\nReturn ONLY a JSON array (no markdown fences, no prose): [{\\\"fallacy\\\": \\\"snake_case_name\\\", \\\"explanation\\\": \\\"one sentence\\\"}]\\nReturn [] when the argument is clean.\\n\\nARGUMENT:\\n{{argument}}\", \"max_tokens\": 500}]'::jsonb);",
-       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"popularity\", \"sql\": \"SELECT (rvbbit.clover_llm_fallacies(''Nine out of ten people believe it, so it must be true''))::text\", \"expect\": {\"type\": \"contains\", \"value\": \"popularity\"}, \"description\": \"\"}, {\"name\": \"clean\", \"sql\": \"SELECT jsonb_array_length(rvbbit.clover_llm_fallacies(''The measurements were repeated five times and averaged to reduce error''))::text\", \"expect\": {\"type\": \"exact\", \"value\": \"0\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_fallacies';;",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"popularity\", \"sql\": \"SELECT (rvbbit.clover_llm_fallacies(''Nine out of ten people believe it, so it must be true''))::text\", \"expect\": {\"type\": \"contains\", \"value\": \"popularity\"}, \"description\": \"\"}, {\"name\": \"clean\", \"sql\": \"SELECT jsonb_array_length(rvbbit.clover_llm_fallacies(''The measurements were repeated five times and averaged to reduce error''))::text\", \"expect\": {\"type\": \"exact\", \"value\": \"0\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_fallacies';",
+       "SELECT rvbbit.create_operator('clover_llm_means', ARRAY['t', 'criterion'], 'bool',\n  op_description := 'Clover-LLM: TRUE if text semantically matches a criterion — the LLM-judged sibling of clover_means for inputs that need real thought (sarcasm, indirection, multi-clause)',\n  op_steps := '[{\"name\": \"main\", \"kind\": \"llm\", \"provider\": \"clover_llm\", \"model\": \"gemma4\", \"user\": \"You are a semantic matching evaluator. Given a TEXT and a CRITERION, determine if the text semantically matches the criterion.\\n\\nSTEP 1: What topic/domain is the TEXT about?\\nSTEP 2: What topic/domain is the CRITERION about?\\nSTEP 3: Are these the SAME or CLOSELY RELATED topics?\\n\\nA MATCH means the text discusses the SAME or CLOSELY RELATED topic.\\nNOT A MATCH means the topics are from completely different domains.\\n\\nExamples:\\n- MATCH: \\\"stock prices fell\\\" + \\\"financial news\\\" (both finance)\\n- MATCH: \\\"apple pie recipe\\\" + \\\"dessert recipes\\\" (both food)\\n- NO MATCH: \\\"weather forecast\\\" + \\\"financial news\\\" (different domains)\\n\\nReturn ONLY the word true or false. Nothing else.\\n\\nTEXT: {{t}}\\nCRITERION: {{criterion}}\", \"max_tokens\": 6}]'::jsonb);",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"dessert\", \"sql\": \"SELECT rvbbit.clover_llm_means(''apple pie recipe'', ''dessert recipes'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"cross_domain\", \"sql\": \"SELECT rvbbit.clover_llm_means(''basketball game results'', ''cooking recipes'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"indirection\", \"sql\": \"SELECT rvbbit.clover_llm_means(''the package never showed up and support went silent for two weeks'', ''a customer having a bad delivery experience'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_means';",
+       "SELECT rvbbit.create_operator('clover_llm_implies', ARRAY['premise', 'conclusion'], 'bool',\n  op_description := 'Clover-LLM: TRUE if the premise implies the conclusion — logical entailment plus common-sense inference; handles the quantifier cases (all -> some) that fast NLI models miss',\n  op_steps := '[{\"name\": \"main\", \"kind\": \"llm\", \"provider\": \"clover_llm\", \"model\": \"gemma4\", \"user\": \"Determine if a PREMISE semantically implies a CONCLUSION.\\n\\nReturn true if a reasonable person would consider the conclusion likely true given the premise. This includes:\\n- Direct logical entailment (\\\"bachelor\\\" -> \\\"unmarried\\\")\\n- Quantifier logic (\\\"all employees got a bonus\\\" -> \\\"some employees got a bonus\\\")\\n- Strong causal relationships (\\\"raining\\\" -> \\\"the ground is wet\\\")\\n- Common-sense inferences that follow naturally\\n\\nReturn false only if there is no meaningful connection or the conclusion does not follow from the premise.\\n\\nReturn ONLY the word true or false. Nothing else.\\n\\nPREMISE: {{premise}}\\nCONCLUSION: {{conclusion}}\", \"max_tokens\": 6}]'::jsonb);",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"subset\", \"sql\": \"SELECT rvbbit.clover_llm_implies(''All employees received a bonus in December'', ''Some employees received a bonus'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"causal\", \"sql\": \"SELECT rvbbit.clover_llm_implies(''It has been raining for hours'', ''the ground is wet'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"non_sequitur\", \"sql\": \"SELECT rvbbit.clover_llm_implies(''The cat sat on the mat'', ''The stock market rose today'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_implies';",
+       "SELECT rvbbit.create_operator('clover_llm_contradicts', ARRAY['a', 'b'], 'bool',\n  op_description := 'Clover-LLM: TRUE if two texts logically contradict — LLM-judged sibling of clover_contradicts; different-subject statements are never contradictions',\n  op_steps := '[{\"name\": \"main\", \"kind\": \"llm\", \"provider\": \"clover_llm\", \"model\": \"gemma4\", \"user\": \"Do these two texts logically contradict each other?\\n\\nSTEP 1 - Identify the subject of each statement.\\nSTEP 2 - Are they about the SAME subject? If NO, answer false (statements about different topics are NEVER contradictions).\\nSTEP 3 - If the same subject: do they make OPPOSING claims about it? If yes, true; otherwise false.\\n\\nReturn ONLY the word true or false. Nothing else.\\n\\nTEXT A: {{a}}\\nTEXT B: {{b}}\", \"max_tokens\": 6}]'::jsonb);",
+       "UPDATE rvbbit.operators SET tests = '[{\"name\": \"opposing\", \"sql\": \"SELECT rvbbit.clover_llm_contradicts(''The store is open until 9pm tonight'', ''The store closed at noon today'')\", \"expect\": {\"type\": \"exact\", \"value\": \"true\"}, \"description\": \"\"}, {\"name\": \"different_subjects\", \"sql\": \"SELECT rvbbit.clover_llm_contradicts(''The report covers Q3 revenue'', ''The office got new chairs'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}, {\"name\": \"compatible\", \"sql\": \"SELECT rvbbit.clover_llm_contradicts(''The meeting is at 9am'', ''The meeting is in the morning'')\", \"expect\": {\"type\": \"exact\", \"value\": \"false\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_llm_contradicts';;",
        "SELECT rvbbit.reload_backends();"
       ]
      },
@@ -627,7 +649,8 @@
       "cta_url": "https://rvbbit.ai/buy/clover-llm-free"
      },
      "highlights": [
-      "13 operators: apply, extract, translate, anonymize, canonical, fix, date, score, supports, valid, steelman, fallacies, ask",
+      "16 operators: means, implies, contradicts, score, supports, valid, apply, extract, translate, anonymize, canonical, fix, date, steelman, fallacies, ask",
+      "clover_llm_implies passes the quantifier cases (all -> some) that fast NLI models miss — same battery, documented side by side",
       "clover_llm_extract: freeform text -> JSON per a schema you write in plain English",
       "Argument intelligence nobody else ships in SQL: steelman() and fallacies()",
       "Drop-in for any operator, agent(), or flow that calls an LLM — plus raw OpenAI-compatible /v1 access",
@@ -640,11 +663,11 @@
       "The full audit trail lives in YOUR receipts, not ours"
      ],
      "verified": {
-      "tests": 23,
-      "passed": 23,
+      "tests": 32,
+      "passed": 32,
       "regime": "clover-llm-v1.1",
       "battery_date": "2026-07-15",
-      "note": "23-case battery over the 12 mined operators, run against the live hosted model"
+      "note": "32-case battery over the 15 mined operators against the live hosted model — incl. the all->some entailment case the specialist NLI is known to miss"
      }
     }
    }
