@@ -189,7 +189,7 @@
       ]
      },
      "endpoint": {
-      "base_url": "http://8.231.39.55:8090"
+      "base_url": "http://hutch.rvbbit.ai:8090"
      },
      "verified": {
       "tests": 61,
@@ -444,7 +444,7 @@
       ]
      },
      "endpoint": {
-      "base_url": "http://8.231.39.55:8090"
+      "base_url": "http://hutch.rvbbit.ai:8090"
      },
      "models": [
       {
@@ -455,7 +455,7 @@
      ],
      "install": {
       "sql": [
-       "SELECT rvbbit.register_backend('hutch_llm', 'http://8.231.39.55:8090/v1/chat/completions', 'openai_chat', 32, 4, 120000, 'RVBBIT_GEMMA_KEY');",
+       "SELECT rvbbit.register_backend('hutch_llm', 'http://hutch.rvbbit.ai:8090/v1/chat/completions', 'openai_chat', 32, 4, 120000, 'RVBBIT_GEMMA_KEY');",
        "SELECT rvbbit.create_operator('hutch_ask', ARRAY['q'], 'text', op_steps := '[{\"name\":\"main\",\"kind\":\"llm\",\"provider\":\"hutch_llm\",\"model\":\"gemma4\",\"user\":\"{{q}}\",\"max_tokens\":400}]'::jsonb);",
        "SELECT rvbbit.reload_backends();"
       ]
