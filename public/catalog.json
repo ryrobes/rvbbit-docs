@@ -365,135 +365,6 @@
    }
   },
   {
-   "id": "managed/gemma-lanes",
-   "name": "gemma-lanes",
-   "title": "Gemma Lanes",
-   "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows — OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
-   "tags": [
-    "managed",
-    "llm",
-    "gemma",
-    "lanes"
-   ],
-   "kind": "managed",
-   "catalog_visibility": "public",
-   "device": "cloud",
-   "operators": [
-    "hutch_ask"
-   ],
-   "backend_name": "hutch_llm",
-   "capability_manifest": {
-    "api_version": "v1",
-    "kind": "managed",
-    "name": "gemma-lanes",
-    "title": "Gemma Lanes",
-    "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows — OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
-    "tags": [
-     "managed",
-     "llm",
-     "gemma",
-     "lanes"
-    ],
-    "operators": [
-     {
-      "name": "hutch_ask",
-      "description": "Example: ask the hosted generalist from SQL"
-     }
-    ],
-    "managed": {
-     "vendor": "rvbbit.ai",
-     "status": "available",
-     "entitlement": "gemma",
-     "key_env": "RVBBIT_GEMMA_KEY",
-     "pricing": {
-      "monthly_usd": 199,
-      "from": true,
-      "note": "a lane = one operation in flight",
-      "tiers": [
-       {
-        "name": "Free",
-        "lanes": 1,
-        "monthly_usd": 0,
-        "checkout_url": "https://rvbbit.ai/buy/gemma-free"
-       },
-       {
-        "name": "Starter",
-        "lanes": 3,
-        "monthly_usd": 199,
-        "checkout_url": "https://rvbbit.ai/buy/gemma-starter"
-       },
-       {
-        "name": "Pro",
-        "lanes": 10,
-        "monthly_usd": 499,
-        "checkout_url": "https://rvbbit.ai/buy/gemma-pro"
-       },
-       {
-        "name": "Scale",
-        "lanes": 25,
-        "monthly_usd": 999,
-        "checkout_url": "https://rvbbit.ai/buy/gemma-scale"
-       },
-       {
-        "name": "Custom",
-        "lanes": null,
-        "monthly_usd": null,
-        "contact_email": "ryan@rvbbit.ai",
-        "note": "Need more lanes, a dedicated box, or a private model set? Email us."
-       }
-      ]
-     },
-     "endpoint": {
-      "base_url": "http://hutch.rvbbit.ai:8090"
-     },
-     "models": [
-      {
-       "slot": "generalist",
-       "model": "nvidia/Gemma-4-31B-IT-NVFP4",
-       "version": "gemma-4-31b-it-nvfp4"
-      }
-     ],
-     "install": {
-      "sql": [
-       "SELECT rvbbit.register_backend('hutch_llm', 'http://hutch.rvbbit.ai:8090/v1/chat/completions', 'openai_chat', 32, 4, 120000, 'RVBBIT_GEMMA_KEY');",
-       "SELECT rvbbit.create_operator('hutch_ask', ARRAY['q'], 'text', op_steps := '[{\"name\":\"main\",\"kind\":\"llm\",\"provider\":\"hutch_llm\",\"model\":\"gemma4\",\"user\":\"{{q}}\",\"max_tokens\":400}]'::jsonb);",
-       "SELECT rvbbit.reload_backends();"
-      ]
-     },
-     "tagline": "A hosted generalist LLM for semantic SQL, agent() steps, and flows — you pay for concurrency, not per call.",
-     "value_props": [
-      {
-       "title": "Lane-priced",
-       "detail": "Unlimited inference within your concurrent lanes. Metered pricing taxes curiosity; capacity pricing taxes only impatience."
-      },
-      {
-       "title": "OpenAI-compatible",
-       "detail": "Works anywhere rvbbit calls an LLM — operators, agents, workflows."
-      },
-      {
-       "title": "Receipted",
-       "detail": "Token usage recorded on both sides of the wire, with your would-be à la carte cost."
-      }
-     ],
-     "free_tier": {
-      "note": "Try the generalist on a single lane at no cost — enough to feel it work on your data before you scale up lanes.",
-      "cta_url": "https://rvbbit.ai/buy/gemma-free"
-     },
-     "highlights": [
-      "Drop-in for any operator, agent(), or flow that calls an LLM",
-      "Gemma-4-31B, pinned and versioned — the model under your verdicts never changes silently",
-      "Scale by lanes as your usage grows — no per-token anxiety on big ad-hoc queries"
-     ],
-     "privacy": [
-      "Your data never leaves your database — operators send inputs, never tables",
-      "We never store your inputs or outputs — metering records counts, timings, and token totals only",
-      "Never used for training — your traffic trains nothing",
-      "The full audit trail lives in YOUR receipts, not ours"
-     ]
-    }
-   }
-  },
-  {
    "id": "managed/hare-slots",
    "name": "hare-slots",
    "title": "Hare Slots",
@@ -553,6 +424,135 @@
       "We never store your inputs or outputs — metering records counts, timings, and token totals only",
       "Never used for training — your traffic trains nothing",
       "No standing credentials — your database presigns its own storage URLs; capsules expire in minutes"
+     ]
+    }
+   }
+  },
+  {
+   "id": "managed/clover-llm",
+   "name": "clover-llm",
+   "title": "Clover-LLM",
+   "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows — OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
+   "tags": [
+    "managed",
+    "llm",
+    "gemma",
+    "lanes"
+   ],
+   "kind": "managed",
+   "catalog_visibility": "public",
+   "device": "cloud",
+   "operators": [
+    "clover_llm_ask"
+   ],
+   "backend_name": "clover_llm",
+   "capability_manifest": {
+    "api_version": "v1",
+    "kind": "managed",
+    "name": "clover-llm",
+    "title": "Clover-LLM",
+    "description": "A hosted generalist LLM for semantic SQL, agent() steps and flows — OpenAI-compatible, lane-priced concurrency, token receipts on both sides of the wire.",
+    "tags": [
+     "managed",
+     "llm",
+     "gemma",
+     "lanes"
+    ],
+    "operators": [
+     {
+      "name": "clover_llm_ask",
+      "description": "One-shot ask against the hosted generalist (pinned provider + model version)"
+     }
+    ],
+    "managed": {
+     "vendor": "rvbbit.ai",
+     "status": "available",
+     "entitlement": "clover_llm",
+     "key_env": "RVBBIT_CLOVER_LLM_KEY",
+     "pricing": {
+      "monthly_usd": 199,
+      "from": true,
+      "note": "a lane = one operation in flight",
+      "tiers": [
+       {
+        "name": "Free",
+        "lanes": 1,
+        "monthly_usd": 0,
+        "checkout_url": "https://rvbbit.ai/buy/clover-llm-free"
+       },
+       {
+        "name": "Starter",
+        "lanes": 3,
+        "monthly_usd": 199,
+        "checkout_url": "https://rvbbit.ai/buy/clover-llm-starter"
+       },
+       {
+        "name": "Pro",
+        "lanes": 10,
+        "monthly_usd": 499,
+        "checkout_url": "https://rvbbit.ai/buy/clover-llm-pro"
+       },
+       {
+        "name": "Scale",
+        "lanes": 25,
+        "monthly_usd": 999,
+        "checkout_url": "https://rvbbit.ai/buy/clover-llm-scale"
+       },
+       {
+        "name": "Custom",
+        "lanes": null,
+        "monthly_usd": null,
+        "contact_email": "ryan@rvbbit.ai",
+        "note": "Need more lanes, a dedicated box, or a private model set? Email us."
+       }
+      ]
+     },
+     "endpoint": {
+      "base_url": "http://hutch.rvbbit.ai:8090"
+     },
+     "models": [
+      {
+       "slot": "llm",
+       "model": "nvidia/Gemma-4-31B-IT-NVFP4 (Gemma license note in docs)",
+       "version": "clover-llm-v1"
+      }
+     ],
+     "install": {
+      "sql": [
+       "SELECT rvbbit.register_backend('clover_llm', 'http://hutch.rvbbit.ai:8090/v1/chat/completions', 'openai_chat', 32, 4, 120000, 'RVBBIT_CLOVER_LLM_KEY');",
+       "SELECT rvbbit.create_operator('clover_llm_ask', ARRAY['q'], 'text', op_description := 'Clover-LLM: one-shot ask against the hosted generalist', op_steps := '[{\"name\":\"main\",\"kind\":\"llm\",\"provider\":\"clover_llm\",\"model\":\"gemma4\",\"user\":\"{{q}}\",\"max_tokens\":400}]'::jsonb);",
+       "SELECT rvbbit.reload_backends();"
+      ]
+     },
+     "tagline": "A hosted generalist LLM for semantic SQL, agent() steps, and flows — you pay for concurrency, not per call.",
+     "value_props": [
+      {
+       "title": "Lane-priced",
+       "detail": "Unlimited inference within your concurrent lanes. Metered pricing taxes curiosity; capacity pricing taxes only impatience."
+      },
+      {
+       "title": "OpenAI-compatible",
+       "detail": "Works anywhere rvbbit calls an LLM — operators, agents, workflows."
+      },
+      {
+       "title": "Receipted",
+       "detail": "Token usage recorded on both sides of the wire, with your would-be à la carte cost."
+      }
+     ],
+     "free_tier": {
+      "note": "Try the generalist on a single lane at no cost — enough to feel it work on your data before you scale up lanes.",
+      "cta_url": "https://rvbbit.ai/buy/clover-llm-free"
+     },
+     "highlights": [
+      "Drop-in for any operator, agent(), or flow that calls an LLM",
+      "Gemma-4-31B, pinned and versioned — the model under your verdicts never changes silently",
+      "Scale by lanes as your usage grows — no per-token anxiety on big ad-hoc queries"
+     ],
+     "privacy": [
+      "Your data never leaves your database — operators send inputs, never tables",
+      "We never store your inputs or outputs — metering records counts, timings, and token totals only",
+      "Never used for training — your traffic trains nothing",
+      "The full audit trail lives in YOUR receipts, not ours"
      ]
     }
    }
