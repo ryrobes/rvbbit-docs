@@ -21,6 +21,7 @@ export type DocMeta = {
   slug: string;
   href: string;
   sourceDocs: string[];
+  hidden: boolean;
 };
 
 export type DocPage = DocMeta & {
@@ -33,6 +34,8 @@ type Frontmatter = {
   section?: string;
   navOrder?: number;
   sourceDocs?: string[];
+  /** Drafts: excluded from nav, index, and the build's slug set. */
+  hidden?: boolean;
 };
 
 type HastNode = {
@@ -162,7 +165,8 @@ function readDocFile(filePath: string) {
       navOrder: data.navOrder ?? 999,
       sourceDocs: data.sourceDocs ?? [],
       slug,
-      href: hrefFromSlug(slug)
+      href: hrefFromSlug(slug),
+      hidden: data.hidden ?? false
     } satisfies DocMeta
   };
 }
@@ -170,6 +174,7 @@ function readDocFile(filePath: string) {
 export function getAllDocs(): DocMeta[] {
   return getMarkdownFiles(docsRoot)
     .map((filePath) => readDocFile(filePath).meta)
+    .filter((meta) => !meta.hidden)
     .sort((a, b) => a.navOrder - b.navOrder || a.title.localeCompare(b.title));
 }
 

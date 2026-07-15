@@ -3,6 +3,7 @@ title: Self-Service, Actually
 description: A marketing lead with no SQL ships a live competitive-intelligence dashboard in one conversation - the user story behind the Warehouse MCP, metrics, cubes, and hosted dashboards working as one surface.
 section: Start
 navOrder: 28
+hidden: true
 ---
 
 <!-- SKELETON: prose is real, gaps are marked [PASTE]/[SCREENSHOT]. Title
