@@ -10,6 +10,9 @@ sourceDocs:
   - ../rvbbit-lens/docs/canonical-viz-blocks.md
 ---
 
+> Data Rabbit has a site of its own now — screenshots, field notes, and the quickstart live at [datarabbit.com](https://datarabbit.com). This page stays the deep reference.
+
+
 Data Rabbit is RVBBIT's desktop: a fast, local-first SQL client for Postgres
 built around a windowed canvas instead of tabs. It works against **any**
 Postgres - browse, query, chart, monitor - and when it detects the `pg_rvbbit`

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  AppWindow,
   BarChart3,
   BookOpen,
   Boxes,
@@ -17,7 +18,8 @@ const navItems = [
   { href: "/benchmarks", label: "Benchmarks", icon: BarChart3 },
   { href: "/doomql", label: "DoomQL", icon: Crosshair },
   { href: "/docs/acceleration", label: "Acceleration", icon: Boxes },
-  { href: "/docs/quickstart", label: "Quickstart", icon: TerminalSquare }
+  { href: "/docs/quickstart", label: "Quickstart", icon: TerminalSquare },
+  { href: "https://datarabbit.com", label: "Data Rabbit", icon: AppWindow }
 ];
 
 function GithubIcon() {

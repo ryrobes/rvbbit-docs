@@ -253,12 +253,18 @@ WHERE  created_at > now() - interval '1 day'
       </section>
 
       <section className="band" id="dr-proof">
-        <Screenshot
-          src="shots/data-rabbit-desktop.png"
-          alt="Data Rabbit - a desktop over any Postgres, lit up on an RVBBIT database: adaptive routing, model deploys, the operator canvas, the knowledge graph, and live receipts."
-          caption="Data Rabbit - point it at any Postgres to browse and query; point it at an RVBBIT database and it lights up. Everything here is plain SQL underneath."
-          wide
-        />
+        <a
+          href="https://datarabbit.com"
+          style={{ display: "block", textDecoration: "none", color: "inherit" }}
+          aria-label="Meet Data Rabbit - the SQL desktop, at datarabbit.com"
+        >
+          <Screenshot
+            src="shots/data-rabbit-desktop.png"
+            alt="Data Rabbit - a desktop over any Postgres, lit up on an RVBBIT database: adaptive routing, model deploys, the operator canvas, the knowledge graph, and live receipts."
+            caption="Data Rabbit - point it at any Postgres to browse and query; point it at an RVBBIT database and it lights up. Meet the desktop at datarabbit.com →"
+            wide
+          />
+        </a>
       </section>
 
       <section className="band" id="why">
@@ -795,7 +801,8 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
             explore. Point it at an RVBBIT database and it lights up: watch the
             planner pick an engine, deploy a specialist model, build operators on
             a canvas, and read live receipts. Works without the extension;
-            unmissable with it.
+            unmissable with it. It now has a home of its own at{" "}
+            <a href="https://datarabbit.com">datarabbit.com</a>.
           </span>
         </div>
         <div className="shot-row">
@@ -821,6 +828,12 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
             alt="Data Search in Data Rabbit - free-text semantic search over the catalog, ranking tables and columns by what their data is about."
             caption="Data Search - find tables by what their data is about."
           />
+        </div>
+        <div className="hero-actions">
+          <a className="button primary" href="https://datarabbit.com">
+            Visit datarabbit.com
+            <ArrowRight aria-hidden="true" size={18} />
+          </a>
         </div>
       </section>
 
