@@ -32,7 +32,7 @@ services:
   # service) and the uber compose (which doesn't). Each -c is its own
   # transaction: ALTER SYSTEM refuses to run inside one.
   migrate:
-    image: ${RVBBIT_POSTGRES_GQE_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres-gqe:${RVBBIT_VERSION:-4.0.7}}
+    image: ${RVBBIT_POSTGRES_GQE_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres-gqe:${RVBBIT_VERSION:-4.0.8}}
     container_name: rvbbit-migrate
     depends_on:
       postgres:
@@ -58,12 +58,12 @@ services:
     restart: "no"
 
   postgres:
-    image: ${RVBBIT_POSTGRES_GQE_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres-gqe:${RVBBIT_VERSION:-4.0.7}}
+    image: ${RVBBIT_POSTGRES_GQE_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres-gqe:${RVBBIT_VERSION:-4.0.8}}
     build:
       context: .
       dockerfile: Dockerfile.rvbbit-gqe
       args:
-        RVBBIT_BASE_IMAGE: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.7}}
+        RVBBIT_BASE_IMAGE: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.8}}
         GQE_REPO: ${GQE_REPO:-https://github.com/rapidsai/gqe.git}
         GQE_REF: ${GQE_REF:-main}
         CUDF_REF: ${CUDF_REF:-v26.06.01}
