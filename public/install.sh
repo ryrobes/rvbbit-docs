@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-RVBBIT_VERSION="${RVBBIT_VERSION:-4.0.8}"
+RVBBIT_VERSION="${RVBBIT_VERSION:-4.0.9}"
 INSTALL_DIR="${RVBBIT_DIR:-rvbbit}"
 COMPOSE_URL="https://rvbbit.ai/docker-compose.yml"
 
