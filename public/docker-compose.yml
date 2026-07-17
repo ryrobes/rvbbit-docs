@@ -11,7 +11,7 @@ x-rvbbit-secret-env: &rvbbit-secret-env
 
 services:
   postgres:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.6}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.7}}
     container_name: rvbbit-postgres
     environment:
       <<: *rvbbit-secret-env
@@ -48,7 +48,7 @@ services:
     restart: unless-stopped
 
   duck:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.6}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.7}}
     container_name: rvbbit-duck
     depends_on:
       postgres:
@@ -95,7 +95,7 @@ services:
     restart: unless-stopped
 
   lens:
-    image: ${RVBBIT_LENS_IMAGE:-ghcr.io/ryrobes/rvbbit-lens:${RVBBIT_VERSION:-4.0.6}}
+    image: ${RVBBIT_LENS_IMAGE:-ghcr.io/ryrobes/rvbbit-lens:${RVBBIT_VERSION:-4.0.7}}
     container_name: rvbbit-lens
     depends_on:
       postgres:
@@ -121,7 +121,7 @@ services:
     restart: unless-stopped
 
   warren:
-    image: ${RVBBIT_WARREN_AGENT_IMAGE:-ghcr.io/ryrobes/rvbbit-warren-agent:${RVBBIT_VERSION:-4.0.6}}
+    image: ${RVBBIT_WARREN_AGENT_IMAGE:-ghcr.io/ryrobes/rvbbit-warren-agent:${RVBBIT_VERSION:-4.0.7}}
     container_name: rvbbit-warren
     depends_on:
       postgres:
@@ -143,7 +143,7 @@ services:
     restart: unless-stopped
 
   bootstrap:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.6}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.0.7}}
     container_name: rvbbit-bootstrap
     depends_on:
       postgres:
@@ -186,7 +186,7 @@ services:
   # Prod hardening: point WAREHOUSE_DSN at a read-only `warehouse_reader` role.
   warehouse-mcp:
     profiles: ["warehouse"]
-    image: ${RVBBIT_WAREHOUSE_MCP_IMAGE:-ghcr.io/ryrobes/rvbbit-warehouse-mcp:${RVBBIT_VERSION:-4.0.6}}
+    image: ${RVBBIT_WAREHOUSE_MCP_IMAGE:-ghcr.io/ryrobes/rvbbit-warehouse-mcp:${RVBBIT_VERSION:-4.0.7}}
     container_name: rvbbit-warehouse-mcp
     depends_on:
       postgres:
