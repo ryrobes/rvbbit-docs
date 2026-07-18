@@ -159,6 +159,10 @@ export default function Home() {
                 Read the docs
                 <ArrowRight aria-hidden="true" size={18} />
               </Link>
+              <Link className="button secondary" href="/agents">
+                Setup for Agents
+                <ArrowRight aria-hidden="true" size={18} />
+              </Link>
             </div>
             <p className="hero-foot">Your hardware · your data · no lock-in.</p>
             <ul className="hero-teasers" aria-label="A few of the exciting parts">

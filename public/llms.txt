@@ -1,0 +1,23 @@
+# RVBBIT
+
+> Open-source Postgres extension: semantic operators in plain SQL (means, summarize, extract, triples), table time travel, columnar acceleration with adaptive engine routing, and receipts for every model-backed answer. With a Clover key, per-row inference runs on hosted GPUs under a flat subscription — agents orchestrate in SQL without spending their own tokens.
+
+Everything is reachable over a normal Postgres connection; discovery is SQL
+(`rvbbit.operators`, `rvbbit.capability_catalog`, `rvbbit.capability_search(text)`).
+
+## Setup
+
+- [Setup for Agents](https://rvbbit.ai/agents.md): install, get a key, verify, example queries — written for agents
+- [Clover install SQL](https://rvbbit.ai/clover-install.sql): idempotent psql script registering the hosted operators
+- [Quickstart](https://rvbbit.ai/docs/quickstart): the Docker ensemble and first semantic queries
+- [install.sh](https://rvbbit.ai/install.sh): full-stack one-liner (Postgres 18 + RVBBIT + Data Rabbit desktop)
+
+## Reference
+
+- [Capability catalog (JSON)](https://rvbbit.ai/catalog.json): machine-readable list of operators, models, and install statements
+- [Docs index](https://rvbbit.ai/docs): human documentation
+- [Benchmarks](https://rvbbit.ai/benchmarks): ClickBench / TPC-H route-by-route results
+
+## Optional
+
+- [Data Rabbit](https://datarabbit.com): the SQL desktop for the humans you work with

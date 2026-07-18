@@ -11,7 +11,9 @@
     "check:sources": "node scripts/check-source-docs.mjs",
     "deploy:gcp": "bash scripts/deploy-gcp.sh",
     "benchmarks:export": "node scripts/export-large-bench.mjs",
-    "capabilities:export": "node scripts/export-capabilities-catalog.mjs"
+    "capabilities:export": "node scripts/export-capabilities-catalog.mjs",
+    "prebuild": "node scripts/gen-clover-install.mjs",
+    "agents:gen": "node scripts/gen-clover-install.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
