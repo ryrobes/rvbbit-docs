@@ -15,6 +15,7 @@ Everything is reachable over a normal Postgres connection; discovery is SQL
 ## Reference
 
 - [Capability catalog (JSON)](https://rvbbit.ai/catalog.json): machine-readable list of operators, models, and install statements
+- [Clover](https://rvbbit.ai/clover): hosted operator sets and industry kits — pricing, install, design partners
 - [Docs index](https://rvbbit.ai/docs): human documentation
 - [Benchmarks](https://rvbbit.ai/benchmarks): ClickBench / TPC-H route-by-route results
 

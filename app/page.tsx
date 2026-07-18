@@ -280,6 +280,8 @@ WHERE  created_at > now() - interval '1 day'
             cloud. RVBBIT hands you the building blocks: compose hosted models,
             your own Hugging Face deployments, tools, retries, and receipts into
             operators you define - open source, on Postgres, over your own data.
+            {" "}Prefer outcomes to assembly?{" "}
+            <Link href="/clover">Clover ships the operators pre-built &rarr;</Link>
           </span>
         </div>
         <div className="capability-grid">
