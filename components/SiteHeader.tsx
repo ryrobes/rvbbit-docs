@@ -7,7 +7,8 @@ import {
   Crosshair,
   PackageSearch,
   TerminalSquare,
-  Workflow
+  Workflow,
+  Sparkles
 } from "lucide-react";
 import { RabbitMark } from "@/components/RabbitMark";
 
@@ -15,6 +16,7 @@ const navItems = [
   { href: "/docs", label: "Docs", icon: BookOpen },
   { href: "/docs/cascades", label: "Cascades", icon: Workflow },
   { href: "/capabilities", label: "Capabilities", icon: PackageSearch },
+  { href: "/clover", label: "Clover", icon: Sparkles },
   { href: "/benchmarks", label: "Benchmarks", icon: BarChart3 },
   { href: "/doomql", label: "DoomQL", icon: Crosshair },
   { href: "/docs/acceleration", label: "Acceleration", icon: Boxes },
