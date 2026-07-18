@@ -109,6 +109,32 @@ Use live mode only when you intentionally want active provider probes:
 SELECT * FROM rvbbit.provider_doctor(true);
 ```
 
+## Install Clover (Hosted Operators, No UI Needed)
+
+Clover is RVBBIT's managed capability: ~50 semantic operators (`clover_*`
+specialists + `clover_llm_*` generalist functions) whose inference runs on
+hosted GPUs under a flat subscription — the free tier costs $0 and issues one
+key at [rvbbit.ai/buy/clover-free](https://rvbbit.ai/buy/clover-free).
+
+With `RVBBIT_CLOVER_KEY` set in the Postgres server's environment, install
+from plain `psql` — no browser, no desktop app:
+
+```bash
+curl -fsSL https://rvbbit.ai/clover-install.sql | psql "$DSN"
+```
+
+The script is generated from the same catalog the Data Rabbit UI imports,
+and it is idempotent — re-run it any time the catalog updates. The
+`rvbbit-postgres` Docker image also applies it automatically on first boot
+whenever `RVBBIT_CLOVER_KEY` is present. Verify with:
+
+```sql
+SELECT rvbbit.clover_means('apple pie recipe', 'dessert recipes');  -- true
+```
+
+Setting things up for an AI agent instead? There's a dedicated page:
+[Setup for Agents](/docs/agents).
+
 ## Create A Semantic Operator
 
 Semantic operators are SQL functions backed by model calls or other capability
