@@ -17,11 +17,11 @@
 
 CREATE EXTENSION IF NOT EXISTS pg_rvbbit;
 
-SELECT rvbbit.register_backend('embed',     'http://hutch.rvbbit.ai:8090/b/embed/predict',     'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('embed',     'http://clover.rvbb.it:8090/b/embed/predict',     'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('sentiment', 'http://hutch.rvbbit.ai:8090/b/sentiment/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('sentiment', 'http://clover.rvbb.it:8090/b/sentiment/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('rerank',    'http://hutch.rvbbit.ai:8090/b/rerank/predict',    'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('rerank',    'http://clover.rvbb.it:8090/b/rerank/predict',    'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
 DELETE FROM rvbbit.embedding_cache WHERE specialist = 'embed';
 
@@ -35,17 +35,17 @@ SELECT rvbbit.create_operator('clover_relevance', ARRAY['t','criterion'], 'float
   op_description := 'Clover-ML: cross-encoder relevance of t to criterion, 0..1 (hosted bge-reranker-v2-m3)',
   op_steps := '[{"name":"r","kind":"specialist","specialist":"rerank","inputs":{"query":"{{criterion}}","text":"{{t}}"}}]'::jsonb);
 
-SELECT rvbbit.register_backend('nli',      'http://hutch.rvbbit.ai:8090/b/nli/predict',      'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('nli',      'http://clover.rvbb.it:8090/b/nli/predict',      'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('nli3',     'http://hutch.rvbbit.ai:8090/b/nli3/predict',     'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('nli3',     'http://clover.rvbb.it:8090/b/nli3/predict',     'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('classify', 'http://hutch.rvbbit.ai:8090/b/classify/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('classify', 'http://clover.rvbb.it:8090/b/classify/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('toxicity', 'http://hutch.rvbbit.ai:8090/b/toxicity/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('toxicity', 'http://clover.rvbb.it:8090/b/toxicity/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('language', 'http://hutch.rvbbit.ai:8090/b/language/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('language', 'http://clover.rvbb.it:8090/b/language/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('extract',  'http://hutch.rvbbit.ai:8090/b/extract/predict',  'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('extract',  'http://clover.rvbb.it:8090/b/extract/predict',  'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
 SELECT rvbbit.reload_backends();
 
@@ -130,23 +130,23 @@ UPDATE rvbbit.operators SET tests = '[{"name": "close", "sql": "SELECT rvbbit.cl
 
 UPDATE rvbbit.operators SET tests = '[{"name": "scores", "sql": "SELECT rvbbit.clover_moderate(''you are a worthless idiot'')::text", "expect": {"type": "contains", "value": "insult"}, "description": ""}]'::jsonb WHERE name = 'clover_moderate';
 
-SELECT rvbbit.register_backend('ocr',             'http://hutch.rvbbit.ai:8090/b/ocr/predict',             'rvbbit', 4, 2, 180000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('ocr',             'http://clover.rvbb.it:8090/b/ocr/predict',             'rvbbit', 4, 2, 180000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('transcribe',      'http://hutch.rvbbit.ai:8090/b/transcribe/predict',      'rvbbit', 4, 2, 300000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('transcribe',      'http://clover.rvbb.it:8090/b/transcribe/predict',      'rvbbit', 4, 2, 300000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('forecast',        'http://hutch.rvbbit.ai:8090/b/forecast/predict',        'rvbbit', 8, 2, 60000,  'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('forecast',        'http://clover.rvbb.it:8090/b/forecast/predict',        'rvbbit', 8, 2, 60000,  'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('image_embed',     'http://hutch.rvbbit.ai:8090/b/image_embed/predict',     'rvbbit', 16, 4, 120000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('image_embed',     'http://clover.rvbb.it:8090/b/image_embed/predict',     'rvbbit', 16, 4, 120000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('tabular_fit',     'http://hutch.rvbbit.ai:8090/b/tabular_fit/predict',     'rvbbit', 1, 1, 300000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('tabular_fit',     'http://clover.rvbb.it:8090/b/tabular_fit/predict',     'rvbbit', 1, 1, 300000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('tabular_predict', 'http://hutch.rvbbit.ai:8090/b/tabular_predict/predict', 'rvbbit', 1, 1, 600000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('tabular_predict', 'http://clover.rvbb.it:8090/b/tabular_predict/predict', 'rvbbit', 1, 1, 600000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('anomaly_fit',     'http://hutch.rvbbit.ai:8090/b/anomaly_fit/predict',     'rvbbit', 1, 1, 120000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('anomaly_fit',     'http://clover.rvbb.it:8090/b/anomaly_fit/predict',     'rvbbit', 1, 1, 120000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('anomaly_score',   'http://hutch.rvbbit.ai:8090/b/anomaly_score/predict',   'rvbbit', 1, 1, 60000,  'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('anomaly_score',   'http://clover.rvbb.it:8090/b/anomaly_score/predict',   'rvbbit', 1, 1, 60000,  'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('relations',       'http://hutch.rvbbit.ai:8090/b/relations/predict',       'rvbbit', 16, 4, 120000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('relations',       'http://clover.rvbb.it:8090/b/relations/predict',       'rvbbit', 16, 4, 120000, 'RVBBIT_CLOVER_KEY');
 
 SELECT rvbbit.reload_backends();
 
@@ -261,7 +261,7 @@ UPDATE rvbbit.operators SET tests = '[
   {"name": "curie", "sql": "SELECT rvbbit.clover_relations(''Marie Curie discovered radium in 1898'')::text", "expect": {"type": "contains", "value": "Curie"}, "description": "REBEL triple extraction"}
 ]'::jsonb WHERE name = 'clover_relations';
 
-SELECT rvbbit.register_backend('clover_llm', 'http://hutch.rvbbit.ai:8090/v1/chat/completions', 'openai_chat', 32, 32, 120000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('clover_llm', 'http://clover.rvbb.it:8090/v1/chat/completions', 'openai_chat', 32, 32, 120000, 'RVBBIT_CLOVER_KEY');
 
 SELECT rvbbit.create_operator('clover_llm_ask', ARRAY['q'], 'text', op_description := 'Clover-LLM: one-shot ask against the hosted generalist', op_steps := '[{"name":"main","kind":"llm","provider":"clover_llm","model":"gemma4","user":"{{q}}","max_tokens":400}]'::jsonb);
 
@@ -576,9 +576,9 @@ $BRIEF$;
                             'error', 'did not converge; refine the description or raise p_max_iterations');
 END $$;
 
-SELECT rvbbit.register_backend('cluster', 'http://hutch.rvbbit.ai:8090/b/cluster/predict', 'rvbbit', 1, 1, 300000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('cluster', 'http://clover.rvbb.it:8090/b/cluster/predict', 'rvbbit', 1, 1, 300000, 'RVBBIT_CLOVER_KEY');
 
-SELECT rvbbit.register_backend('tabular_explain', 'http://hutch.rvbbit.ai:8090/b/tabular_explain/predict', 'rvbbit', 1, 1, 600000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('tabular_explain', 'http://clover.rvbb.it:8090/b/tabular_explain/predict', 'rvbbit', 1, 1, 600000, 'RVBBIT_CLOVER_KEY');
 
 SELECT rvbbit.reload_backends();
 
