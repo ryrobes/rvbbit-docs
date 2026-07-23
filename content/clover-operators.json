@@ -1,0 +1,1192 @@
+{
+  "operators": [
+    {
+      "name": "clover_anomaly_fit",
+      "args": [
+        "features"
+      ],
+      "returns": "jsonb",
+      "description": "Fit an anomaly detector on numeric rows (client-held model)",
+      "steps": [
+        {
+          "name": "f",
+          "kind": "specialist",
+          "label": "anomaly_fit",
+          "model": null,
+          "argIn": [
+            "features"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_anomaly_score",
+      "args": [
+        "model_blob_b64",
+        "features"
+      ],
+      "returns": "jsonb",
+      "description": "Score rows for anomalousness against a fitted detector",
+      "steps": [
+        {
+          "name": "s",
+          "kind": "specialist",
+          "label": "anomaly_score",
+          "model": null,
+          "argIn": [
+            "model_blob_b64",
+            "features"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_classify",
+      "args": [
+        "t",
+        "labels"
+      ],
+      "returns": "text",
+      "description": "Zero-shot classification over your labels",
+      "steps": [
+        {
+          "name": "c",
+          "kind": "specialist",
+          "label": "classify",
+          "model": null,
+          "argIn": [
+            "t",
+            "labels"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "c"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_classify_scores",
+      "args": [
+        "t",
+        "labels"
+      ],
+      "returns": "jsonb",
+      "description": "Zero-shot classification with the winning label and every candidate score",
+      "steps": [
+        {
+          "name": "c",
+          "kind": "specialist",
+          "label": "classify",
+          "model": null,
+          "argIn": [
+            "t",
+            "labels"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_cluster",
+      "args": [
+        "values",
+        "num_clusters"
+      ],
+      "returns": "jsonb",
+      "description": "Cluster a JSON array of texts into assignments and representative groups",
+      "steps": [
+        {
+          "name": "c",
+          "kind": "specialist",
+          "label": "cluster",
+          "model": null,
+          "argIn": [
+            "values",
+            "num_clusters"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_contradicts",
+      "args": [
+        "a",
+        "b"
+      ],
+      "returns": "bool",
+      "description": "TRUE if two statements contradict (NLI 3-class)",
+      "steps": [
+        {
+          "name": "n",
+          "kind": "specialist",
+          "label": "nli3",
+          "model": "MoritzLaurer/deberta-v3-large-mnli-fever-anli-ling-wanli",
+          "argIn": [
+            "a",
+            "b"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "n"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_entails",
+      "args": [
+        "premise",
+        "hypothesis"
+      ],
+      "returns": "bool",
+      "description": "TRUE if premise entails hypothesis (NLI)",
+      "steps": [
+        {
+          "name": "n",
+          "kind": "specialist",
+          "label": "nli",
+          "model": "MoritzLaurer/deberta-v3-large-zeroshot-v2.0",
+          "argIn": [
+            "premise",
+            "hypothesis"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "n"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_explain",
+      "args": [
+        "model_blob_b64",
+        "model_sha256",
+        "features",
+        "feature_names"
+      ],
+      "returns": "jsonb",
+      "description": "SHAP feature attributions for a fitted TabPFN or anomaly model",
+      "steps": [
+        {
+          "name": "x",
+          "kind": "specialist",
+          "label": "tabular_explain",
+          "model": null,
+          "argIn": [
+            "model_blob_b64",
+            "model_sha256",
+            "features",
+            "feature_names"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_extract",
+      "args": [
+        "t",
+        "entity_types"
+      ],
+      "returns": "jsonb",
+      "description": "Entity extraction (GLiNER) over your types",
+      "steps": [
+        {
+          "name": "e",
+          "kind": "specialist",
+          "label": "extract",
+          "model": "urchade/gliner_large-v2.1",
+          "argIn": [
+            "t",
+            "entity_types"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_fit",
+      "args": [
+        "task",
+        "features",
+        "labels"
+      ],
+      "returns": "jsonb",
+      "description": "Fit a TabPFN model on tabular rows — the fitted model is returned to you",
+      "steps": [
+        {
+          "name": "f",
+          "kind": "specialist",
+          "label": "tabular_fit",
+          "model": null,
+          "argIn": [
+            "task",
+            "features",
+            "labels"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_forecast",
+      "args": [
+        "series",
+        "horizon"
+      ],
+      "returns": "jsonb",
+      "description": "Forecast a numeric series N steps ahead — median + quantile bands",
+      "steps": [
+        {
+          "name": "f",
+          "kind": "specialist",
+          "label": "forecast",
+          "model": "amazon/chronos-bolt-base",
+          "argIn": [
+            "series",
+            "horizon"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_image_embed",
+      "args": [
+        "item"
+      ],
+      "returns": "jsonb",
+      "description": "Reusable SigLIP2 embedding for an image or text description",
+      "steps": [
+        {
+          "name": "e",
+          "kind": "specialist",
+          "label": "image_embed",
+          "model": "google/siglip2-so400m-patch16-384",
+          "argIn": [
+            "item"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_image_similar",
+      "args": [
+        "a",
+        "b"
+      ],
+      "returns": "float8",
+      "description": "Similarity of two images, or an image and a text description",
+      "steps": [
+        {
+          "name": "ea",
+          "kind": "specialist",
+          "label": "image_embed",
+          "model": "google/siglip2-so400m-patch16-384",
+          "argIn": [
+            "a"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "eb",
+          "kind": "specialist",
+          "label": "image_embed",
+          "model": "google/siglip2-so400m-patch16-384",
+          "argIn": [
+            "b"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "c",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "eb"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_language",
+      "args": [
+        "t"
+      ],
+      "returns": "text",
+      "description": "ISO language code of text",
+      "steps": [
+        {
+          "name": "l",
+          "kind": "specialist",
+          "label": "language",
+          "model": "papluca/xlm-roberta-base-language-detection",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "l"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_language_info",
+      "args": [
+        "t"
+      ],
+      "returns": "jsonb",
+      "description": "Language code plus confidence for thresholded routing",
+      "steps": [
+        {
+          "name": "l",
+          "kind": "specialist",
+          "label": "language",
+          "model": "papluca/xlm-roberta-base-language-detection",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_anonymize",
+      "args": [
+        "t"
+      ],
+      "returns": "text",
+      "description": "Rewrite text with all PII redacted ([NAME], [EMAIL], ...)",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_apply",
+      "args": [
+        "t",
+        "instruction"
+      ],
+      "returns": "text",
+      "description": "Apply an instruction/question to a text — answers only from the text",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t",
+            "instruction"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_ask",
+      "args": [
+        "q"
+      ],
+      "returns": "text",
+      "description": "One-shot ask against the hosted generalist",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "q"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_canonical",
+      "args": [
+        "t"
+      ],
+      "returns": "text",
+      "description": "Canonical form of a value (NYC -> New York City)",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_consensus",
+      "args": [
+        "texts",
+        "focus"
+      ],
+      "returns": "text",
+      "description": "Synthesize the shared consensus across a JSON array of findings",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "texts",
+            "focus"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_contradicts",
+      "args": [
+        "a",
+        "b"
+      ],
+      "returns": "bool",
+      "description": "TRUE if two texts oppose each other on the same subject",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "a",
+            "b"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_date",
+      "args": [
+        "t"
+      ],
+      "returns": "text",
+      "description": "Messy text to ISO 8601 date, or NULL",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_extract",
+      "args": [
+        "t",
+        "schema"
+      ],
+      "returns": "jsonb",
+      "description": "Freeform text to a JSON object per a schema you describe",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t",
+            "schema"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_fallacies",
+      "args": [
+        "argument"
+      ],
+      "returns": "jsonb",
+      "description": "Detect logical fallacies — JSON array of {fallacy, explanation}",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "argument"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_fix",
+      "args": [
+        "value",
+        "hint"
+      ],
+      "returns": "text",
+      "description": "Repair malformed values given a type hint (gmial.com -> gmail.com)",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "value",
+            "hint"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_implies",
+      "args": [
+        "premise",
+        "conclusion"
+      ],
+      "returns": "bool",
+      "description": "TRUE if premise implies conclusion — incl. the quantifier logic fast NLI misses",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "premise",
+            "conclusion"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_means",
+      "args": [
+        "t",
+        "criterion"
+      ],
+      "returns": "bool",
+      "description": "TRUE if text semantically matches a criterion — LLM-judged for inputs that need thought",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t",
+            "criterion"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_merge_records",
+      "args": [
+        "records",
+        "strategy"
+      ],
+      "returns": "jsonb",
+      "description": "Merge duplicate JSON records into one canonical golden record",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "records",
+            "strategy"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_same_entity",
+      "args": [
+        "left_value",
+        "right_value",
+        "entity_type"
+      ],
+      "returns": "bool",
+      "description": "TRUE if two values identify the same real-world entity",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "left_value",
+            "right_value",
+            "entity_type"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_score",
+      "args": [
+        "t",
+        "criterion"
+      ],
+      "returns": "float8",
+      "description": "Judge text against any English-phrased criterion, 0-1",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t",
+            "criterion"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_steelman",
+      "args": [
+        "argument"
+      ],
+      "returns": "text",
+      "description": "Rewrite an argument in its strongest, most defensible form",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "argument"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_supports",
+      "args": [
+        "evidence",
+        "claim"
+      ],
+      "returns": "float8",
+      "description": "How strongly evidence supports a claim, 0-1",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "evidence",
+            "claim"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_timeline",
+      "args": [
+        "t",
+        "reference_date"
+      ],
+      "returns": "jsonb",
+      "description": "Extract a normalized chronological event timeline from text",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t",
+            "reference_date"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_translate",
+      "args": [
+        "t",
+        "lang"
+      ],
+      "returns": "text",
+      "description": "Translate to any language — returns only the translation",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "t",
+            "lang"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_valid",
+      "args": [
+        "value",
+        "rule"
+      ],
+      "returns": "bool",
+      "description": "TRUE if a value satisfies an English-phrased rule",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "value",
+            "rule"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_means",
+      "args": [
+        "t",
+        "criterion"
+      ],
+      "returns": "bool",
+      "description": "TRUE if text semantically matches a criterion (cross-encoder)",
+      "steps": [
+        {
+          "name": "r",
+          "kind": "specialist",
+          "label": "rerank",
+          "model": "BAAI/bge-reranker-v2-m3",
+          "argIn": [
+            "t",
+            "criterion"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "r"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_moderate",
+      "args": [
+        "t"
+      ],
+      "returns": "jsonb",
+      "description": "Full moderation category scores",
+      "steps": [
+        {
+          "name": "x",
+          "kind": "specialist",
+          "label": "toxicity",
+          "model": "unitary/toxic-bert",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "x"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_nli",
+      "args": [
+        "premise",
+        "hypothesis"
+      ],
+      "returns": "jsonb",
+      "description": "Full 3-way entailment, neutral, and contradiction scores",
+      "steps": [
+        {
+          "name": "n",
+          "kind": "specialist",
+          "label": "nli3",
+          "model": "MoritzLaurer/deberta-v3-large-mnli-fever-anli-ling-wanli",
+          "argIn": [
+            "premise",
+            "hypothesis"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_ocr",
+      "args": [
+        "doc"
+      ],
+      "returns": "text",
+      "description": "OCR a document (image or PDF; URL or data URI) to plain text",
+      "steps": [
+        {
+          "name": "o",
+          "kind": "specialist",
+          "label": "ocr",
+          "model": "stepfun-ai/GOT-OCR-2.0-hf",
+          "argIn": [
+            "doc"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "o"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_pii",
+      "args": [
+        "t"
+      ],
+      "returns": "jsonb",
+      "description": "PII detection preset (person, email, phone, ssn, ...)",
+      "steps": [
+        {
+          "name": "e",
+          "kind": "specialist",
+          "label": "extract",
+          "model": "urchade/gliner_large-v2.1",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_predict",
+      "args": [
+        "model_blob_b64",
+        "features"
+      ],
+      "returns": "jsonb",
+      "description": "Predict with a clover_fit model — classifications or regressions",
+      "steps": [
+        {
+          "name": "p",
+          "kind": "specialist",
+          "label": "tabular_predict",
+          "model": null,
+          "argIn": [
+            "model_blob_b64",
+            "features"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_relations",
+      "args": [
+        "t"
+      ],
+      "returns": "jsonb",
+      "description": "Extract (subject, predicate, object) relation triples from text",
+      "steps": [
+        {
+          "name": "r",
+          "kind": "specialist",
+          "label": "relations",
+          "model": "Babelscape/rebel-large",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_relevance",
+      "args": [
+        "t",
+        "criterion"
+      ],
+      "returns": "float8",
+      "description": "Relevance score 0..1 of text to criterion",
+      "steps": [
+        {
+          "name": "r",
+          "kind": "specialist",
+          "label": "rerank",
+          "model": "BAAI/bge-reranker-v2-m3",
+          "argIn": [
+            "t",
+            "criterion"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_sentiment",
+      "args": [
+        "t"
+      ],
+      "returns": "text",
+      "description": "Sentiment label + score for a text",
+      "steps": [
+        {
+          "name": "s",
+          "kind": "specialist",
+          "label": "sentiment",
+          "model": "cardiffnlp/twitter-xlm-roberta-base-sentiment",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_sentiment_score",
+      "args": [
+        "t"
+      ],
+      "returns": "float8",
+      "description": "Continuous sentiment in [-1, 1]",
+      "steps": [
+        {
+          "name": "s",
+          "kind": "specialist",
+          "label": "sentiment",
+          "model": "cardiffnlp/twitter-xlm-roberta-base-sentiment",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "s"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_similar",
+      "args": [
+        "a",
+        "b"
+      ],
+      "returns": "float8",
+      "description": "Embedding cosine similarity of two texts",
+      "steps": [
+        {
+          "name": "ea",
+          "kind": "specialist",
+          "label": "embed",
+          "model": "Snowflake/snowflake-arctic-embed-l-v2.0",
+          "argIn": [
+            "a"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "eb",
+          "kind": "specialist",
+          "label": "embed",
+          "model": "Snowflake/snowflake-arctic-embed-l-v2.0",
+          "argIn": [
+            "b"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "c",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "eb"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_toxic",
+      "args": [
+        "t"
+      ],
+      "returns": "bool",
+      "description": "TRUE if text is toxic",
+      "steps": [
+        {
+          "name": "x",
+          "kind": "specialist",
+          "label": "toxicity",
+          "model": "unitary/toxic-bert",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "x"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_transcribe",
+      "args": [
+        "audio"
+      ],
+      "returns": "text",
+      "description": "Transcribe audio to text (Whisper large-v3-turbo)",
+      "steps": [
+        {
+          "name": "w",
+          "kind": "specialist",
+          "label": "transcribe",
+          "model": "openai/whisper-large-v3-turbo",
+          "argIn": [
+            "audio"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "w"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_triples",
+      "args": [
+        "text",
+        "focus"
+      ],
+      "returns": "jsonb",
+      "description": "Extract knowledge-graph triples from text as strict JSON — same contract as the built-in rvbbit.triples, so every KG surface (data_crawl, Document Brain, Scry) can run on it",
+      "steps": [
+        {
+          "name": "main",
+          "kind": "llm",
+          "label": "gemma4",
+          "model": "gemma-4-31b",
+          "argIn": [
+            "text",
+            "focus"
+          ],
+          "stepIn": []
+        }
+      ]
+    }
+  ]
+}

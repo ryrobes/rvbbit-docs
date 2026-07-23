@@ -145,6 +145,12 @@ export default function CloverPage() {
             </article>
           ))}
         </div>
+        <p style={{ marginTop: "1rem" }}>
+          <Link href="/clover/operators">
+            Browse the full operator reference — all 49, each with the model
+            cascade it runs →
+          </Link>
+        </p>
       </section>
 
       <section className="band" id="pricing">
