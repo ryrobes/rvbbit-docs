@@ -261,7 +261,7 @@ UPDATE rvbbit.operators SET tests = '[
   {"name": "curie", "sql": "SELECT rvbbit.clover_relations(''Marie Curie discovered radium in 1898'')::text", "expect": {"type": "contains", "value": "Curie"}, "description": "REBEL triple extraction"}
 ]'::jsonb WHERE name = 'clover_relations';
 
-SELECT rvbbit.register_backend('clover_llm', 'http://clover.rvbb.it:8090/v1/chat/completions', 'openai_chat', 32, 32, 120000, 'RVBBIT_CLOVER_KEY');
+SELECT rvbbit.register_backend('clover_llm', 'http://clover.rvbb.it:8090/v1/chat/completions', 'openai_chat', 32, 32, 120000, 'RVBBIT_CLOVER_KEY', '{"model": "gemma4"}'::jsonb);
 
 SELECT rvbbit.create_operator('clover_llm_ask', ARRAY['q'], 'text', op_description := 'Clover-LLM: one-shot ask against the hosted generalist', op_steps := '[{"name":"main","kind":"llm","provider":"clover_llm","model":"gemma4","user":"{{q}}","max_tokens":400}]'::jsonb);
 
@@ -739,3 +739,24 @@ BEGIN
     RETURN 'rvbbit.extract_entities restored to the local GLiNER pack (extract_gliner)';
 END
 $uee$;
+
+DO $clover_default$
+DECLARE cur text; ok boolean;
+BEGIN
+    -- Adopt clover_llm as the default LLM provider ONLY when the
+    -- current default can't authenticate (virgin boxes ship
+    -- default_provider=openrouter with no key, which strands every
+    -- core LLM operator on a model this key can't reach). Boxes
+    -- with a working provider are left exactly as they are.
+    SELECT trim(both '"' from value::text) INTO cur
+      FROM rvbbit.settings WHERE key = 'default_provider';
+    SELECT (b.auth_header_env IS NULL
+            OR rvbbit.env_present(b.auth_header_env)
+            OR coalesce(rvbbit.get_secret(b.auth_header_env), '') <> '')
+      INTO ok FROM rvbbit.backends b WHERE b.name = cur;
+    IF cur IS DISTINCT FROM 'clover_llm' AND NOT coalesce(ok, false) THEN
+        PERFORM rvbbit.set_default_provider('clover_llm');
+        UPDATE rvbbit.operators SET model = ''
+         WHERE model LIKE 'openai/%';
+    END IF;
+END $clover_default$;
