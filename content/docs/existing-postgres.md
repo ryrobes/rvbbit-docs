@@ -34,8 +34,17 @@ Each layer is strictly additive. Nothing you skip is load-bearing.
 
 ### Get the artifacts
 
-Three files ship inside the published image; extract them with `docker cp`
-(no need to run the container):
+Grab the extension tarball (linux amd64, PG 18) — no Docker needed:
+
+```bash
+curl -fsSLO https://rvbbit.ai/dist/pg_rvbbit-4.1.1-pg18-amd64.tar.gz
+curl -fsSL  https://rvbbit.ai/dist/pg_rvbbit-4.1.1-pg18-amd64.tar.gz.sha256 | sha256sum -c
+tar xzf pg_rvbbit-4.1.1-pg18-amd64.tar.gz
+sudo pg_rvbbit-4.1.1-pg18-amd64/install.sh    # copies into pg_config paths
+```
+
+<details>
+<summary>Alternative: extract the same three files from the published image</summary>
 
 ```bash
 cid=$(docker create ghcr.io/ryrobes/rvbbit-postgres:latest)
@@ -43,15 +52,13 @@ docker cp "$cid":/usr/lib/postgresql/18/lib/pg_rvbbit.so ./
 mkdir -p extension && docker cp "$cid":/usr/share/postgresql/18/extension/. ./extension/
 docker cp "$cid":/usr/local/bin/rvbbit-duck ./
 docker rm "$cid"
-```
 
-### Install into your Postgres 18
-
-```bash
 cp pg_rvbbit.so "$(pg_config --pkglibdir)/"
 cp extension/pg_rvbbit*.control extension/pg_rvbbit*.sql "$(pg_config --sharedir)/extension/"
 cp rvbbit-duck /usr/local/bin/            # the query worker (Layer 1) uses this; it need not run yet
 ```
+
+</details>
 
 Built for **PostgreSQL 18**. The `.so` is self-contained — there are no extra
 system libraries to install.
