@@ -104,11 +104,11 @@ export default function CloverPage() {
           </h2>
           <span>
             RVBBIT gives you the building blocks. Clover is the other door:
-            ~50 semantic operators, pre-built and calibrated as a set, running
-            on hosted GPUs under flat pricing — installed into the Postgres
-            you already run. Your data never leaves your database; every
-            answer ships with a receipt naming the exact model that produced
-            it.
+            ~50 <Link href="/semantic-sql">semantic SQL</Link> operators,
+            pre-built and calibrated as a set, running on hosted GPUs under
+            flat pricing — installed into the Postgres you already run. Your
+            data never leaves your database; every answer ships with a
+            receipt naming the exact model that produced it.
           </span>
         </div>
         <div className="clover-install">

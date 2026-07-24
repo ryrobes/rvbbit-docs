@@ -237,7 +237,8 @@ export default function CloverOperatorsPage() {
       <section className="band">
         <div className="section-header">
           <p className="eyebrow">
-            <Link href="/clover">Clover</Link> · operator reference
+            <Link href="/clover">Clover</Link> · operator reference ·{" "}
+            <Link href="/semantic-sql">new to the term?</Link>
           </p>
           <h2>
             All {OPS.length} operators, <em>with the cascade each one runs.</em>

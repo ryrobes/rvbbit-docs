@@ -8,7 +8,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/quickstart", destination: "/docs/quickstart", permanent: true },
       { source: "/existing-postgres", destination: "/docs/existing-postgres", permanent: true },
-      { source: "/free", destination: "/buy/clover-free", permanent: true }
+      { source: "/free", destination: "/buy/clover-free", permanent: true },
+      { source: "/what-is-semantic-sql", destination: "/semantic-sql", permanent: true }
     ];
   },
   async headers() {
