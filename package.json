@@ -13,7 +13,8 @@
     "benchmarks:export": "node scripts/export-large-bench.mjs",
     "capabilities:export": "node scripts/export-capabilities-catalog.mjs",
     "prebuild": "node scripts/gen-clover-install.mjs && node scripts/gen-clover-operators.mjs",
-    "agents:gen": "node scripts/gen-clover-install.mjs"
+    "agents:gen": "node scripts/gen-clover-install.mjs",
+    "og:gen": "node scripts/gen-og-images.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -37,6 +38,7 @@
     "@types/node": "^22.15.24",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
+    "playwright-core": "^1.61.1",
     "typescript": "^5.8.3"
   }
 }

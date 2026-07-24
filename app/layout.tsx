@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rvbbit.ai"),
   title: {
     default: "RVBBIT",
     template: "%s | RVBBIT"
