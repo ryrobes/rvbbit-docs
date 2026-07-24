@@ -196,6 +196,60 @@ function OpDag({ op }: { op: Op }) {
   );
 }
 
+/* The fit → blob → predict family: fit operators RETURN the trained model
+ * (base64, in your result set — nothing persists server-side); the
+ * consumers take that blob back. The cards cross-link and point at the
+ * worked example in the "Client-held models" band above the groups. */
+const MODEL_FLOW: Record<string, { role: "produces" | "consumes"; pairs: string[] }> = {
+  clover_fit: { role: "produces", pairs: ["clover_predict", "clover_explain"] },
+  clover_anomaly_fit: { role: "produces", pairs: ["clover_anomaly_score", "clover_explain"] },
+  clover_predict: { role: "consumes", pairs: ["clover_fit"] },
+  clover_anomaly_score: { role: "consumes", pairs: ["clover_anomaly_fit"] },
+  clover_explain: { role: "consumes", pairs: ["clover_fit", "clover_anomaly_fit"] }
+};
+
+function ModelFlowNote({ op }: { op: Op }) {
+  const flow = MODEL_FLOW[op.name];
+  if (!flow) return null;
+  const links = flow.pairs.map((p, i) => (
+    <span key={p}>
+      {i > 0 ? " / " : ""}
+      <Link href={`#${p}`}>
+        <code>{p}</code>
+      </Link>
+    </span>
+  ));
+  return (
+    <p
+      style={{
+        fontSize: "0.8rem",
+        lineHeight: 1.5,
+        padding: "0.45rem 0.7rem",
+        borderRadius: 8,
+        border: "1px solid rgba(167,139,250,0.35)",
+        background: "rgba(167,139,250,0.06)"
+      }}
+    >
+      {flow.role === "produces" ? (
+        <>
+          <strong>Returns your model.</strong> The fitted model comes back IN the
+          result — <code>result-&gt;&gt;&apos;blob_b64&apos;</code> — nothing is stored
+          server-side. Hand that string to {links}, usually via a CTE (
+          <a href="#client-held-models">worked example ↑</a>), or save the row in a
+          table to reuse it forever.
+        </>
+      ) : (
+        <>
+          <strong>model_blob_b64 = a model you fitted earlier.</strong> It&apos;s the{" "}
+          <code>blob_b64</code> field returned by {links} — chain them in one
+          statement with a CTE (<a href="#client-held-models">worked example ↑</a>) or
+          read it back from wherever you stored it.
+        </>
+      )}
+    </p>
+  );
+}
+
 function OpCard({ op }: { op: Op }) {
   return (
     <article className="feature-card" id={op.name} style={{ overflow: "hidden" }}>
@@ -203,6 +257,7 @@ function OpCard({ op }: { op: Op }) {
         {op.name}({op.args.join(", ")}) → {op.returns}
       </h3>
       <p>{op.description}</p>
+      <ModelFlowNote op={op} />
       <div style={{ overflowX: "auto" }}>
         <OpDag op={op} />
       </div>
@@ -267,6 +322,76 @@ export default function CloverOperatorsPage() {
               </span>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* The one genuinely confusing argument on this page, explained once,
+          anchored, and linked from every card that touches it. */}
+      <section className="band" id="client-held-models">
+        <div className="section-header">
+          <p>Before the list — the one weird argument</p>
+          <h2>
+            <code style={{ fontSize: "0.8em" }}>model_blob_b64</code> — you hold the
+            model, not us.
+          </h2>
+          <span>
+            <code>clover_fit</code> and <code>clover_anomaly_fit</code> train a model
+            on your rows and <strong>return it to you</strong> as a base64 blob inside
+            the JSON result (<code>-&gt;&gt;&apos;blob_b64&apos;</code>). Nothing is
+            stored server-side — the model is just data in your database, like any
+            other value. Operators that take <code>model_blob_b64</code> are asking
+            for that string back. The usual shape is one statement, fit feeding
+            predict through a CTE:
+          </span>
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+            gap: "1rem",
+            maxWidth: 1100
+          }}
+        >
+          <article className="feature-card">
+            <h3>Fit → predict, one statement</h3>
+            <pre style={{ overflowX: "auto", fontSize: "0.82rem", lineHeight: 1.55 }}>
+              <code>{`WITH model AS (
+  SELECT rvbbit.clover_fit(
+    'classifier',
+    '[[1,1],[2,1],[1,2],[8,9],[9,8],[9,9]]',      -- feature rows
+    '["small","small","small","big","big","big"]' -- labels
+  ) AS m
+)
+SELECT rvbbit.clover_predict(
+         m->>'blob_b64',        -- the model, straight back in
+         '[[9,9]]'              -- rows to classify
+       )->'predictions'->>0
+FROM model;                     -- → big`}</code>
+            </pre>
+          </article>
+          <article className="feature-card">
+            <h3>Or keep the model — it&apos;s yours</h3>
+            <pre style={{ overflowX: "auto", fontSize: "0.82rem", lineHeight: 1.55 }}>
+              <code>{`-- Train once, store the blob like any other value:
+CREATE TABLE churn_model AS
+SELECT now() AS trained_at,
+       rvbbit.clover_fit('classifier', f.features, f.labels) AS m
+FROM   my_training_set f;
+
+-- Reuse it anywhere, forever, no refitting:
+SELECT rvbbit.clover_predict(
+         (SELECT m->>'blob_b64' FROM churn_model
+          ORDER BY trained_at DESC LIMIT 1),
+         c.features)
+FROM   new_customers c;`}</code>
+            </pre>
+            <p style={{ fontSize: "0.85rem", opacity: 0.8 }}>
+              Same pattern for <code>clover_anomaly_fit</code> →{" "}
+              <code>clover_anomaly_score</code>, and <code>clover_explain</code> takes
+              the same blob (plus its <code>sha256</code>, also in the fit result) to
+              produce SHAP attributions.
+            </p>
+          </article>
         </div>
       </section>
 
