@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { SqlCode } from "@/components/SqlCode";
 import catalog from "../../../content/clover-operators.json";
 
 export const metadata: Metadata = {
@@ -352,30 +353,29 @@ export default function CloverOperatorsPage() {
             maxWidth: 1100
           }}
         >
-          <article className="feature-card">
+          <article className="feature-card code-quiet">
             <h3>Fit → predict, one statement</h3>
-            <pre style={{ overflowX: "auto", fontSize: "0.82rem", lineHeight: 1.55 }}>
-              <code>{`WITH model AS (
+            <SqlCode ariaLabel="Fit then predict via a CTE">{`WITH model AS (
   SELECT rvbbit.clover_fit(
     'classifier',
-    '[[1,1],[2,1],[1,2],[8,9],[9,8],[9,9]]',      -- feature rows
-    '["small","small","small","big","big","big"]' -- labels
+    '[[1,1],[2,1],[1,2],[8,9],[9,8],[9,9]]',  -- features
+    '["small","small","small",
+      "big","big","big"]'                     -- labels
   ) AS m
 )
 SELECT rvbbit.clover_predict(
-         m->>'blob_b64',        -- the model, straight back in
-         '[[9,9]]'              -- rows to classify
+         m->>'blob_b64',   -- the model, straight back in
+         '[[9,9]]'         -- rows to classify
        )->'predictions'->>0
-FROM model;                     -- → big`}</code>
-            </pre>
+FROM model;                -- → big`}</SqlCode>
           </article>
-          <article className="feature-card">
+          <article className="feature-card code-quiet">
             <h3>Or keep the model — it&apos;s yours</h3>
-            <pre style={{ overflowX: "auto", fontSize: "0.82rem", lineHeight: 1.55 }}>
-              <code>{`-- Train once, store the blob like any other value:
+            <SqlCode ariaLabel="Store the fitted model and reuse it">{`-- Train once, store the blob like any value:
 CREATE TABLE churn_model AS
 SELECT now() AS trained_at,
-       rvbbit.clover_fit('classifier', f.features, f.labels) AS m
+       rvbbit.clover_fit('classifier',
+         f.features, f.labels) AS m
 FROM   my_training_set f;
 
 -- Reuse it anywhere, forever, no refitting:
@@ -383,8 +383,7 @@ SELECT rvbbit.clover_predict(
          (SELECT m->>'blob_b64' FROM churn_model
           ORDER BY trained_at DESC LIMIT 1),
          c.features)
-FROM   new_customers c;`}</code>
-            </pre>
+FROM   new_customers c;`}</SqlCode>
             <p style={{ fontSize: "0.85rem", opacity: 0.8 }}>
               Same pattern for <code>clover_anomaly_fit</code> →{" "}
               <code>clover_anomaly_score</code>, and <code>clover_explain</code> takes
