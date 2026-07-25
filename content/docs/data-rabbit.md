@@ -20,11 +20,37 @@ extension on a connection, the whole rvbbit surface lights up: operator
 studios, receipts and costs, adaptive routing, the knowledge graph, cubes,
 metrics, capability deployment, and more.
 
-It ships as part of the [Docker ensemble](/docs/quickstart) and serves on
-port `3000`. It is a pure web app (Next.js) - no Electron shell - so "install"
-is just opening `http://localhost:3000`. The container image is currently
-published as `ghcr.io/ryrobes/rvbbit-lens` (the project's earlier name; the
-image name follows the rename later).
+## Get it
+
+Three ways to run the same app:
+
+- **Native macOS app** (Apple silicon) — signed and notarized, no Docker
+  required:
+
+  ```
+  https://rvbbit.ai/dist/mac/DataRabbit-4.1.3-arm64.dmg
+  sha256: f5926145edb52b9648747e96cd117ef2b009c0d6850a897e9c1035afbf081552
+  ```
+
+  The `.app` bundles its own Node runtime and serves the desktop on a
+  stable private origin (`127.0.0.1:43129`), so scenes, saved views, and
+  assistant history survive relaunches. Connections and homebase state
+  live in `~/Library/Application Support/Data Rabbit/`. All you need is a
+  reachable Postgres; Docker is used only if you install capabilities
+  that launch containers. Requirements and architecture notes live in
+  the repo's `docs/MACOS.md`.
+
+- **The [Docker ensemble](/docs/quickstart)** — ships alongside the
+  warehouse and serves on port `3000`; "install" is opening
+  `http://localhost:3000`.
+
+- **Bare web app** — it is a Next.js app at heart; the container image is
+  published as `ghcr.io/ryrobes/rvbbit-lens` (the project's earlier name;
+  the image name follows the rename later).
+
+The macOS shell keeps Node fully isolated from the renderer and drives the
+same product actions as the in-canvas menu bar, so browser and `.app`
+behavior cannot drift.
 
 ![Data Rabbit - a desktop over any Postgres, lit up on an RVBBIT database: adaptive routing, model deploys, the operator canvas, the knowledge graph, and live receipts.](/shots/data-rabbit-desktop.png)
 
