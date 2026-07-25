@@ -40,6 +40,17 @@ Three ways to run the same app:
   that launch containers. Requirements and architecture notes live in
   the repo's `docs/MACOS.md`.
 
+- **Native Linux app** (x86_64) — AppImage (`chmod +x` and run) or `.deb`:
+
+  ```
+  https://rvbbit.ai/dist/linux/DataRabbit-4.1.3-x86_64.AppImage
+  https://rvbbit.ai/dist/linux/DataRabbit-4.1.3-amd64.deb
+  ```
+
+  Checksums sit beside each artifact (`.sha256`). Same architecture as the
+  Mac app — bundled runtime, stable private origin, state under
+  `~/.config/Data Rabbit/`.
+
 - **The [Docker ensemble](/docs/quickstart)** — ships alongside the
   warehouse and serves on port `3000`; "install" is opening
   `http://localhost:3000`.
