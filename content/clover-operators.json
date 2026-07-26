@@ -151,6 +151,26 @@
       ]
     },
     {
+      "name": "clover_embed",
+      "args": [
+        "t"
+      ],
+      "returns": "jsonb",
+      "description": "Reusable Arctic text embedding vector for KNN, similarity and clustering",
+      "steps": [
+        {
+          "name": "e",
+          "kind": "specialist",
+          "label": "embed",
+          "model": "Snowflake/snowflake-arctic-embed-l-v2.0",
+          "argIn": [
+            "t"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
       "name": "clover_entails",
       "args": [
         "premise",
