@@ -37,10 +37,10 @@ Each layer is strictly additive. Nothing you skip is load-bearing.
 Grab the extension tarball (linux amd64, PG 18) — no Docker needed:
 
 ```bash
-curl -fsSLO https://rvbbit.ai/dist/pg_rvbbit-4.1.4-pg18-amd64.tar.gz
-curl -fsSL  https://rvbbit.ai/dist/pg_rvbbit-4.1.4-pg18-amd64.tar.gz.sha256 | sha256sum -c
-tar xzf pg_rvbbit-4.1.4-pg18-amd64.tar.gz
-sudo pg_rvbbit-4.1.4-pg18-amd64/install.sh    # copies into pg_config paths
+curl -fsSLO https://rvbbit.ai/dist/pg_rvbbit-4.1.5-pg18-amd64.tar.gz
+curl -fsSL  https://rvbbit.ai/dist/pg_rvbbit-4.1.5-pg18-amd64.tar.gz.sha256 | sha256sum -c
+tar xzf pg_rvbbit-4.1.5-pg18-amd64.tar.gz
+sudo pg_rvbbit-4.1.5-pg18-amd64/install.sh    # copies into pg_config paths
 ```
 
 <details>
@@ -69,7 +69,15 @@ system libraries to install.
 ALTER SYSTEM SET shared_preload_libraries = 'pg_rvbbit';   -- add pg_cron for scheduled maintenance
 -- restart Postgres, then:
 CREATE EXTENSION pg_rvbbit;
+SELECT rvbbit.migrate();
 ```
+
+`rvbbit.migrate()` is a required second step, every time — `CREATE EXTENSION`
+installs the base version, and `migrate()` brings it up to date with
+everything shipped since. It's idempotent (safe to run again any time; it
+reports "up to date" once there's nothing pending), and it's per-database —
+if you add rvbbit to another database on the same Postgres instance later,
+run both lines again there too.
 
 ### What works at Layer 0
 
