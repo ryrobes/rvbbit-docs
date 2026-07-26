@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-16",
+  "generated_at": "2026-07-26",
   "capabilities": [
     {
       "id": "managed/clover",
@@ -23,6 +23,7 @@
         "clover_means",
         "clover_relevance",
         "clover_similar",
+        "clover_embed",
         "clover_entails",
         "clover_contradicts",
         "clover_sentiment",
@@ -98,6 +99,10 @@
           {
             "name": "clover_similar",
             "description": "Embedding cosine similarity of two texts"
+          },
+          {
+            "name": "clover_embed",
+            "description": "Reusable Arctic text embedding vector for KNN, similarity and clustering"
           },
           {
             "name": "clover_entails",
@@ -530,6 +535,7 @@
               "SELECT rvbbit.create_operator('clover_classify_scores', ARRAY['t','labels'], 'jsonb', op_description := 'Clover-ML: zero-shot classification with every candidate score and the winning label', op_tests := jsonb_build_array(jsonb_build_object('name','returns_scores','sql',$test$SELECT rvbbit.clover_classify_scores('refund request for damaged item','billing, shipping, returns, technical support')::text$test$,'expect',jsonb_build_object('type','contains','value','scores'))), op_steps := jsonb_build_array(jsonb_build_object('name','c','kind','specialist','specialist','classify','inputs',jsonb_build_object('text','{{t}}','labels','{{labels}}'))));",
               "SELECT rvbbit.create_operator('clover_nli', ARRAY['premise','hypothesis'], 'jsonb', op_description := 'Clover-ML: full 3-way natural-language-inference result with entailment, neutral, and contradiction scores', op_tests := jsonb_build_array(jsonb_build_object('name','contradiction_score','sql',$test$SELECT rvbbit.clover_nli('The store is open','The store is closed')::text$test$,'expect',jsonb_build_object('type','contains','value','contradiction'))), op_steps := jsonb_build_array(jsonb_build_object('name','n','kind','specialist','specialist','nli3','inputs',jsonb_build_object('premise','{{premise}}','hypothesis','{{hypothesis}}'))));",
               "SELECT rvbbit.create_operator('clover_language_info', ARRAY['t'], 'jsonb', op_description := 'Clover-ML: language code plus confidence for routing and quality thresholds', op_tests := jsonb_build_array(jsonb_build_object('name','french_confidence','sql',$test$SELECT rvbbit.clover_language_info('bonjour mes amis')::text$test$,'expect',jsonb_build_object('type','contains','value','confidence'))), op_steps := jsonb_build_array(jsonb_build_object('name','l','kind','specialist','specialist','language','inputs',jsonb_build_object('text','{{t}}'))));",
+              "SELECT rvbbit.create_operator('clover_embed', ARRAY['t'], 'jsonb', op_description := 'Clover-ML: reusable text embedding vector (arctic-embed-l-v2, 1024-dim) \u2014 KNN, similarity & clustering feedstock', op_tests := jsonb_build_array(jsonb_build_object('name','text_vector','sql',$test$SELECT jsonb_array_length(rvbbit.clover_embed('fast analytical database')) > 100$test$,'expect',jsonb_build_object('type','exact','value','true'))), op_steps := jsonb_build_array(jsonb_build_object('name','e','kind','specialist','specialist','embed','inputs',jsonb_build_object('text','{{t}}'))));",
               "SELECT rvbbit.create_operator('clover_image_embed', ARRAY['item'], 'jsonb', op_description := 'Clover-ML: reusable SigLIP2 embedding for an image URL/data URI or text description', op_tests := jsonb_build_array(jsonb_build_object('name','text_vector','sql',$test$SELECT jsonb_array_length(rvbbit.clover_image_embed('a red bicycle')) > 100$test$,'expect',jsonb_build_object('type','exact','value','true'))), op_steps := jsonb_build_array(jsonb_build_object('name','e','kind','specialist','specialist','image_embed','inputs',jsonb_build_object('text','{{item}}'))));",
               "SELECT rvbbit.create_operator('clover_cluster', ARRAY['values','num_clusters'], 'jsonb', op_description := 'Clover-ML: cluster a JSON array of texts with hosted embeddings plus K-means; returns assignments, cluster members, and representatives', op_tests := jsonb_build_array(jsonb_build_object('name','two_groups','sql',$test$SELECT jsonb_array_length(rvbbit.clover_cluster(jsonb_build_array('New York','Boston','Chicago','Paris','Lyon','Marseille')::text,'2')->'assignments')$test$,'expect',jsonb_build_object('type','exact','value','6'))), op_steps := jsonb_build_array(jsonb_build_object('name','c','kind','specialist','specialist','cluster','inputs',jsonb_build_object('values','{{values}}','num_clusters','{{num_clusters}}'))));",
               "SELECT rvbbit.create_operator('clover_explain', ARRAY['model_blob_b64','model_sha256','features','feature_names'], 'jsonb', op_description := 'Clover-ML: SHAP feature attributions for a fitted TabPFN or anomaly model; returns per-row contributions, base values, predictions, and score kind', op_tests := jsonb_build_array(jsonb_build_object('name','tabpfn_regressor','sql',$test$WITH m AS (SELECT rvbbit.clover_fit('regressor',jsonb_build_array(jsonb_build_array(1,0),jsonb_build_array(2,0),jsonb_build_array(3,0),jsonb_build_array(4,0),jsonb_build_array(5,0),jsonb_build_array(6,0))::text,'[2,4,6,8,10,12]') AS j) SELECT jsonb_array_length(rvbbit.clover_explain(j->>'blob_b64',j->>'blob_sha256','[[7,0]]','[\"signal\",\"noise\"]')->'shap_values'->0) FROM m$test$,'expect',jsonb_build_object('type','exact','value','2')),jsonb_build_object('name','anomaly_model','sql',$test$WITH m AS (SELECT rvbbit.clover_anomaly_fit('[[1,1],[1.1,0.9],[0.9,1.2],[10,10]]') AS j) SELECT rvbbit.clover_explain(j->>'blob_b64',j->>'blob_sha256','[[10,10]]','[\"x\",\"y\"]')->>'score_kind' FROM m$test$,'expect',jsonb_build_object('type','contains','value','anomaly_score'))), op_steps := jsonb_build_array(jsonb_build_object('name','x','kind','specialist','specialist','tabular_explain','inputs',jsonb_build_object('model_blob_b64','{{model_blob_b64}}','model_sha256','{{model_sha256}}','X','{{features}}','feature_names','{{feature_names}}'))));",
@@ -580,7 +586,7 @@
             "cta_url": "https://rvbbit.ai/buy/clover-free"
           },
           "highlights": [
-            "49 operators, one flat sub: match, classify with scores, NLI, sentiment, extract, PII, OCR, transcribe, forecast, cluster, fit/predict/explain, relations \u2014 plus LLM entity resolution, golden records, timelines, consensus, and general reasoning",
+            "50 operators, one flat sub: match, classify with scores, NLI, sentiment, extract, PII, OCR, transcribe, forecast, cluster, fit/predict/explain, relations \u2014 plus LLM entity resolution, golden records, timelines, consensus, and general reasoning",
             "clover_llm_make_operator: an operator that BUILDS operators \u2014 plain English in, a created + battery-tested SQL operator out",
             "ML specialists are unmetered on every tier, including Free \u2014 lanes only pace the LLM",
             "clover_llm_implies passes the quantifier cases (all -> some) that fast NLI models miss \u2014 same battery, documented side by side",
