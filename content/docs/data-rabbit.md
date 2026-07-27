@@ -28,7 +28,7 @@ Three ways to run the same app:
   required:
 
   ```
-  https://rvbbit.ai/dist/mac/DataRabbit-4.1.5-arm64.dmg
+  https://rvbbit.ai/dist/mac/DataRabbit-4.1.6-arm64.dmg
   sha256: f5926145edb52b9648747e96cd117ef2b009c0d6850a897e9c1035afbf081552
   ```
 
@@ -43,8 +43,8 @@ Three ways to run the same app:
 - **Native Linux app** (x86_64) — AppImage (`chmod +x` and run) or `.deb`:
 
   ```
-  https://rvbbit.ai/dist/linux/DataRabbit-4.1.5-x86_64.AppImage
-  https://rvbbit.ai/dist/linux/DataRabbit-4.1.5-amd64.deb
+  https://rvbbit.ai/dist/linux/DataRabbit-4.1.6-x86_64.AppImage
+  https://rvbbit.ai/dist/linux/DataRabbit-4.1.6-amd64.deb
   ```
 
   Checksums sit beside each artifact (`.sha256`). Same architecture as the

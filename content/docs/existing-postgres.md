@@ -37,10 +37,10 @@ Each layer is strictly additive. Nothing you skip is load-bearing.
 Grab the extension tarball (linux amd64, PG 18) — no Docker needed:
 
 ```bash
-curl -fsSLO https://rvbbit.ai/dist/pg_rvbbit-4.1.5-pg18-amd64.tar.gz
-curl -fsSL  https://rvbbit.ai/dist/pg_rvbbit-4.1.5-pg18-amd64.tar.gz.sha256 | sha256sum -c
-tar xzf pg_rvbbit-4.1.5-pg18-amd64.tar.gz
-sudo pg_rvbbit-4.1.5-pg18-amd64/install.sh    # copies into pg_config paths
+curl -fsSLO https://rvbbit.ai/dist/pg_rvbbit-4.1.6-pg18-amd64.tar.gz
+curl -fsSL  https://rvbbit.ai/dist/pg_rvbbit-4.1.6-pg18-amd64.tar.gz.sha256 | sha256sum -c
+tar xzf pg_rvbbit-4.1.6-pg18-amd64.tar.gz
+sudo pg_rvbbit-4.1.6-pg18-amd64/install.sh    # copies into pg_config paths
 ```
 
 <details>
