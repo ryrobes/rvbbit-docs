@@ -11,7 +11,7 @@ x-rvbbit-secret-env: &rvbbit-secret-env
 
 services:
   postgres:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.1.6}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.5}}
     container_name: rvbbit-postgres
     environment:
       <<: *rvbbit-secret-env
@@ -26,7 +26,7 @@ services:
       RVBBIT_DUCK_BACKEND_SHARED_DIR: ${RVBBIT_DUCK_BACKEND_SHARED_DIR:-/run/rvbbit/duck}
       RVBBIT_DUCK_BACKEND_SHARED_WORKERS: ${RVBBIT_DUCK_BACKEND_SHARED_WORKERS:-4}
       RVBBIT_DUCK_BACKEND_TIMEOUT_S: ${RVBBIT_DUCK_BACKEND_TIMEOUT_S:-300}
-      RVBBIT_DUCK_THREADS: ${RVBBIT_DUCK_THREADS:-4}
+      RVBBIT_DUCK_THREADS: ${RVBBIT_DUCK_THREADS:-0}
       RVBBIT_PGDATA_PREFIX: ${RVBBIT_PGDATA_PREFIX:-/var/lib/postgresql}
       RVBBIT_VISIBLE_PGDATA_PREFIX: ${RVBBIT_VISIBLE_PGDATA_PREFIX:-/var/lib/postgresql}
       RVBBIT_ARROW_IPC_DIR: ${RVBBIT_ARROW_IPC_DIR:-/tmp/rvbbit-arrow-ipc}
@@ -34,6 +34,7 @@ services:
       - "${RVBBIT_POSTGRES_PORT:-55433}:5432"
     volumes:
       - rvbbit_pgdata:/var/lib/postgresql
+      - rvbbit_staging:/staging
       - rvbbit_duck_run:/run/rvbbit
       - rvbbit_duck_arrow_ipc:/tmp/rvbbit-arrow-ipc
     command:
@@ -48,7 +49,7 @@ services:
     restart: unless-stopped
 
   duck:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.1.6}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.5}}
     container_name: rvbbit-duck
     depends_on:
       postgres:
@@ -58,7 +59,7 @@ services:
       RVBBIT_DUCK_BIN: ${RVBBIT_DUCK_BIN:-/usr/local/bin/rvbbit-duck}
       RVBBIT_DUCK_BACKEND_SHARED_DIR: ${RVBBIT_DUCK_BACKEND_SHARED_DIR:-/run/rvbbit/duck}
       RVBBIT_DUCK_WORKERS: ${RVBBIT_DUCK_BACKEND_SHARED_WORKERS:-4}
-      RVBBIT_DUCK_THREADS: ${RVBBIT_DUCK_THREADS:-4}
+      RVBBIT_DUCK_THREADS: ${RVBBIT_DUCK_THREADS:-0}
       RVBBIT_DUCK_BROKER_QUEUE: ${RVBBIT_DUCK_BROKER_QUEUE:-1024}
       RVBBIT_DUCK_MAX_REQUEST_BYTES: ${RVBBIT_DUCK_MAX_REQUEST_BYTES:-16777216}
       RVBBIT_DUCK_SOCKET_IO_TIMEOUT_S: ${RVBBIT_DUCK_SOCKET_IO_TIMEOUT_S:-30}
@@ -78,7 +79,7 @@ services:
       - --dsn
       - postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}
       - --threads
-      - ${RVBBIT_DUCK_THREADS:-4}
+      - "${RVBBIT_DUCK_THREADS:-0}"
       - --pgdata-prefix
       - ${RVBBIT_PGDATA_PREFIX:-/var/lib/postgresql}
       - --visible-pgdata-prefix
@@ -95,7 +96,7 @@ services:
     restart: unless-stopped
 
   lens:
-    image: ${RVBBIT_LENS_IMAGE:-ghcr.io/ryrobes/rvbbit-lens:${RVBBIT_VERSION:-4.1.6}}
+    image: ${RVBBIT_LENS_IMAGE:-ghcr.io/ryrobes/rvbbit-lens:${RVBBIT_VERSION:-4.2.5}}
     container_name: rvbbit-lens
     depends_on:
       postgres:
@@ -113,6 +114,13 @@ services:
       RVBBIT_CAPABILITY_CLI: ${RVBBIT_CAPABILITY_CLI:-/usr/share/rvbbit/capabilities/tools/rvbbit-capability}
       DOCKER_HOST: ${RVBBIT_DOCKER_HOST:-unix:///var/run/docker.sock}
       RVBBIT_DOCKER_NETWORK: ${RVBBIT_DOCKER_NETWORK:-rvbbit_uber}
+      # Hosted artifact islands and thumbnail requests resolve through Warehouse.
+      RVBBIT_APP_BASE: ${WAREHOUSE_PUBLIC_URL:-}
+      RVBBIT_APP_BASE_INTERNAL: http://warehouse-mcp:8765
+      WAREHOUSE_MCP_KEY: ${WAREHOUSE_MCP_KEY:-}
+      # Optional Burrow/unified-origin mode.
+      RVBBIT_MODE: ${RVBBIT_MODE:-}
+      RVBBIT_AUTH_INTERNAL: http://warehouse-mcp:8765
     ports:
       - "${RVBBIT_LENS_PORT:-3000}:3000"
     volumes:
@@ -121,7 +129,7 @@ services:
     restart: unless-stopped
 
   warren:
-    image: ${RVBBIT_WARREN_AGENT_IMAGE:-ghcr.io/ryrobes/rvbbit-warren-agent:${RVBBIT_VERSION:-4.1.6}}
+    image: ${RVBBIT_WARREN_AGENT_IMAGE:-ghcr.io/ryrobes/rvbbit-warren-agent:${RVBBIT_VERSION:-4.2.5}}
     container_name: rvbbit-warren
     depends_on:
       postgres:
@@ -143,7 +151,7 @@ services:
     restart: unless-stopped
 
   bootstrap:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.1.6}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.5}}
     container_name: rvbbit-bootstrap
     depends_on:
       postgres:
@@ -186,16 +194,24 @@ services:
   # Prod hardening: point WAREHOUSE_DSN at a read-only `warehouse_reader` role.
   warehouse-mcp:
     profiles: ["warehouse"]
-    image: ${RVBBIT_WAREHOUSE_MCP_IMAGE:-ghcr.io/ryrobes/rvbbit-warehouse-mcp:${RVBBIT_VERSION:-4.1.6}}
+    image: ${RVBBIT_WAREHOUSE_MCP_IMAGE:-ghcr.io/ryrobes/rvbbit-warehouse-mcp:${RVBBIT_VERSION:-4.2.5}}
     container_name: rvbbit-warehouse-mcp
     depends_on:
       postgres:
         condition: service_healthy
     ports:
       - "127.0.0.1:8765:8765"   # localhost-only - your host nginx/proxy reaches it here
+    extra_hosts:
+      # External Hermes on the Docker host is reachable on Linux and macOS.
+      - "host.docker.internal:host-gateway"
     volumes:
       - rvbbit_warehouse_mcp:/app/data   # durable OAuth state (clients + refresh tokens)
+      # Same-path, read-only handoff for files created by external Hermes.
+      - ${WAREHOUSE_CALLIOPE_EXPORT_DIR:-/tmp/rvbbit-hermes-exports}:${WAREHOUSE_CALLIOPE_EXPORT_DIR:-/tmp/rvbbit-hermes-exports}:ro
     environment:
+      # Provider keys enable vision/image inspection; WAREHOUSE_VISION_KEY can
+      # override the OPENROUTER/OPENAI fallbacks.
+      <<: *rvbbit-secret-env
       WAREHOUSE_DSN: ${WAREHOUSE_DSN:-postgresql://postgres:${POSTGRES_PASSWORD:-rvbbit}@postgres:5432/${POSTGRES_DB:-rvbbit}}
       WAREHOUSE_MCP_PORT: "8765"
       # OAuth mode (set these for the native connector):
@@ -203,9 +219,28 @@ services:
       WAREHOUSE_LOGIN_PASSWORD: ${WAREHOUSE_LOGIN_PASSWORD:-}
       WAREHOUSE_ALLOWED_EMAILS: ${WAREHOUSE_ALLOWED_EMAILS:-}
       WAREHOUSE_JWT_SECRET: ${WAREHOUSE_JWT_SECRET:-}
+      # Optional verified Google Workspace login.
+      WAREHOUSE_GOOGLE_CLIENT_ID: ${WAREHOUSE_GOOGLE_CLIENT_ID:-}
+      WAREHOUSE_GOOGLE_CLIENT_SECRET: ${WAREHOUSE_GOOGLE_CLIENT_SECRET:-}
+      WAREHOUSE_GOOGLE_HD: ${WAREHOUSE_GOOGLE_HD:-}
+      WAREHOUSE_GOOGLE_ONLY: ${WAREHOUSE_GOOGLE_ONLY:-}
       WAREHOUSE_STATE_FILE: /app/data/oauth_state.json   # survives restarts (no re-add of connectors)
       # Shared-key fallback (Claude Code / optional):
       WAREHOUSE_MCP_KEY: ${WAREHOUSE_MCP_KEY:-}
+      # Published-artifact hub, captures, and optional Hermes-backed Calliope.
+      LENS_PUBLIC_URL: ${LENS_PUBLIC_URL:-}
+      WAREHOUSE_LIVE_APP_CAPTURE_DIR: /app/data/captures
+      WAREHOUSE_HERMES_URL: ${WAREHOUSE_HERMES_URL:-}
+      WAREHOUSE_HERMES_API_KEY: ${WAREHOUSE_HERMES_API_KEY:-}
+      WAREHOUSE_HERMES_MEMORY_KEY: ${WAREHOUSE_HERMES_MEMORY_KEY:-}
+      WAREHOUSE_CALLIOPE_DIR: /app/data/calliope
+      WAREHOUSE_CALLIOPE_STYLE_ALLOW_PRIVATE_URLS: ${WAREHOUSE_CALLIOPE_STYLE_ALLOW_PRIVATE_URLS:-false}
+      WAREHOUSE_CALLIOPE_EXPORT_ROOTS: ${WAREHOUSE_CALLIOPE_EXPORT_DIR:-/tmp/rvbbit-hermes-exports}
+      WAREHOUSE_CALLIOPE_MAX_EXPORT_BYTES: ${WAREHOUSE_CALLIOPE_MAX_EXPORT_BYTES:-134217728}
+      # Optional Postgres-role/Burrow authorization.
+      WAREHOUSE_AUTH: ${WAREHOUSE_AUTH:-shared}
+      WAREHOUSE_PG_LOGIN_ROLE: ${WAREHOUSE_PG_LOGIN_ROLE:-rvbbit_users}
+      WAREHOUSE_LOGIN_UI: ${WAREHOUSE_LOGIN_UI:-builtin}
     restart: unless-stopped
 
   # OPTIONAL Cloudflare QUICK tunnel - only if you have NO proxy of your own. Separate
@@ -221,11 +256,33 @@ services:
     command: tunnel --no-autoupdate --url http://warehouse-mcp:8765
     restart: unless-stopped
 
+  # Document-brain extraction is available in the default stack.
+  doc-extract:
+    image: ${RVBBIT_DOC_EXTRACT_IMAGE:-ghcr.io/ryrobes/rvbbit-doc-extract:${RVBBIT_VERSION:-4.2.5}}
+    container_name: rvbbit-doc-extract
+    volumes:
+      - rvbbit_staging:/staging
+    restart: unless-stopped
+
+  # Optional Google Drive document connector.
+  gdrive-connector:
+    profiles: ["gdrive"]
+    image: ${RVBBIT_GDRIVE_CONNECTOR_IMAGE:-ghcr.io/ryrobes/rvbbit-gdrive-connector:${RVBBIT_VERSION:-4.2.5}}
+    container_name: rvbbit-gdrive-connector
+    environment:
+      GDRIVE_SA_KEY: ${GDRIVE_SA_KEY:-}
+      CONNECTOR_TOKEN: ${GDRIVE_CONNECTOR_TOKEN:-}
+    volumes:
+      - rvbbit_staging:/staging
+    restart: unless-stopped
+
 networks:
   default:
     name: ${RVBBIT_DOCKER_NETWORK:-rvbbit_uber}
 
 volumes:
+  rvbbit_staging:
+    name: ${RVBBIT_STAGING_VOLUME:-rvbbit_uber_staging}
   rvbbit_pgdata:
     name: ${RVBBIT_PGDATA_VOLUME:-rvbbit_uber_pgdata}
   rvbbit_duck_run:

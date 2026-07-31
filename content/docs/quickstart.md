@@ -33,6 +33,19 @@ stack. One line:
 curl -fsSL https://rvbbit.ai/install.sh | bash
 ```
 
+The installer currently pins the coordinated `4.2.5` release. To pin a
+different published release explicitly, set `RVBBIT_VERSION` before running it.
+Re-running the installer keeps an existing Compose file intact; upgrade an
+existing install by pulling the updated file (after preserving any local
+changes) and recreating the services:
+
+```bash
+cd rvbbit
+curl -fsSL https://rvbbit.ai/docker-compose.yml -o docker-compose.yml
+RVBBIT_VERSION=4.2.5 docker compose pull
+RVBBIT_VERSION=4.2.5 docker compose up -d
+```
+
 The script is short and readable - it checks for Docker, downloads
 [docker-compose.yml](https://rvbbit.ai/docker-compose.yml) into `./rvbbit/`,
 runs `docker compose up -d`, and waits for Postgres to report healthy. If you
@@ -56,7 +69,9 @@ That starts everything from published images:
 | `lens` | `ghcr.io/ryrobes/rvbbit-lens` | The Data Rabbit desktop UI on host port `3000`. |
 | `warren` | `ghcr.io/ryrobes/rvbbit-warren-agent` | Deploys capability sidecars (local models, runtimes, MCP gateways) via the mounted Docker socket. |
 | `bootstrap` | (one-shot) | Deploys and verifies the baseline capabilities on first start, then exits. |
-| `warehouse-mcp` | opt-in | The [Warehouse MCP server](/docs/warehouse-mcp): start with `docker compose --profile warehouse up -d` after setting `WAREHOUSE_MCP_KEY`. |
+| `doc-extract` | `ghcr.io/ryrobes/rvbbit-doc-extract` | Parses staged documents for the document brain. |
+| `warehouse-mcp` | opt-in | The [Warehouse MCP server](/docs/warehouse-mcp), published-artifact hub, Artifact Lens, and optional Hermes-backed Calliope notebook. Configure OAuth or `WAREHOUSE_MCP_KEY`, then start with `docker compose --profile warehouse up -d`. |
+| `gdrive-connector` | opt-in | Google Drive ingestion for the document brain; start with the `gdrive` profile after configuring its service-account key. |
 
 Provider API keys (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`,
 `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, …) are passed through from your shell

@@ -30,6 +30,7 @@ governed tools.
 | `describe_table(table)` | Columns + sample rows + per-column stats + freshness. | `information_schema` + `pg_stats` + [`accel_freshness`](/docs/accelerator-freshness) |
 | `list_metrics(category?, search?)` / `get_metric(name)` | Browse the blessed [metric](/docs/metrics-kpis) catalog and read a definition. | `metric_defs` / `metric_sql` |
 | `metric(name, params?, as_of?, group_by?)` | A **governed number** - the blessed [metric](/docs/metrics-kpis) value (data-time `as_of` pins the snapshot); `group_by` slices a dimensional metric per segment. | `rvbbit.metric()` / `rvbbit.metric_by()` |
+| `cube_pivot(cube, rows?, cols?, measures?)` | Build a grouped table or cross-tab from one or more cube dimensions and aggregated numeric fields; a governed metric definition is optional. | validated read-only aggregation over `cubes.<name>` |
 | `validate_sql(sql, as_of?)` | Plan a query *without running it* (the self-correct loop) - returns the chosen engine + `safe_select` flag + referenced tables. | [`route_explain`](/docs/routing-training) |
 | `run_sql(sql, as_of?, limit?)` | **Read-only** execute: `route_explain` → `safe_select` gate → read-only run with an enforced `LIMIT`. Rejects anything that isn't a single read-only `SELECT`/CTE. | the [route engine](/docs/routing-training) |
 
@@ -121,7 +122,7 @@ FROM   rvbbit.data_search('customers who churned in europe', k => 8);
 
 ## Run It
 
-The server ships as its own Docker image, wired into the opt-in `warehouse`
+The `4.2.5` server ships as its own Docker image, wired into the opt-in `warehouse`
 compose profile, speaking remote **streamable-HTTP**. Auth is either a single
 shared key (`WAREHOUSE_MCP_KEY`) or a self-contained OAuth flow
 (`WAREHOUSE_PUBLIC_URL` + `WAREHOUSE_LOGIN_PASSWORD` + `WAREHOUSE_JWT_SECRET`,
@@ -131,6 +132,17 @@ for native connectors):
 make warehouse-up          # start warehouse-mcp ('warehouse' profile)
 make warehouse-tunnel-up   # optional: add a Cloudflare quick-tunnel for instant HTTPS
 make warehouse-url         # print the current tunnel URL (changes per restart)
+```
+
+With the downloadable Compose file:
+
+```bash
+export RVBBIT_VERSION=4.2.5
+export WAREHOUSE_PUBLIC_URL="https://warehouse.example.com"
+export WAREHOUSE_LOGIN_PASSWORD="$(openssl rand -hex 16)"
+export WAREHOUSE_JWT_SECRET="$(openssl rand -hex 32)"
+export WAREHOUSE_MCP_KEY="$(openssl rand -hex 24)"
+docker compose --profile warehouse up -d
 ```
 
 Point a client at it:
@@ -144,6 +156,61 @@ Point a client at it:
   `window.cowork.callMcpTool('mcp__<id>__run_sql', { sql })` (see the dashboard
   template the server ships).
 
+## Published Hub, Artifact Lens, And Calliope
+
+OAuth mode also serves a browser-facing artifact hub at `/` (or `/gallery`
+behind a unified Data Rabbit origin). It lists published dashboards, apps, and
+decks with cached captures, while the MCP and browser surfaces share the same
+authenticated identity. Artifact visibility is currently company-wide;
+Calliope session history is private to the OAuth email.
+
+Hosted native dashboard routes inject **Artifact Lens** at the serving layer,
+without adding framework boilerplate to the dashboard itself. When all query
+sources support retained RVBBIT history, its Data Time view applies a debounced
+AS-OF snapshot across the dashboard. Trace mode inventories selectable rendered
+objects, binds a value or chart mark to its exact query evidence where possible,
+and can run that read-only SQL in an inspection drawer. **Analyze with
+Calliope** creates a fresh exploration session pinned to the artifact version,
+selected object, SQL, execution metadata, and a bounded result preview. The
+dashboard remains a normal full-page HTML/JavaScript artifact.
+
+Calliope is optional and disappears completely unless both Hermes settings are
+present:
+
+```bash
+# Hermes runs on the Docker host; Linux host-gateway support is in the Compose file.
+export WAREHOUSE_HERMES_URL="http://host.docker.internal:8642"
+export WAREHOUSE_HERMES_API_KEY="..."       # Hermes API_SERVER_KEY
+export WAREHOUSE_HERMES_MEMORY_KEY="company" # optional shared company memory
+
+# Shared file handoff for documents/data created by Hermes.
+export WAREHOUSE_CALLIOPE_EXPORT_DIR="/tmp/rvbbit-hermes-exports"
+mkdir -p "$WAREHOUSE_CALLIOPE_EXPORT_DIR"
+
+docker compose --profile warehouse up -d
+```
+
+Hermes keeps its normal/default agent profile and shared memory. Warehouse keeps
+the email-owned session index, mirrored turn prose, attachments, and immutable
+artifact projections. Configure that Hermes profile with this Warehouse
+server's `/mcp` URL and `WAREHOUSE_MCP_KEY`, then enable its API server:
+
+```bash
+hermes config set platforms.api_server.enabled true
+hermes config set platforms.api_server.extra.host 127.0.0.1
+hermes config set platforms.api_server.extra.port 8642
+hermes config set platforms.api_server.extra.model_name openai/gpt-5.6-sol
+hermes config set platforms.api_server.extra.key "$WAREHOUSE_HERMES_API_KEY"
+hermes gateway run --accept-hooks
+```
+
+Calliope separates chat from a newest-first, versioned artifact history. Query
+results, charts, dashboards, captures, annotated images, and generated files
+become stage surfaces linked to the message that created them. Cube surfaces
+include an auto-refreshing multi-dimension pivot builder. Design Profiles turn
+reference images, a URL capture, an existing artifact, and editable Markdown
+into reusable, versioned dashboard style contracts.
+
 For a fixed schema scope, set `WAREHOUSE_SCHEMAS` to a CSV allowlist of the
 schemas you want exposed (on top of the always-on `rvbbit`/`pg_*`/
 `information_schema` filter); everything else stays invisible.
@@ -153,9 +220,10 @@ schemas you want exposed (on top of the always-on `rvbbit`/`pg_*`/
 - **Ad-hoc SQL is read-only.** `run_sql`/`validate_sql` accept only a single
   read-only `SELECT`/CTE - no writes, no DDL. (Governed write paths do exist, but
   only through the structured tools - `propose_*`/`edit_*`, `publish_dashboard`,
-  `brain_ingest` - which call blessed rvbbit functions, not raw SQL.) Per-user
-  role mapping, PII masking on samples, and a server-side `ask`/text-to-SQL
-  convenience tool are still planned - today there is one shared connection.
+  `brain_ingest` - which call blessed rvbbit functions, not raw SQL.) Shared mode
+  uses one connection; Postgres-role/Burrow deployments can map verified email
+  identities to database roles. PII masking on samples and per-role cost caps
+  remain deployment concerns.
 - The server runs as a standalone service built on FastMCP (foldable into the
   MCP gateway later); the backing functions are the ordinary rvbbit SQL surfaces
   documented elsewhere, so anything you can do in SQL the warehouse can expose
