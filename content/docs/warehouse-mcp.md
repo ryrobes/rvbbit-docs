@@ -81,6 +81,11 @@ glue around it:
   the app against the **live** query bridge and reports `bridge` health:
   queries run/failed (with per-query timing), console errors, and page errors
   - one call verifies the page renders *and* its data layer works.
+- **A richer chart primitive without a framework lock-in.** The optional
+  `tanstack_chart_template` returns a complete framework-free dashboard using
+  the bundled TanStack Charts runtime, with interactive marks and exact
+  query/row metadata for Artifact Lens. The ordinary dashboard template and
+  existing Chart.js artifacts remain supported and unchanged.
 - **One bad tool never benches the server.** Unexpected tool exceptions come
   back as the same structured `{"error": ...}` shape every tool uses, not
   protocol-level failures that trip client-side circuit breakers.
@@ -122,7 +127,7 @@ FROM   rvbbit.data_search('customers who churned in europe', k => 8);
 
 ## Run It
 
-The `4.2.5` server ships as its own Docker image, wired into the opt-in `warehouse`
+The `4.2.6` server ships as its own Docker image, wired into the opt-in `warehouse`
 compose profile, speaking remote **streamable-HTTP**. Auth is either a single
 shared key (`WAREHOUSE_MCP_KEY`) or a self-contained OAuth flow
 (`WAREHOUSE_PUBLIC_URL` + `WAREHOUSE_LOGIN_PASSWORD` + `WAREHOUSE_JWT_SECRET`,
@@ -137,7 +142,7 @@ make warehouse-url         # print the current tunnel URL (changes per restart)
 With the downloadable Compose file:
 
 ```bash
-export RVBBIT_VERSION=4.2.5
+export RVBBIT_VERSION=4.2.6
 export WAREHOUSE_PUBLIC_URL="https://warehouse.example.com"
 export WAREHOUSE_LOGIN_PASSWORD="$(openssl rand -hex 16)"
 export WAREHOUSE_JWT_SECRET="$(openssl rand -hex 32)"
@@ -173,6 +178,14 @@ and can run that read-only SQL in an inspection drawer. **Analyze with
 Calliope** creates a fresh exploration session pinned to the artifact version,
 selected object, SQL, execution metadata, and a bounded result preview. The
 dashboard remains a normal full-page HTML/JavaScript artifact.
+
+Newly published HTML artifacts are also queued for a non-blocking semantic
+compiler. It inventories rendered business values, validates independently
+replayable read-only SQL for the values it can prove, and stores the result as
+an enriched manifest overlay. Publication never waits for that agent run and
+the artifact source is never rewritten. Set `WAREHOUSE_SEMANTIC_ENRICHMENT=0`
+to disable it, or override `WAREHOUSE_SEMANTIC_ENRICH_MODEL` when the default
+`openai/gpt-5.6-sol` route is not available in your provider configuration.
 
 Calliope is optional and disappears completely unless both Hermes settings are
 present:
@@ -210,6 +223,15 @@ become stage surfaces linked to the message that created them. Cube surfaces
 include an auto-refreshing multi-dimension pivot builder. Design Profiles turn
 reference images, a URL capture, an existing artifact, and editable Markdown
 into reusable, versioned dashboard style contracts.
+
+The scratchpad header includes a company evidence resolver that searches the
+caller's ACL-filtered Document Brain, published artifacts and their enriched
+dashboard objects, and warehouse semantics in one pass. Search sets become
+durable scratchpad surfaces rather than chat noise. Select individual results
+for precise grounding, or press **Ask Calliope** with nothing selected to attach
+the whole search as one compact query/count/gist/provenance index. Warehouse
+rehydrates every handle from the email-owned session before it reaches Hermes;
+the browser cannot forge evidence text.
 
 For a fixed schema scope, set `WAREHOUSE_SCHEMAS` to a CSV allowlist of the
 schemas you want exposed (on top of the always-on `rvbbit`/`pg_*`/

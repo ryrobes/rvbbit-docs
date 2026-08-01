@@ -11,7 +11,7 @@ x-rvbbit-secret-env: &rvbbit-secret-env
 
 services:
   postgres:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-postgres
     environment:
       <<: *rvbbit-secret-env
@@ -49,7 +49,7 @@ services:
     restart: unless-stopped
 
   duck:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-duck
     depends_on:
       postgres:
@@ -96,7 +96,7 @@ services:
     restart: unless-stopped
 
   lens:
-    image: ${RVBBIT_LENS_IMAGE:-ghcr.io/ryrobes/rvbbit-lens:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_LENS_IMAGE:-ghcr.io/ryrobes/rvbbit-lens:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-lens
     depends_on:
       postgres:
@@ -129,7 +129,7 @@ services:
     restart: unless-stopped
 
   warren:
-    image: ${RVBBIT_WARREN_AGENT_IMAGE:-ghcr.io/ryrobes/rvbbit-warren-agent:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_WARREN_AGENT_IMAGE:-ghcr.io/ryrobes/rvbbit-warren-agent:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-warren
     depends_on:
       postgres:
@@ -151,7 +151,7 @@ services:
     restart: unless-stopped
 
   bootstrap:
-    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_POSTGRES_IMAGE:-ghcr.io/ryrobes/rvbbit-postgres:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-bootstrap
     depends_on:
       postgres:
@@ -194,7 +194,7 @@ services:
   # Prod hardening: point WAREHOUSE_DSN at a read-only `warehouse_reader` role.
   warehouse-mcp:
     profiles: ["warehouse"]
-    image: ${RVBBIT_WAREHOUSE_MCP_IMAGE:-ghcr.io/ryrobes/rvbbit-warehouse-mcp:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_WAREHOUSE_MCP_IMAGE:-ghcr.io/ryrobes/rvbbit-warehouse-mcp:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-warehouse-mcp
     depends_on:
       postgres:
@@ -230,6 +230,12 @@ services:
       # Published-artifact hub, captures, and optional Hermes-backed Calliope.
       LENS_PUBLIC_URL: ${LENS_PUBLIC_URL:-}
       WAREHOUSE_LIVE_APP_CAPTURE_DIR: /app/data/captures
+      # Non-blocking publication-side semantic mapping for Artifact Lens.
+      WAREHOUSE_SEMANTIC_ENRICHMENT: ${WAREHOUSE_SEMANTIC_ENRICHMENT:-1}
+      WAREHOUSE_SEMANTIC_ENRICH_MODEL: ${WAREHOUSE_SEMANTIC_ENRICH_MODEL:-openai/gpt-5.6-sol}
+      WAREHOUSE_SEMANTIC_ENRICH_MAX_ATTEMPTS: ${WAREHOUSE_SEMANTIC_ENRICH_MAX_ATTEMPTS:-3}
+      WAREHOUSE_SEMANTIC_ENRICH_RENDER_WAIT_MS: ${WAREHOUSE_SEMANTIC_ENRICH_RENDER_WAIT_MS:-3000}
+      WAREHOUSE_SEMANTIC_ENRICH_SOURCE_CHARS: ${WAREHOUSE_SEMANTIC_ENRICH_SOURCE_CHARS:-180000}
       WAREHOUSE_HERMES_URL: ${WAREHOUSE_HERMES_URL:-}
       WAREHOUSE_HERMES_API_KEY: ${WAREHOUSE_HERMES_API_KEY:-}
       WAREHOUSE_HERMES_MEMORY_KEY: ${WAREHOUSE_HERMES_MEMORY_KEY:-}
@@ -258,7 +264,7 @@ services:
 
   # Document-brain extraction is available in the default stack.
   doc-extract:
-    image: ${RVBBIT_DOC_EXTRACT_IMAGE:-ghcr.io/ryrobes/rvbbit-doc-extract:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_DOC_EXTRACT_IMAGE:-ghcr.io/ryrobes/rvbbit-doc-extract:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-doc-extract
     volumes:
       - rvbbit_staging:/staging
@@ -267,7 +273,7 @@ services:
   # Optional Google Drive document connector.
   gdrive-connector:
     profiles: ["gdrive"]
-    image: ${RVBBIT_GDRIVE_CONNECTOR_IMAGE:-ghcr.io/ryrobes/rvbbit-gdrive-connector:${RVBBIT_VERSION:-4.2.5}}
+    image: ${RVBBIT_GDRIVE_CONNECTOR_IMAGE:-ghcr.io/ryrobes/rvbbit-gdrive-connector:${RVBBIT_VERSION:-4.2.6}}
     container_name: rvbbit-gdrive-connector
     environment:
       GDRIVE_SA_KEY: ${GDRIVE_SA_KEY:-}

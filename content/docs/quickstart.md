@@ -33,7 +33,7 @@ stack. One line:
 curl -fsSL https://rvbbit.ai/install.sh | bash
 ```
 
-The installer currently pins the coordinated `4.2.5` release. To pin a
+The installer currently pins the coordinated `4.2.6` release. To pin a
 different published release explicitly, set `RVBBIT_VERSION` before running it.
 Re-running the installer keeps an existing Compose file intact; upgrade an
 existing install by pulling the updated file (after preserving any local
@@ -42,8 +42,8 @@ changes) and recreating the services:
 ```bash
 cd rvbbit
 curl -fsSL https://rvbbit.ai/docker-compose.yml -o docker-compose.yml
-RVBBIT_VERSION=4.2.5 docker compose pull
-RVBBIT_VERSION=4.2.5 docker compose up -d
+RVBBIT_VERSION=4.2.6 docker compose pull
+RVBBIT_VERSION=4.2.6 docker compose up -d
 ```
 
 The script is short and readable - it checks for Docker, downloads
