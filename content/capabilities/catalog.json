@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T05:13:24.066Z",
+  "generatedAt": "2026-08-05T00:51:34.022Z",
   "sourcePath": "../rvbbit-sql/capabilities/catalog.json",
   "sourceSchemaVersion": 1,
   "sourceCatalogLayout": "rvbbit.pack/v1",
@@ -9,7 +9,7 @@
       "id": "mcp/apollo",
       "name": "apollo",
       "title": "Apollo.io (B2B Enrichment)",
-      "description": "Apollo.io - B2B people/company search + firmographic enrichment. Needs APOLLO_API_KEY (paid plan).",
+      "description": "Apollo.io — B2B people/company search + firmographic enrichment. Needs APOLLO_API_KEY (paid plan).",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -989,7 +989,7 @@
       "id": "mcp/brave",
       "name": "brave",
       "title": "Brave Search",
-      "description": "Brave Search (official) - web/news/image/video/local search + AI summarizer. Needs BRAVE_API_KEY (free tier ~2k/mo).",
+      "description": "Brave Search (official) — web/news/image/video/local search + AI summarizer. Needs BRAVE_API_KEY (free tier ~2k/mo).",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -1281,6 +1281,1376 @@
       ],
       "deploySelector": {},
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'tabular/california-housing-sklearn',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "managed/clover",
+      "name": "clover",
+      "title": "Clover",
+      "description": "All of Clover in one subscription: 53 semantic SQL operators — 29 calibrated ML specialists (text, documents, audio, images, tabular AutoML, anomaly detection, forecasting, clustering, and SHAP explanations), 22 LLM operators for fuzzy judgment and structured extraction, plus safe web and document-to-Markdown extraction. ML and web operators are unmetered on every tier; lanes buy LLM generation speed.",
+      "kind": "managed",
+      "visibility": "public",
+      "tags": [
+        "bundle",
+        "clover",
+        "documents",
+        "lanes",
+        "llm",
+        "managed",
+        "specialists",
+        "verified",
+        "web"
+      ],
+      "device": "api",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": "rvbbit.ai",
+      "sourceModel": "clover",
+      "sourceUrl": "https://rvbbit.ai/catalog.json",
+      "backendName": "embed",
+      "backendTransport": "rvbbit",
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": "hf-rvbbit-fastapi",
+      "runtimeHandler": "custom",
+      "runtimeMode": "external",
+      "packPath": "capabilities/packs/managed/clover",
+      "manifestPath": "capabilities/packs/managed/clover/capability.json",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [
+        {
+          "name": "clover_anomaly_fit",
+          "description": "Fit an anomaly detector on numeric rows (client-held model)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_anomaly_score",
+          "description": "Score rows for anomalousness against a fitted detector",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_classify",
+          "description": "Zero-shot classification over your labels",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_classify_scores",
+          "description": "Zero-shot classification with the winning label and every candidate score",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_cluster",
+          "description": "Cluster a JSON array of texts into assignments and representative groups",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_contradicts",
+          "description": "TRUE if two statements contradict (NLI 3-class)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_embed",
+          "description": "Reusable Arctic text embedding vector for KNN, similarity and clustering",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_entails",
+          "description": "TRUE if premise entails hypothesis (NLI)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_explain",
+          "description": "SHAP feature attributions for a fitted TabPFN or anomaly model",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_extract",
+          "description": "Entity extraction (GLiNER) over your types",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_fit",
+          "description": "Fit a TabPFN model on tabular rows — the fitted model is returned to you",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_forecast",
+          "description": "Forecast a numeric series N steps ahead — median + quantile bands",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_image_embed",
+          "description": "Reusable SigLIP2 embedding for an image or text description",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_image_similar",
+          "description": "Similarity of two images, or an image and a text description",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_language",
+          "description": "ISO language code of text",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_language_info",
+          "description": "Language code plus confidence for thresholded routing",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_anonymize",
+          "description": "Rewrite text with all PII redacted ([NAME], [EMAIL], ...)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_apply",
+          "description": "Apply an instruction/question to a text — answers only from the text",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_ask",
+          "description": "One-shot ask against the hosted generalist",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_canonical",
+          "description": "Canonical form of a value (NYC -> New York City)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_consensus",
+          "description": "Synthesize the shared consensus across a JSON array of findings",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_contradicts",
+          "description": "TRUE if two texts oppose each other on the same subject",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_date",
+          "description": "Messy text to ISO 8601 date, or NULL",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_extract",
+          "description": "Freeform text to a JSON object per a schema you describe",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_fallacies",
+          "description": "Detect logical fallacies — JSON array of {fallacy, explanation}",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_fix",
+          "description": "Repair malformed values given a type hint (gmial.com -> gmail.com)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_implies",
+          "description": "TRUE if premise implies conclusion — incl. the quantifier logic fast NLI misses",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_make_operator",
+          "description": "The operator operator: describe an operator in plain English → drafts it, creates it under a temp name, runs generated tests, self-corrects, then promotes it with its tests attached",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_means",
+          "description": "TRUE if text semantically matches a criterion — LLM-judged for inputs that need thought",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_merge_records",
+          "description": "Merge duplicate JSON records into one canonical golden record",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_same_entity",
+          "description": "TRUE if two values identify the same real-world entity",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_score",
+          "description": "Judge text against any English-phrased criterion, 0-1",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_steelman",
+          "description": "Rewrite an argument in its strongest, most defensible form",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_supports",
+          "description": "How strongly evidence supports a claim, 0-1",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_timeline",
+          "description": "Extract a normalized chronological event timeline from text",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_translate",
+          "description": "Translate to any language — returns only the translation",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_llm_valid",
+          "description": "TRUE if a value satisfies an English-phrased rule",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_means",
+          "description": "TRUE if text semantically matches a criterion (cross-encoder)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_moderate",
+          "description": "Full moderation category scores",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_nli",
+          "description": "Full 3-way entailment, neutral, and contradiction scores",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_ocr",
+          "description": "OCR a document (image or PDF; URL or data URI) to plain text",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_pii",
+          "description": "PII detection preset (person, email, phone, ssn, ...)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_predict",
+          "description": "Predict with a clover_fit model — classifications or regressions",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_relations",
+          "description": "Extract (subject, predicate, object) relation triples from text",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_relevance",
+          "description": "Relevance score 0..1 of text to criterion",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_sentiment",
+          "description": "Sentiment label + score for a text",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_sentiment_score",
+          "description": "Continuous sentiment in [-1, 1]",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_similar",
+          "description": "Embedding cosine similarity of two texts",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_toxic",
+          "description": "TRUE if text is toxic",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_transcribe",
+          "description": "Transcribe audio to text (Whisper large-v3-turbo)",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_triples",
+          "description": "Extract knowledge-graph triples from text as strict JSON — same contract as the built-in rvbbit.triples, so every KG surface (data_crawl, Document Brain, Scry) can run on it",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_web_markdown",
+          "description": "Fetch a public HTTP(S) page or document and return its cleaned Markdown",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        },
+        {
+          "name": "clover_web_scrape",
+          "description": "Fetch a public HTTP(S) page or document and return Markdown, metadata, provenance, and extraction diagnostics",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "managed/clover",
+          "capabilityTitle": "Clover",
+          "capabilityTags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'managed/clover',\n  target_selector => '{}'::jsonb\n);"
     },
     {
       "id": "sql/core-workflows",
@@ -2277,7 +3647,7 @@
       "id": "mcp/exa",
       "name": "exa",
       "title": "Exa (Neural Search)",
-      "description": "Exa - neural/semantic web search + fetch; composes with embed() for KNN. Needs EXA_API_KEY.",
+      "description": "Exa — neural/semantic web search + fetch; composes with embed() for KNN. Needs EXA_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -2480,7 +3850,7 @@
       "id": "mcp/firecrawl",
       "name": "firecrawl",
       "title": "Firecrawl (MCP)",
-      "description": "Firecrawl MCP server (firecrawl-mcp) over stdio via npx - web scrape/search/crawl/extract. PAT read from FIRECRAWL_API_KEY, resolved by the gateway from its encrypted secret store; only the ${FIRECRAWL_API_KEY} ref is stored in PG.",
+      "description": "Firecrawl MCP server (firecrawl-mcp) over stdio via npx — web scrape/search/crawl/extract. PAT read from FIRECRAWL_API_KEY, resolved by the gateway from its encrypted secret store; only the ${FIRECRAWL_API_KEY} ref is stored in PG.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -3925,7 +5295,7 @@
       "id": "mcp/maps",
       "name": "maps",
       "title": "Google Maps",
-      "description": "Google Maps Platform - geocode/reverse-geocode/places/distance-matrix/directions/timezone/elevation/weather (read-only). Needs GOOGLE_MAPS_API_KEY.",
+      "description": "Google Maps Platform — geocode/reverse-geocode/places/distance-matrix/directions/timezone/elevation/weather (read-only). Needs GOOGLE_MAPS_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -4520,7 +5890,7 @@
       "id": "mcp/ipgeo",
       "name": "ipgeo",
       "title": "ipgeolocation.io",
-      "description": "ipgeolocation.io - IP geolocation + timezone + VPN/security + currency + ASN. Needs IPGEOLOCATION_API_KEY.",
+      "description": "ipgeolocation.io — IP geolocation + timezone + VPN/security + currency + ASN. Needs IPGEOLOCATION_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -4897,7 +6267,7 @@
       "id": "mcp/iplocate",
       "name": "iplocate",
       "title": "IPLocate (IP Geolocation)",
-      "description": "IPLocate.io - read-only IP geolocation/privacy(VPN)/network/company/abuse lookups. Works keyless at low quota; set IPLOCATE_API_KEY for volume.",
+      "description": "IPLocate.io — read-only IP geolocation/privacy(VPN)/network/company/abuse lookups. Works keyless at low quota; set IPLOCATE_API_KEY for volume.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -5318,7 +6688,7 @@
       "id": "mcp/linear",
       "name": "linear",
       "title": "Linear",
-      "description": "Linear (@tacticlaunch/mcp-linear) - issues, projects, teams, cycles, comments. Reads + writes via LINEAR_API_KEY.",
+      "description": "Linear (@tacticlaunch/mcp-linear) — issues, projects, teams, cycles, comments. Reads + writes via LINEAR_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -8907,7 +10277,7 @@
       "id": "mcp/openweather",
       "name": "openweather",
       "title": "OpenWeatherMap",
-      "description": "OpenWeatherMap - current/forecast/hourly/daily/alerts/air-pollution + geocoding. Needs OPENWEATHER_API_KEY (32-hex). SDK pinned to 1.12.1 in args (avoids a FastMCP completions crash with sdk 1.29).",
+      "description": "OpenWeatherMap — current/forecast/hourly/daily/alerts/air-pollution + geocoding. Needs OPENWEATHER_API_KEY (32-hex). SDK pinned to 1.12.1 in args (avoids a FastMCP completions crash with sdk 1.29).",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -9998,7 +11368,7 @@
       "id": "mcp/tavily",
       "name": "tavily",
       "title": "Tavily (Web Search)",
-      "description": "Tavily - web search / extract / crawl / map as read-only enrichment operators. Needs TAVILY_API_KEY.",
+      "description": "Tavily — web search / extract / crawl / map as read-only enrichment operators. Needs TAVILY_API_KEY.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -10144,7 +11514,7 @@
       "id": "mcp/time",
       "name": "time",
       "title": "Time / Timezone",
-      "description": "time-mcp - timezone conversion, relative time, week-of-year, days-in-month. Deterministic local clock + IANA tz DB, no API key.",
+      "description": "time-mcp — timezone conversion, relative time, week-of-year, days-in-month. Deterministic local clock + IANA tz DB, no API key.",
       "kind": "mcp",
       "visibility": "public",
       "tags": [
@@ -10915,6 +12285,626 @@
       ],
       "deploySelector": {},
       "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'sql/workflow-visuals',\n  target_selector => '{}'::jsonb\n);"
+    },
+    {
+      "id": "mcp/x",
+      "name": "x",
+      "title": "X (Twitter) — Official XMCP",
+      "description": "Official X (Twitter) MCP — full-archive post search, users, timelines, trends, and news as live SQL rows via rvbbit.mcp_rows() or the generated x_* operators. Hosted by X at api.x.com/mcp; needs X_BEARER_TOKEN (app-only bearer from developer.x.com, read-only). Pipe results straight into clover_* classifiers: sentiment/classify/extract over the live firehose in one statement.",
+      "kind": "mcp",
+      "visibility": "public",
+      "tags": [
+        "mcp",
+        "news",
+        "search",
+        "social",
+        "trends",
+        "twitter",
+        "verified",
+        "x"
+      ],
+      "device": "",
+      "systemRuntime": false,
+      "capabilityRole": null,
+      "sourceProvider": null,
+      "sourceModel": null,
+      "sourceUrl": null,
+      "backendName": null,
+      "backendTransport": null,
+      "runtimeName": null,
+      "runtimeLanguage": null,
+      "runtimeTemplate": null,
+      "runtimeHandler": null,
+      "runtimeMode": null,
+      "packPath": null,
+      "manifestPath": "mcp/x",
+      "gpuRequired": false,
+      "gpuPlacement": null,
+      "vramRequiredBytes": null,
+      "ramRequiredBytes": null,
+      "modelSizeBytes": null,
+      "resourceHeadroomPct": null,
+      "resourceEstimateSource": null,
+      "operators": [
+        {
+          "name": "x_create_users_bookmark",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_create_users_bookmark_folder",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_delete_users_bookmark",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_news",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_posts_by_id",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_posts_by_ids",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_posts_counts_recent",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_posts_liking_users",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_posts_quoted_posts",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_posts_reposted_by",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_trends_by_woeid",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_bookmark_folders",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_bookmarks",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_bookmarks_by_folder_id",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_by_id",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_by_username",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_by_usernames",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_me",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_mentions",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_posts",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_get_users_timeline",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_search_news",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_search_posts_all",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        },
+        {
+          "name": "x_search_users",
+          "description": "Operator exported by X (Twitter) — Official XMCP.",
+          "returnType": "",
+          "parser": "",
+          "argNames": [],
+          "argTypes": [],
+          "capabilityId": "mcp/x",
+          "capabilityTitle": "X (Twitter) — Official XMCP",
+          "capabilityTags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "capabilityVisibility": "public",
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ],
+      "deploySelector": {},
+      "deploySql": "SELECT rvbbit.deploy_catalog_capability(\n  catalog_id => 'mcp/x',\n  target_selector => '{}'::jsonb\n);"
     },
     {
       "id": "classify/language-detection-xlm-roberta",
@@ -12172,6 +14162,1543 @@
           "backendName": "classify_deberta_base_zero_shot",
           "runtimeName": null,
           "device": "auto"
+        }
+      ]
+    },
+    {
+      "name": "clover_anomaly_fit",
+      "description": "Fit an anomaly detector on numeric rows (client-held model)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_anomaly_score",
+      "description": "Score rows for anomalousness against a fitted detector",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_classify",
+      "description": "Zero-shot classification over your labels",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_classify_scores",
+      "description": "Zero-shot classification with the winning label and every candidate score",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_cluster",
+      "description": "Cluster a JSON array of texts into assignments and representative groups",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_contradicts",
+      "description": "TRUE if two statements contradict (NLI 3-class)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_embed",
+      "description": "Reusable Arctic text embedding vector for KNN, similarity and clustering",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_entails",
+      "description": "TRUE if premise entails hypothesis (NLI)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_explain",
+      "description": "SHAP feature attributions for a fitted TabPFN or anomaly model",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_extract",
+      "description": "Entity extraction (GLiNER) over your types",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_fit",
+      "description": "Fit a TabPFN model on tabular rows — the fitted model is returned to you",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_forecast",
+      "description": "Forecast a numeric series N steps ahead — median + quantile bands",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_image_embed",
+      "description": "Reusable SigLIP2 embedding for an image or text description",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_image_similar",
+      "description": "Similarity of two images, or an image and a text description",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_language",
+      "description": "ISO language code of text",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_language_info",
+      "description": "Language code plus confidence for thresholded routing",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_anonymize",
+      "description": "Rewrite text with all PII redacted ([NAME], [EMAIL], ...)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_apply",
+      "description": "Apply an instruction/question to a text — answers only from the text",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_ask",
+      "description": "One-shot ask against the hosted generalist",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_canonical",
+      "description": "Canonical form of a value (NYC -> New York City)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_consensus",
+      "description": "Synthesize the shared consensus across a JSON array of findings",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_contradicts",
+      "description": "TRUE if two texts oppose each other on the same subject",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_date",
+      "description": "Messy text to ISO 8601 date, or NULL",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_extract",
+      "description": "Freeform text to a JSON object per a schema you describe",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_fallacies",
+      "description": "Detect logical fallacies — JSON array of {fallacy, explanation}",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_fix",
+      "description": "Repair malformed values given a type hint (gmial.com -> gmail.com)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_implies",
+      "description": "TRUE if premise implies conclusion — incl. the quantifier logic fast NLI misses",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_make_operator",
+      "description": "The operator operator: describe an operator in plain English → drafts it, creates it under a temp name, runs generated tests, self-corrects, then promotes it with its tests attached",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_means",
+      "description": "TRUE if text semantically matches a criterion — LLM-judged for inputs that need thought",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_merge_records",
+      "description": "Merge duplicate JSON records into one canonical golden record",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_same_entity",
+      "description": "TRUE if two values identify the same real-world entity",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_score",
+      "description": "Judge text against any English-phrased criterion, 0-1",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_steelman",
+      "description": "Rewrite an argument in its strongest, most defensible form",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_supports",
+      "description": "How strongly evidence supports a claim, 0-1",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_timeline",
+      "description": "Extract a normalized chronological event timeline from text",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_translate",
+      "description": "Translate to any language — returns only the translation",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_llm_valid",
+      "description": "TRUE if a value satisfies an English-phrased rule",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_means",
+      "description": "TRUE if text semantically matches a criterion (cross-encoder)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_moderate",
+      "description": "Full moderation category scores",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_nli",
+      "description": "Full 3-way entailment, neutral, and contradiction scores",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_ocr",
+      "description": "OCR a document (image or PDF; URL or data URI) to plain text",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_pii",
+      "description": "PII detection preset (person, email, phone, ssn, ...)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_predict",
+      "description": "Predict with a clover_fit model — classifications or regressions",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_relations",
+      "description": "Extract (subject, predicate, object) relation triples from text",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_relevance",
+      "description": "Relevance score 0..1 of text to criterion",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_sentiment",
+      "description": "Sentiment label + score for a text",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_sentiment_score",
+      "description": "Continuous sentiment in [-1, 1]",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_similar",
+      "description": "Embedding cosine similarity of two texts",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_toxic",
+      "description": "TRUE if text is toxic",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_transcribe",
+      "description": "Transcribe audio to text (Whisper large-v3-turbo)",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_triples",
+      "description": "Extract knowledge-graph triples from text as strict JSON — same contract as the built-in rvbbit.triples, so every KG surface (data_crawl, Document Brain, Scry) can run on it",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_web_markdown",
+      "description": "Fetch a public HTTP(S) page or document and return its cleaned Markdown",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
+        }
+      ]
+    },
+    {
+      "name": "clover_web_scrape",
+      "description": "Fetch a public HTTP(S) page or document and return Markdown, metadata, provenance, and extraction diagnostics",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "managed/clover",
+          "title": "Clover",
+          "visibility": "public",
+          "tags": [
+            "bundle",
+            "clover",
+            "documents",
+            "lanes",
+            "llm",
+            "managed",
+            "specialists",
+            "verified",
+            "web"
+          ],
+          "backendName": "embed",
+          "runtimeName": null,
+          "device": "api"
         }
       ]
     },
@@ -21338,6 +24865,678 @@
           "backendName": "predict_wine_quality_sklearn",
           "runtimeName": null,
           "device": "cpu"
+        }
+      ]
+    },
+    {
+      "name": "x_create_users_bookmark",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_create_users_bookmark_folder",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_delete_users_bookmark",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_news",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_posts_by_id",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_posts_by_ids",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_posts_counts_recent",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_posts_liking_users",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_posts_quoted_posts",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_posts_reposted_by",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_trends_by_woeid",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_bookmark_folders",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_bookmarks",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_bookmarks_by_folder_id",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_by_id",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_by_username",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_by_usernames",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_me",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_mentions",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_posts",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_get_users_timeline",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_search_news",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_search_posts_all",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
+        }
+      ]
+    },
+    {
+      "name": "x_search_users",
+      "description": "Operator exported by X (Twitter) — Official XMCP.",
+      "returnType": "",
+      "parser": "",
+      "argNames": [],
+      "argTypes": [],
+      "capabilities": [
+        {
+          "id": "mcp/x",
+          "title": "X (Twitter) — Official XMCP",
+          "visibility": "public",
+          "tags": [
+            "mcp",
+            "news",
+            "search",
+            "social",
+            "trends",
+            "twitter",
+            "verified",
+            "x"
+          ],
+          "backendName": null,
+          "runtimeName": null,
+          "device": ""
         }
       ]
     }

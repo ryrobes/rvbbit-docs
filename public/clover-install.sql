@@ -23,6 +23,8 @@ SELECT rvbbit.register_backend('sentiment', 'http://clover.rvbb.it:8090/b/sentim
 
 SELECT rvbbit.register_backend('rerank',    'http://clover.rvbb.it:8090/b/rerank/predict',    'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');
 
+SELECT rvbbit.register_backend('web_scrape', 'http://clover.rvbb.it:8090/b/web_scrape/predict', 'rvbbit', 8, 4, 60000, 'RVBBIT_CLOVER_KEY');
+
 DELETE FROM rvbbit.embedding_cache WHERE specialist = 'embed';
 
 SELECT rvbbit.reload_backends();
@@ -642,6 +644,12 @@ UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name',
 UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','arithmetic','sql',$test$SELECT rvbbit.clover_llm_ask('What is two plus two?')$test$,'expect',jsonb_build_object('type','not_empty'))) WHERE name='clover_llm_ask';
 
 UPDATE rvbbit.backends b SET source_provider='rvbbit.ai', source_model=v.source_model, source_revision=v.source_revision, install_manifest=jsonb_build_object('capability','managed/clover','backend',v.backend_name) FROM (VALUES ('embed','Snowflake/snowflake-arctic-embed-l-v2.0','clover-v1'),('rerank','BAAI/bge-reranker-v2-m3','clover-v1'),('sentiment','cardiffnlp/twitter-xlm-roberta-base-sentiment','clover-v1.0'),('nli','MoritzLaurer/deberta-v3-large-zeroshot-v2.0','clover-v1'),('nli3','MoritzLaurer/deberta-v3-large-mnli-fever-anli-ling-wanli','clover-v1'),('classify','MoritzLaurer/deberta-v3-large-zeroshot-v2.0','clover-v1'),('toxicity','unitary/toxic-bert','clover-v1'),('language','papluca/xlm-roberta-base-language-detection','clover-v1'),('extract','urchade/gliner_large-v2.1','clover-v1'),('ocr','stepfun-ai/GOT-OCR-2.0-hf','clover-v1'),('transcribe','openai/whisper-large-v3-turbo','clover-v1'),('forecast','amazon/chronos-bolt-base','clover-v1'),('image_embed','google/siglip2-so400m-patch16-384','clover-v1'),('tabular_fit','Prior-Labs/TabPFN-v2-clf+reg','clover-v1'),('tabular_predict','Prior-Labs/TabPFN-v2-clf+reg','clover-v1'),('tabular_explain','Prior-Labs/TabPFN-v2-clf+reg + SHAP','clover-v1'),('anomaly_fit','scikit-learn/IsolationForest','clover-v1'),('anomaly_score','scikit-learn/IsolationForest','clover-v1'),('relations','Babelscape/rebel-large','clover-v1'),('cluster','Snowflake/snowflake-arctic-embed-l-v2.0 + KMeans/HDBSCAN','clover-v1'),('clover_llm','nvidia/Gemma-4-31B-IT-NVFP4','clover-llm-v1')) AS v(backend_name,source_model,source_revision) WHERE b.name=v.backend_name;
+
+SELECT rvbbit.create_operator('clover_web_scrape', ARRAY['url'], 'jsonb', op_description := 'Clover-Web: fetch a public HTTP(S) HTML page or supported document and return cleaned Markdown, metadata, provenance, and diagnostics; static content only (no JavaScript, login, cookies, or private-network targets)', op_steps := jsonb_build_array(jsonb_build_object('name','w','kind','specialist','specialist','web_scrape','inputs',jsonb_build_object('url','{{url}}'))));
+
+SELECT rvbbit.create_operator('clover_web_markdown', ARRAY['url'], 'text', op_description := 'Clover-Web: fetch a public HTTP(S) HTML page or supported document and return cleaned Markdown; static content only (no JavaScript, login, cookies, or private-network targets)', op_steps := jsonb_build_array(jsonb_build_object('name','w','kind','specialist','specialist','web_scrape','inputs',jsonb_build_object('url','{{url}}')),jsonb_build_object('name','m','kind','code','fn','json_get','inputs',jsonb_build_object('value','{{steps.w.output}}','path','markdown'))));
+
+UPDATE rvbbit.backends SET source_provider='rvbbit.ai', source_model='firecrawl/html-extractor + firecrawl/anydoc', source_revision='clover-web-v0.1', install_manifest=jsonb_build_object('capability','managed/clover','backend','web_scrape') WHERE name='web_scrape';
 
 SELECT rvbbit.set_cost_policy('backend','clover_llm','model_rate', input_per_mtok => 0.10, output_per_mtok => 0.20, model => 'gemma4', notes => 'Clover included value: would-be a-la-carte cost of hosted gemma4; covered by subscription, never billed');
 

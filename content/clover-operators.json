@@ -1207,6 +1207,56 @@
           "stepIn": []
         }
       ]
+    },
+    {
+      "name": "clover_web_markdown",
+      "args": [
+        "url"
+      ],
+      "returns": "text",
+      "description": "Fetch a public HTTP(S) page or document and return its cleaned Markdown",
+      "steps": [
+        {
+          "name": "w",
+          "kind": "specialist",
+          "label": "web_scrape",
+          "model": "firecrawl/html-extractor + firecrawl/anydoc",
+          "argIn": [
+            "url"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "m",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "w"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_web_scrape",
+      "args": [
+        "url"
+      ],
+      "returns": "jsonb",
+      "description": "Fetch a public HTTP(S) page or document and return Markdown, metadata, provenance, and extraction diagnostics",
+      "steps": [
+        {
+          "name": "w",
+          "kind": "specialist",
+          "label": "web_scrape",
+          "model": "firecrawl/html-extractor + firecrawl/anydoc",
+          "argIn": [
+            "url"
+          ],
+          "stepIn": []
+        }
+      ]
     }
   ]
 }

@@ -133,7 +133,7 @@ returns, and new calls fail fast with *"has no live instance right now"*.
 
 ## Many machines, one name
 
-If several people register runners under the **same backend name**, the
+If several machines register runners under the **same backend name**, the
 queue fans work out across them automatically — each request is claimed
 exactly once (`FOR UPDATE SKIP LOCKED`, the standard Postgres queue
 idiom), and faster or less-busy machines naturally claim more. A team can
@@ -141,11 +141,25 @@ turn three workstations with the same Ollama model into a small
 answering pool without configuring anything beyond sharing under one
 name.
 
+Those runners must connect to the warehouse as the **same database
+role** — serving a backend is restricted to its sharer (see below), and
+the sharer is the role that registered the name first. Pointing three
+Data Rabbit instances at the same connection is the normal way this
+happens; pooling across genuinely different database accounts is not
+supported.
+
 ## The rules that keep it honest
 
-- **Scope is enforced in the database.** A share is gated by a real
-  Postgres role membership check on every call. Not in the client, not
-  in a gateway — in the same place your data's permissions already live.
+- **Scope is enforced in the database.** Calling a share is gated by a
+  real Postgres role membership check. Not in the client, not in a
+  gateway — in the same place your data's permissions already live.
+- **Serving is restricted to the sharer.** Only the database role that
+  registered a backend can claim its requests, write its answers, or
+  heartbeat for it. Another user on the same warehouse cannot pull the
+  prompts being sent to your model, answer on its behalf, or pretend it
+  is online.
+- **An answer goes back only to the caller who asked.** Holding a
+  request id is not enough to read its response.
 - **The sharer's machine only dials out.** Nothing ever connects *to*
   the sharing client. It claims work from the queue over its existing
   database connection.
