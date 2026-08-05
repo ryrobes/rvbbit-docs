@@ -151,6 +151,26 @@
       ]
     },
     {
+      "name": "clover_document_parse",
+      "args": [
+        "doc"
+      ],
+      "returns": "jsonb",
+      "description": "Parse a document into Markdown, typed blocks, tables, cells, hierarchy and source geometry",
+      "steps": [
+        {
+          "name": "p",
+          "kind": "specialist",
+          "label": "document_parse",
+          "model": null,
+          "argIn": [
+            "doc"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
       "name": "clover_embed",
       "args": [
         "t"
@@ -287,9 +307,35 @@
           "name": "f",
           "kind": "specialist",
           "label": "forecast",
-          "model": "amazon/chronos-bolt-base",
+          "model": "amazon/chronos-2",
           "argIn": [
             "series",
+            "horizon"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_forecast_drivers",
+      "args": [
+        "targets",
+        "past_covariates",
+        "future_covariates",
+        "horizon"
+      ],
+      "returns": "jsonb",
+      "description": "Forecast named related series with historical and known-future business drivers",
+      "steps": [
+        {
+          "name": "f",
+          "kind": "specialist",
+          "label": "forecast",
+          "model": "amazon/chronos-2",
+          "argIn": [
+            "targets",
+            "past_covariates",
+            "future_covariates",
             "horizon"
           ],
           "stepIn": []
@@ -927,13 +973,13 @@
         "doc"
       ],
       "returns": "text",
-      "description": "OCR a document (image or PDF; URL or data URI) to plain text",
+      "description": "OCR a document to plain text through the structured Granite-Docling parser",
       "steps": [
         {
           "name": "o",
           "kind": "specialist",
           "label": "ocr",
-          "model": "stepfun-ai/GOT-OCR-2.0-hf",
+          "model": "ibm-granite/granite-docling-258M",
           "argIn": [
             "doc"
           ],
@@ -1070,6 +1116,98 @@
           "model": "cardiffnlp/twitter-xlm-roberta-base-sentiment",
           "argIn": [
             "t"
+          ],
+          "stepIn": []
+        },
+        {
+          "name": "g",
+          "kind": "code",
+          "label": "code",
+          "model": null,
+          "argIn": [],
+          "stepIn": [
+            "s"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clover_series_anomalies",
+      "args": [
+        "series"
+      ],
+      "returns": "jsonb",
+      "description": "Score a long time series for anomalies with CPU-side TSPulse",
+      "steps": [
+        {
+          "name": "a",
+          "kind": "specialist",
+          "label": "timeseries_anomalies",
+          "model": null,
+          "argIn": [
+            "series"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_series_embed",
+      "args": [
+        "series"
+      ],
+      "returns": "jsonb",
+      "description": "Create a semantic TSPulse embedding for the most recent 512 points",
+      "steps": [
+        {
+          "name": "e",
+          "kind": "specialist",
+          "label": "timeseries_embed",
+          "model": null,
+          "argIn": [
+            "series"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_series_impute",
+      "args": [
+        "series"
+      ],
+      "returns": "jsonb",
+      "description": "Fill missing points in a time series with TSPulse reconstruction",
+      "steps": [
+        {
+          "name": "i",
+          "kind": "specialist",
+          "label": "timeseries_impute",
+          "model": null,
+          "argIn": [
+            "series"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_series_similarity",
+      "args": [
+        "a",
+        "b"
+      ],
+      "returns": "float8",
+      "description": "Compare two time-series shapes with TSPulse semantic similarity",
+      "steps": [
+        {
+          "name": "s",
+          "kind": "specialist",
+          "label": "timeseries_similarity",
+          "model": null,
+          "argIn": [
+            "a",
+            "b"
           ],
           "stepIn": []
         },
@@ -1239,6 +1377,46 @@
       ]
     },
     {
+      "name": "clover_web_research",
+      "args": [
+        "question"
+      ],
+      "returns": "jsonb",
+      "description": "Research the public web with cited claims, typed knowledge, tenant-scoped snapshots, and exact evidence lineage",
+      "steps": [
+        {
+          "name": "r",
+          "kind": "specialist",
+          "label": "web_research",
+          "model": "google/gemma-4-31b-it + OpenRouter Exa + Clover Web + tenant-scoped evidence memory",
+          "argIn": [
+            "question"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_web_research_deep",
+      "args": [
+        "question"
+      ],
+      "returns": "jsonb",
+      "description": "Research with one bounded follow-the-evidence pass to close material gaps",
+      "steps": [
+        {
+          "name": "r",
+          "kind": "specialist",
+          "label": "web_research",
+          "model": "google/gemma-4-31b-it + OpenRouter Exa + Clover Web + tenant-scoped evidence memory",
+          "argIn": [
+            "question"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
       "name": "clover_web_scrape",
       "args": [
         "url"
@@ -1253,6 +1431,28 @@
           "model": "firecrawl/html-extractor + firecrawl/anydoc",
           "argIn": [
             "url"
+          ],
+          "stepIn": []
+        }
+      ]
+    },
+    {
+      "name": "clover_web_watch",
+      "args": [
+        "question",
+        "seed_urls"
+      ],
+      "returns": "jsonb",
+      "description": "Refresh stable public URLs, reuse unchanged evidence without another synthesis, and report source and claim changes",
+      "steps": [
+        {
+          "name": "r",
+          "kind": "specialist",
+          "label": "web_research",
+          "model": "google/gemma-4-31b-it + OpenRouter Exa + Clover Web + tenant-scoped evidence memory",
+          "argIn": [
+            "question",
+            "seed_urls"
           ],
           "stepIn": []
         }

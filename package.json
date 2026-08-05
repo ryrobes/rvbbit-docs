@@ -12,6 +12,7 @@
     "deploy:gcp": "bash scripts/deploy-gcp.sh",
     "benchmarks:export": "node scripts/export-large-bench.mjs",
     "capabilities:export": "node scripts/export-capabilities-catalog.mjs",
+    "clover:sync": "node scripts/sync-clover-catalog.mjs && npm run capabilities:export && npm run prebuild",
     "prebuild": "node scripts/gen-clover-install.mjs && node scripts/gen-clover-operators.mjs",
     "agents:gen": "node scripts/gen-clover-install.mjs",
     "og:gen": "node scripts/gen-og-images.mjs"

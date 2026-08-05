@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-26",
+  "generated_at": "2026-08-05T04:23:42.710Z",
   "capabilities": [
     {
       "id": "managed/clover",
       "name": "clover",
       "title": "Clover",
-      "description": "All of Clover in one subscription: 53 semantic SQL operators — 29 calibrated ML specialists (text, documents, audio, images, tabular AutoML, anomaly detection, forecasting, clustering, and SHAP explanations), 22 LLM operators for fuzzy judgment and structured extraction, plus safe web and document-to-Markdown extraction. ML and web operators are unmetered on every tier; lanes buy LLM generation speed.",
+      "description": "All of Clover in one subscription: 62 semantic SQL operators — 35 calibrated ML specialists, 22 LLM operators, structured document parsing, forecasting with business drivers, and CPU-side time-series anomaly/imputation/similarity, plus safe web extraction and cited research. ML and extraction operators are unmetered on every tier; lanes buy LLM generation speed.",
       "tags": [
         "managed",
         "clover",
@@ -20,7 +20,7 @@
       ],
       "kind": "managed",
       "catalog_visibility": "public",
-      "device": "cloud",
+      "device": "api",
       "operators": [
         "clover_means",
         "clover_relevance",
@@ -40,8 +40,14 @@
         "clover_extract",
         "clover_pii",
         "clover_ocr",
+        "clover_document_parse",
         "clover_transcribe",
         "clover_forecast",
+        "clover_forecast_drivers",
+        "clover_series_anomalies",
+        "clover_series_impute",
+        "clover_series_embed",
+        "clover_series_similarity",
         "clover_image_similar",
         "clover_image_embed",
         "clover_cluster",
@@ -74,7 +80,10 @@
         "clover_llm_make_operator",
         "clover_triples",
         "clover_web_scrape",
-        "clover_web_markdown"
+        "clover_web_markdown",
+        "clover_web_research",
+        "clover_web_research_deep",
+        "clover_web_watch"
       ],
       "backend_name": "embed",
       "capability_manifest": {
@@ -82,7 +91,7 @@
         "kind": "managed",
         "name": "clover",
         "title": "Clover",
-        "description": "All of Clover in one subscription: 53 semantic SQL operators — 29 calibrated ML specialists (text, documents, audio, images, tabular AutoML, anomaly detection, forecasting, clustering, and SHAP explanations), 22 LLM operators for fuzzy judgment and structured extraction, plus safe web and document-to-Markdown extraction. ML and web operators are unmetered on every tier; lanes buy LLM generation speed.",
+        "description": "All of Clover in one subscription: 62 semantic SQL operators — 35 calibrated ML specialists (text, structured documents, audio, images, tabular AutoML, anomaly detection, imputation, forecasting with business drivers, time-series similarity, clustering, and SHAP explanations), 22 LLM operators for fuzzy judgment and structured extraction, safe web extraction, plus cited research with tenant-scoped evidence memory, deep gap closure, and change watches. ML and extraction operators are unmetered on every tier; lanes buy LLM generation speed.",
         "tags": [
           "managed",
           "clover",
@@ -165,7 +174,11 @@
           },
           {
             "name": "clover_ocr",
-            "description": "OCR a document (image or PDF; URL or data URI) to plain text"
+            "description": "OCR a document to plain text through the structured Granite-Docling parser"
+          },
+          {
+            "description": "Parse a document into Markdown, typed blocks, tables, cells, hierarchy and source geometry",
+            "name": "clover_document_parse"
           },
           {
             "name": "clover_transcribe",
@@ -174,6 +187,26 @@
           {
             "name": "clover_forecast",
             "description": "Forecast a numeric series N steps ahead — median + quantile bands"
+          },
+          {
+            "description": "Forecast named related series with historical and known-future business drivers",
+            "name": "clover_forecast_drivers"
+          },
+          {
+            "description": "Score a long time series for anomalies with CPU-side TSPulse",
+            "name": "clover_series_anomalies"
+          },
+          {
+            "description": "Fill missing points in a time series with TSPulse reconstruction",
+            "name": "clover_series_impute"
+          },
+          {
+            "description": "Create a semantic TSPulse embedding for the most recent 512 points",
+            "name": "clover_series_embed"
+          },
+          {
+            "description": "Compare two time-series shapes with TSPulse semantic similarity",
+            "name": "clover_series_similarity"
           },
           {
             "name": "clover_image_similar",
@@ -306,6 +339,18 @@
           {
             "name": "clover_web_markdown",
             "description": "Fetch a public HTTP(S) page or document and return its cleaned Markdown"
+          },
+          {
+            "description": "Research the public web with cited claims, typed knowledge, tenant-scoped snapshots, and exact evidence lineage",
+            "name": "clover_web_research"
+          },
+          {
+            "description": "Research with one bounded follow-the-evidence pass to close material gaps",
+            "name": "clover_web_research_deep"
+          },
+          {
+            "description": "Refresh stable public URLs, reuse unchanged evidence without another synthesis, and report source and claim changes",
+            "name": "clover_web_watch"
           }
         ],
         "managed": {
@@ -398,8 +443,8 @@
             },
             {
               "slot": "ocr",
-              "model": "stepfun-ai/GOT-OCR-2.0-hf",
-              "version": "clover-v1"
+              "model": "ibm-granite/granite-docling-258M",
+              "version": "clover-v2"
             },
             {
               "slot": "transcribe",
@@ -408,8 +453,13 @@
             },
             {
               "slot": "forecast",
-              "model": "amazon/chronos-bolt-base",
-              "version": "clover-v1"
+              "model": "amazon/chronos-2",
+              "version": "clover-v2"
+            },
+            {
+              "slot": "timeseries_understanding",
+              "model": "ibm-granite/granite-timeseries-tspulse-r1",
+              "version": "clover-v2-cpu"
             },
             {
               "slot": "image_embed",
@@ -442,9 +492,14 @@
               "version": "clover-llm-v1"
             },
             {
-              "slot": "web_scrape",
               "model": "firecrawl/html-extractor + firecrawl/anydoc",
-              "version": "clover-web-v0.1"
+              "slot": "web_scrape",
+              "version": "clover-web-v0.2"
+            },
+            {
+              "model": "google/gemma-4-31b-it + OpenRouter Exa + Clover Web + tenant-scoped evidence memory",
+              "slot": "web_research",
+              "version": "clover-research-v0.2"
             }
           ],
           "install": {
@@ -453,6 +508,7 @@
               "SELECT rvbbit.register_backend('sentiment', 'http://clover.rvbb.it:8090/b/sentiment/predict', 'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');",
               "SELECT rvbbit.register_backend('rerank',    'http://clover.rvbb.it:8090/b/rerank/predict',    'rvbbit', 32, 25, 30000, 'RVBBIT_CLOVER_KEY');",
               "SELECT rvbbit.register_backend('web_scrape', 'http://clover.rvbb.it:8090/b/web_scrape/predict', 'rvbbit', 8, 4, 60000, 'RVBBIT_CLOVER_KEY');",
+              "SELECT rvbbit.register_backend('web_research', 'http://clover.rvbb.it:8090/b/web_research/predict', 'rvbbit', 2, 1, 180000, 'RVBBIT_CLOVER_KEY');",
               "DELETE FROM rvbbit.embedding_cache WHERE specialist = 'embed';",
               "SELECT rvbbit.reload_backends();",
               "SELECT rvbbit.create_operator('clover_sentiment', ARRAY['t'], 'text',\n  op_description := 'Clover-ML: sentiment {score,label} for a text (hosted twitter-roberta)',\n  op_steps := '[{\"name\":\"s\",\"kind\":\"specialist\",\"specialist\":\"sentiment\",\"inputs\":{\"text\":\"{{t}}\"}}]'::jsonb);",
@@ -486,8 +542,13 @@
               "UPDATE rvbbit.operators SET tests = '[{\"name\": \"close\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''quick sql engine'')\", \"expect\": {\"type\": \"min\", \"value\": \"0.45\"}, \"description\": \"\"}, {\"name\": \"far\", \"sql\": \"SELECT rvbbit.clover_similar(''fast database'',''a nice sandwich'')\", \"expect\": {\"type\": \"max\", \"value\": \"0.35\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_similar';",
               "UPDATE rvbbit.operators SET tests = '[{\"name\": \"scores\", \"sql\": \"SELECT rvbbit.clover_moderate(''you are a worthless idiot'')::text\", \"expect\": {\"type\": \"contains\", \"value\": \"insult\"}, \"description\": \"\"}]'::jsonb WHERE name = 'clover_moderate';",
               "SELECT rvbbit.register_backend('ocr',             'http://clover.rvbb.it:8090/b/ocr/predict',             'rvbbit', 4, 2, 180000, 'RVBBIT_CLOVER_KEY');",
+              "SELECT rvbbit.register_backend('document_parse',  'http://clover.rvbb.it:8090/b/document_parse/predict',  'rvbbit', 2, 1, 300000, 'RVBBIT_CLOVER_KEY');",
               "SELECT rvbbit.register_backend('transcribe',      'http://clover.rvbb.it:8090/b/transcribe/predict',      'rvbbit', 4, 2, 300000, 'RVBBIT_CLOVER_KEY');",
               "SELECT rvbbit.register_backend('forecast',        'http://clover.rvbb.it:8090/b/forecast/predict',        'rvbbit', 8, 2, 60000,  'RVBBIT_CLOVER_KEY');",
+              "SELECT rvbbit.register_backend('timeseries_anomalies',  'http://clover.rvbb.it:8090/b/timeseries_anomalies/predict',  'rvbbit', 8, 4, 120000, 'RVBBIT_CLOVER_KEY');",
+              "SELECT rvbbit.register_backend('timeseries_impute',     'http://clover.rvbb.it:8090/b/timeseries_impute/predict',     'rvbbit', 8, 4, 120000, 'RVBBIT_CLOVER_KEY');",
+              "SELECT rvbbit.register_backend('timeseries_embed',      'http://clover.rvbb.it:8090/b/timeseries_embed/predict',      'rvbbit', 16, 8, 60000, 'RVBBIT_CLOVER_KEY');",
+              "SELECT rvbbit.register_backend('timeseries_similarity', 'http://clover.rvbb.it:8090/b/timeseries_similarity/predict', 'rvbbit', 16, 8, 60000, 'RVBBIT_CLOVER_KEY');",
               "SELECT rvbbit.register_backend('image_embed',     'http://clover.rvbb.it:8090/b/image_embed/predict',     'rvbbit', 16, 4, 120000, 'RVBBIT_CLOVER_KEY');",
               "SELECT rvbbit.register_backend('tabular_fit',     'http://clover.rvbb.it:8090/b/tabular_fit/predict',     'rvbbit', 1, 1, 300000, 'RVBBIT_CLOVER_KEY');",
               "SELECT rvbbit.register_backend('tabular_predict', 'http://clover.rvbb.it:8090/b/tabular_predict/predict', 'rvbbit', 1, 1, 600000, 'RVBBIT_CLOVER_KEY');",
@@ -498,9 +559,15 @@
               "SELECT rvbbit.create_operator('clover_pii', ARRAY['t'], 'jsonb',\n  op_description := 'Clover-ML: detect PII entities (GLiNER preset: person, email, phone, address, ssn, cc, dob, ip)',\n  op_steps := '[{\"name\":\"e\",\"kind\":\"specialist\",\"specialist\":\"extract\",\"inputs\":{\"text\":\"{{t}}\",\"labels\":\"person, email, phone number, street address, social security number, credit card number, date of birth, ip address\"}}]'::jsonb);",
               "SELECT rvbbit.create_operator('clover_similar', ARRAY['a','b'], 'float8', op_parser := 'strip',\n  op_description := 'Clover-ML: embedding cosine similarity of two texts (arctic-embed)',\n  op_steps := '[\n    {\"name\":\"ea\",\"kind\":\"specialist\",\"specialist\":\"embed\",\"inputs\":{\"text\":\"{{a}}\"}},\n    {\"name\":\"eb\",\"kind\":\"specialist\",\"specialist\":\"embed\",\"inputs\":{\"text\":\"{{b}}\"}},\n    {\"name\":\"c\",\"kind\":\"code\",\"fn\":\"cosine_similarity\",\"inputs\":{\"left\":\"{{steps.ea.output}}\",\"right\":\"{{steps.eb.output}}\"}}\n  ]'::jsonb);",
               "SELECT rvbbit.create_operator('clover_moderate', ARRAY['t'], 'jsonb',\n  op_description := 'Clover-ML: full moderation category scores (toxic/severe/obscene/threat/insult/identity_hate)',\n  op_steps := '[\n    {\"name\":\"x\",\"kind\":\"specialist\",\"specialist\":\"toxicity\",\"inputs\":{\"text\":\"{{t}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.x.output}}\",\"path\":\"scores\"}}\n  ]'::jsonb);",
-              "SELECT rvbbit.create_operator('clover_ocr', ARRAY['doc'], 'text',\n  op_description := 'Clover-ML: OCR a document (image or PDF; URL or data URI) to plain text (GOT-OCR2)',\n  op_steps := '[\n    {\"name\":\"o\",\"kind\":\"specialist\",\"specialist\":\"ocr\",\"inputs\":{\"document\":\"{{doc}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.o.output}}\",\"path\":\"text\"}}\n  ]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_ocr', ARRAY['doc'], 'text',\n  op_description := 'Clover-ML: OCR a document (image or PDF; URL or data URI) to plain text through Granite-Docling',\n  op_steps := '[\n    {\"name\":\"o\",\"kind\":\"specialist\",\"specialist\":\"ocr\",\"inputs\":{\"document\":\"{{doc}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.o.output}}\",\"path\":\"text\"}}\n  ]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_document_parse', ARRAY['doc'], 'jsonb',\n  op_description := 'Clover-ML: structured document parse — Markdown, typed blocks, tables/cells, hierarchy and page geometry (Granite-Docling)',\n  op_steps := '[{\"name\":\"p\",\"kind\":\"specialist\",\"specialist\":\"document_parse\",\"inputs\":{\"document\":\"{{doc}}\"}}]'::jsonb);",
               "SELECT rvbbit.create_operator('clover_transcribe', ARRAY['audio'], 'text',\n  op_description := 'Clover-ML: transcribe audio (URL or data URI) to text (Whisper large-v3-turbo)',\n  op_steps := '[\n    {\"name\":\"w\",\"kind\":\"specialist\",\"specialist\":\"transcribe\",\"inputs\":{\"audio\":\"{{audio}}\"}},\n    {\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.w.output}}\",\"path\":\"text\"}}\n  ]'::jsonb);",
-              "SELECT rvbbit.create_operator('clover_forecast', ARRAY['series','horizon'], 'jsonb',\n  op_description := 'Clover-ML: forecast a numeric series (JSON array) N steps ahead — {median, quantiles} (Chronos-Bolt)',\n  op_steps := '[\n    {\"name\":\"f\",\"kind\":\"specialist\",\"specialist\":\"forecast\",\"inputs\":{\"context\":\"{{series}}\",\"horizon\":\"{{horizon}}\"}}\n  ]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_forecast', ARRAY['series','horizon'], 'jsonb',\n  op_description := 'Clover-ML: forecast a numeric series (JSON array) N steps ahead — {median, quantiles} (Chronos-2)',\n  op_steps := '[\n    {\"name\":\"f\",\"kind\":\"specialist\",\"specialist\":\"forecast\",\"inputs\":{\"context\":\"{{series}}\",\"horizon\":\"{{horizon}}\"}}\n  ]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_forecast_drivers', ARRAY['targets','past_covariates','future_covariates','horizon'], 'jsonb',\n  op_description := 'Clover-ML: Chronos-2 multivariate forecast for named target series with historical and known-future numeric or categorical drivers; arguments are JSON objects',\n  op_steps := '[{\"name\":\"f\",\"kind\":\"specialist\",\"specialist\":\"forecast\",\"inputs\":{\"targets\":\"{{targets}}\",\"past_covariates\":\"{{past_covariates}}\",\"future_covariates\":\"{{future_covariates}}\",\"horizon\":\"{{horizon}}\"}}]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_series_anomalies', ARRAY['series'], 'jsonb',\n  op_description := 'Clover-ML: TSPulse anomaly scores for a JSON numeric series (minimum 1536 points)',\n  op_steps := '[{\"name\":\"a\",\"kind\":\"specialist\",\"specialist\":\"timeseries_anomalies\",\"inputs\":{\"values\":\"{{series}}\"}}]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_series_impute', ARRAY['series'], 'jsonb',\n  op_description := 'Clover-ML: TSPulse reconstruction of null points in a JSON numeric series (minimum 512 points)',\n  op_steps := '[{\"name\":\"i\",\"kind\":\"specialist\",\"specialist\":\"timeseries_impute\",\"inputs\":{\"values\":\"{{series}}\"}}]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_series_embed', ARRAY['series'], 'jsonb',\n  op_description := 'Clover-ML: semantic TSPulse embedding of the most recent 512 points in a JSON numeric series',\n  op_steps := '[{\"name\":\"e\",\"kind\":\"specialist\",\"specialist\":\"timeseries_embed\",\"inputs\":{\"values\":\"{{series}}\"}}]'::jsonb);",
+              "SELECT rvbbit.create_operator('clover_series_similarity', ARRAY['a','b'], 'float8', op_parser := 'strip',\n  op_description := 'Clover-ML: cosine similarity between the TSPulse shape embeddings of two JSON numeric series (minimum 512 points each)',\n  op_steps := '[{\"name\":\"s\",\"kind\":\"specialist\",\"specialist\":\"timeseries_similarity\",\"inputs\":{\"left\":\"{{a}}\",\"right\":\"{{b}}\"}},{\"name\":\"g\",\"kind\":\"code\",\"fn\":\"json_get\",\"inputs\":{\"value\":\"{{steps.s.output}}\",\"path\":\"similarity\"}}]'::jsonb);",
               "SELECT rvbbit.create_operator('clover_image_similar', ARRAY['a','b'], 'float8', op_parser := 'strip',\n  op_description := 'Clover-ML: similarity of two images, or an image and a text description (SigLIP 2 dual-tower; URL/data-URI/text inputs)',\n  op_steps := '[\n    {\"name\":\"ea\",\"kind\":\"specialist\",\"specialist\":\"image_embed\",\"inputs\":{\"text\":\"{{a}}\"}},\n    {\"name\":\"eb\",\"kind\":\"specialist\",\"specialist\":\"image_embed\",\"inputs\":{\"text\":\"{{b}}\"}},\n    {\"name\":\"c\",\"kind\":\"code\",\"fn\":\"cosine_similarity\",\"inputs\":{\"left\":\"{{steps.ea.output}}\",\"right\":\"{{steps.eb.output}}\"}}\n  ]'::jsonb);",
               "SELECT rvbbit.create_operator('clover_fit', ARRAY['task','features','labels'], 'jsonb',\n  op_description := 'Clover-ML: fit a TabPFN model — task ''classifier''|''regressor'', features = JSON array of rows, labels = JSON array. Returns {blob_b64, blob_sha256, ...}: the fitted model stays YOURS, nothing persists server-side.',\n  op_steps := '[\n    {\"name\":\"f\",\"kind\":\"specialist\",\"specialist\":\"tabular_fit\",\"inputs\":{\"task\":\"{{task}}\",\"X\":\"{{features}}\",\"y\":\"{{labels}}\"}}\n  ]'::jsonb);",
               "SELECT rvbbit.create_operator('clover_predict', ARRAY['model_blob_b64','features'], 'jsonb',\n  op_description := 'Clover-ML: predict with a clover_fit model blob — features = JSON array of rows. Returns {predictions, probabilities, class_labels}.',\n  op_steps := '[\n    {\"name\":\"p\",\"kind\":\"specialist\",\"specialist\":\"tabular_predict\",\"inputs\":{\"model_blob_b64\":\"{{model_blob_b64}}\",\"X\":\"{{features}}\"}}\n  ]'::jsonb);",
@@ -569,10 +636,21 @@
               "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','scores','sql',$test$SELECT rvbbit.clover_moderate('you are a worthless idiot')::text$test$,'expect',jsonb_build_object('type','contains','value','insult'))) WHERE name='clover_moderate';",
               "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','scores_outlier','sql',$test$WITH m AS (SELECT rvbbit.clover_anomaly_fit('[[1,1],[1.1,0.9],[0.9,1.2],[10,10]]') AS j) SELECT jsonb_array_length(rvbbit.clover_anomaly_score(j->>'blob_b64','[[10,10]]')->'scores') FROM m$test$,'expect',jsonb_build_object('type','exact','value','1'))) WHERE name='clover_anomaly_score';",
               "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','arithmetic','sql',$test$SELECT rvbbit.clover_llm_ask('What is two plus two?')$test$,'expect',jsonb_build_object('type','not_empty'))) WHERE name='clover_llm_ask';",
-              "UPDATE rvbbit.backends b SET source_provider='rvbbit.ai', source_model=v.source_model, source_revision=v.source_revision, install_manifest=jsonb_build_object('capability','managed/clover','backend',v.backend_name) FROM (VALUES ('embed','Snowflake/snowflake-arctic-embed-l-v2.0','clover-v1'),('rerank','BAAI/bge-reranker-v2-m3','clover-v1'),('sentiment','cardiffnlp/twitter-xlm-roberta-base-sentiment','clover-v1.0'),('nli','MoritzLaurer/deberta-v3-large-zeroshot-v2.0','clover-v1'),('nli3','MoritzLaurer/deberta-v3-large-mnli-fever-anli-ling-wanli','clover-v1'),('classify','MoritzLaurer/deberta-v3-large-zeroshot-v2.0','clover-v1'),('toxicity','unitary/toxic-bert','clover-v1'),('language','papluca/xlm-roberta-base-language-detection','clover-v1'),('extract','urchade/gliner_large-v2.1','clover-v1'),('ocr','stepfun-ai/GOT-OCR-2.0-hf','clover-v1'),('transcribe','openai/whisper-large-v3-turbo','clover-v1'),('forecast','amazon/chronos-bolt-base','clover-v1'),('image_embed','google/siglip2-so400m-patch16-384','clover-v1'),('tabular_fit','Prior-Labs/TabPFN-v2-clf+reg','clover-v1'),('tabular_predict','Prior-Labs/TabPFN-v2-clf+reg','clover-v1'),('tabular_explain','Prior-Labs/TabPFN-v2-clf+reg + SHAP','clover-v1'),('anomaly_fit','scikit-learn/IsolationForest','clover-v1'),('anomaly_score','scikit-learn/IsolationForest','clover-v1'),('relations','Babelscape/rebel-large','clover-v1'),('cluster','Snowflake/snowflake-arctic-embed-l-v2.0 + KMeans/HDBSCAN','clover-v1'),('clover_llm','nvidia/Gemma-4-31B-IT-NVFP4','clover-llm-v1')) AS v(backend_name,source_model,source_revision) WHERE b.name=v.backend_name;",
+              "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','structured_engine','sql',$test$SELECT rvbbit.clover_document_parse('https://rvbbit.ai/data/clover-tests/invoice.png')->>'engine'$test$,'expect',jsonb_build_object('type','contains','value','granite_docling'))) WHERE name='clover_document_parse';",
+              "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','named_target','sql',$test$SELECT jsonb_array_length(rvbbit.clover_forecast_drivers('{\"sales\":[1,2,3,4,5,6,7,8,9,10,11,12]}','{}','{}','4')->'series'->'sales'->'median')$test$,'expect',jsonb_build_object('type','exact','value','4'))) WHERE name='clover_forecast_drivers';",
+              "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','score_length','sql',$test$SELECT jsonb_array_length(rvbbit.clover_series_anomalies((SELECT jsonb_agg(sin(i / 10.0) ORDER BY i)::text FROM generate_series(1,1536) i))->'scores')$test$,'expect',jsonb_build_object('type','exact','value','1536'))) WHERE name='clover_series_anomalies';",
+              "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','fills_null','sql',$test$WITH s AS (SELECT jsonb_agg(CASE WHEN i=250 THEN NULL ELSE sin(i / 10.0) END ORDER BY i)::text AS v FROM generate_series(1,512) i) SELECT jsonb_array_length(rvbbit.clover_series_impute(v)->'values') FROM s$test$,'expect',jsonb_build_object('type','exact','value','512'))) WHERE name='clover_series_impute';",
+              "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','has_vector','sql',$test$SELECT (jsonb_array_length(rvbbit.clover_series_embed((SELECT jsonb_agg(sin(i / 10.0) ORDER BY i)::text FROM generate_series(1,512) i))->'embedding') > 0)::text$test$,'expect',jsonb_build_object('type','exact','value','true'))) WHERE name='clover_series_embed';",
+              "UPDATE rvbbit.operators SET tests = jsonb_build_array(jsonb_build_object('name','same_shape','sql',$test$WITH s AS (SELECT jsonb_agg(sin(i / 10.0) ORDER BY i)::text AS v FROM generate_series(1,512) i) SELECT rvbbit.clover_series_similarity(v,v) FROM s$test$,'expect',jsonb_build_object('type','min','value','0.99'))) WHERE name='clover_series_similarity';",
+              "UPDATE rvbbit.backends b SET source_provider='rvbbit.ai', source_model=v.source_model, source_revision=v.source_revision, install_manifest=jsonb_build_object('capability','managed/clover','backend',v.backend_name) FROM (VALUES ('embed','Snowflake/snowflake-arctic-embed-l-v2.0','clover-v1'),('rerank','BAAI/bge-reranker-v2-m3','clover-v1'),('sentiment','cardiffnlp/twitter-xlm-roberta-base-sentiment','clover-v1.0'),('nli','MoritzLaurer/deberta-v3-large-zeroshot-v2.0','clover-v1'),('nli3','MoritzLaurer/deberta-v3-large-mnli-fever-anli-ling-wanli','clover-v1'),('classify','MoritzLaurer/deberta-v3-large-zeroshot-v2.0','clover-v1'),('toxicity','unitary/toxic-bert','clover-v1'),('language','papluca/xlm-roberta-base-language-detection','clover-v1'),('extract','urchade/gliner_large-v2.1','clover-v1'),('ocr','ibm-granite/granite-docling-258M','clover-v2'),('document_parse','ibm-granite/granite-docling-258M','clover-v2'),('transcribe','openai/whisper-large-v3-turbo','clover-v1'),('forecast','amazon/chronos-2','clover-v2'),('timeseries_anomalies','ibm-granite/granite-timeseries-tspulse-r1','clover-v2-cpu'),('timeseries_impute','ibm-granite/granite-timeseries-tspulse-r1','clover-v2-cpu'),('timeseries_embed','ibm-granite/granite-timeseries-tspulse-r1','clover-v2-cpu'),('timeseries_similarity','ibm-granite/granite-timeseries-tspulse-r1','clover-v2-cpu'),('image_embed','google/siglip2-so400m-patch16-384','clover-v1'),('tabular_fit','Prior-Labs/TabPFN-v2-clf+reg','clover-v1'),('tabular_predict','Prior-Labs/TabPFN-v2-clf+reg','clover-v1'),('tabular_explain','Prior-Labs/TabPFN-v2-clf+reg + SHAP','clover-v1'),('anomaly_fit','scikit-learn/IsolationForest','clover-v1'),('anomaly_score','scikit-learn/IsolationForest','clover-v1'),('relations','Babelscape/rebel-large','clover-v1'),('cluster','Snowflake/snowflake-arctic-embed-l-v2.0 + KMeans/HDBSCAN','clover-v1'),('clover_llm','nvidia/Gemma-4-31B-IT-NVFP4','clover-llm-v1')) AS v(backend_name,source_model,source_revision) WHERE b.name=v.backend_name;",
               "SELECT rvbbit.create_operator('clover_web_scrape', ARRAY['url'], 'jsonb', op_description := 'Clover-Web: fetch a public HTTP(S) HTML page or supported document and return cleaned Markdown, metadata, provenance, and diagnostics; static content only (no JavaScript, login, cookies, or private-network targets)', op_steps := jsonb_build_array(jsonb_build_object('name','w','kind','specialist','specialist','web_scrape','inputs',jsonb_build_object('url','{{url}}'))));",
               "SELECT rvbbit.create_operator('clover_web_markdown', ARRAY['url'], 'text', op_description := 'Clover-Web: fetch a public HTTP(S) HTML page or supported document and return cleaned Markdown; static content only (no JavaScript, login, cookies, or private-network targets)', op_steps := jsonb_build_array(jsonb_build_object('name','w','kind','specialist','specialist','web_scrape','inputs',jsonb_build_object('url','{{url}}')),jsonb_build_object('name','m','kind','code','fn','json_get','inputs',jsonb_build_object('value','{{steps.w.output}}','path','markdown'))));",
-              "UPDATE rvbbit.backends SET source_provider='rvbbit.ai', source_model='firecrawl/html-extractor + firecrawl/anydoc', source_revision='clover-web-v0.1', install_manifest=jsonb_build_object('capability','managed/clover','backend','web_scrape') WHERE name='web_scrape';",
+              "SELECT rvbbit.create_operator('clover_web_research', ARRAY['question'], 'jsonb', op_description := 'Clover-Research: cited public-web research with typed knowledge, tenant-scoped snapshots, exact claim lineage, contradictions, gaps, and a complete bounded trail; no browser actions, login, or side effects', op_steps := jsonb_build_array(jsonb_build_object('name','r','kind','specialist','specialist','web_research','inputs',jsonb_build_object('question','{{question}}'))));",
+              "SELECT rvbbit.create_operator('clover_web_research_deep', ARRAY['question'], 'jsonb', op_description := 'Clover-Research deep mode: research a question, identify material gaps, then spend one bounded follow-the-evidence pass on linked or newly searched primary sources', op_steps := jsonb_build_array(jsonb_build_object('name','r','kind','specialist','specialist','web_research','inputs',jsonb_build_object('question','{{question}}','mode','deep'))));",
+              "SELECT rvbbit.create_operator('clover_web_watch', ARRAY['question','seed_urls'], 'jsonb', op_description := 'Clover-Research watch mode: conditionally refresh a JSON array of stable public URLs, reuse byte-identical prior synthesis, and report source and claim changes', op_steps := jsonb_build_array(jsonb_build_object('name','r','kind','specialist','specialist','web_research','inputs',jsonb_build_object('question','{{question}}','seed_urls','{{seed_urls}}','mode','watch','search',false))));",
+              "UPDATE rvbbit.operators SET cache_policy='never' WHERE name IN ('clover_web_scrape','clover_web_markdown','clover_web_research','clover_web_research_deep','clover_web_watch');",
+              "UPDATE rvbbit.backends SET source_provider='rvbbit.ai', source_model='firecrawl/html-extractor + firecrawl/anydoc', source_revision='clover-web-v0.2', install_manifest=jsonb_build_object('capability','managed/clover','backend','web_scrape') WHERE name='web_scrape';",
+              "UPDATE rvbbit.backends SET source_provider='rvbbit.ai', source_model='google/gemma-4-31b-it + OpenRouter Exa + Clover Web + tenant-scoped evidence memory', source_revision='clover-research-v0.2', install_manifest=jsonb_build_object('capability','managed/clover','backend','web_research') WHERE name='web_research';",
               "SELECT rvbbit.set_cost_policy('backend','clover_llm','model_rate', input_per_mtok => 0.10, output_per_mtok => 0.20, model => 'gemma4', notes => 'Clover included value: would-be a-la-carte cost of hosted gemma4; covered by subscription, never billed');",
               "SELECT rvbbit.create_operator('clover_triples', ARRAY['text','focus'], 'jsonb',\n  op_description := 'Clover-LLM: extract knowledge-graph triples from text as strict JSON — same contract as the built-in rvbbit.triples (subject_kind/subject/predicate/object_kind/object/confidence/evidence/properties), hosted gemma4',\n  op_steps := jsonb_build_array(jsonb_build_object(\n    'name','main','kind','llm','provider','clover_llm','model','gemma4',\n    'system','You are a strict knowledge graph extraction engine. Extract concise, useful facts as JSON triples. Return ONLY a valid JSON array. Each item MUST use exactly these keys unless optional values are needed: subject_kind, subject, predicate, object_kind, object, confidence, evidence, properties. subject and object are entity/value labels. subject_kind and object_kind are short lowercase types such as person, organization, customer, product, issue, event, metric, document, place, date, value, or concept. predicate is a snake_case relationship such as works_at, reported, affects, requested, approved, located_in, uses, owns, depends_on, caused_by, deadline_is, has_status. confidence is 0.0 to 1.0. evidence is a short quote or sentence from the input. properties is an optional object. Extract explicit facts first. Include only high-signal facts. Empty input or no facts returns []. No markdown, no commentary, no code fence.',\n    'user', E'FOCUS: {{focus}}\\n\\nTEXT:\\n{{text}}\\n\\nReturn JSON array only.',\n    'max_tokens', 1600, 'temperature', 0.1)),\n  op_tests := jsonb_build_array(\n    jsonb_build_object('name','extracts_facts',\n      'sql','SELECT (rvbbit.clover_triples(''Sarah Chen works at Acme Corp and reported the Q3 pipeline outage on March 3'', ''all''))::text',\n      'expect', jsonb_build_object('type','contains','value','works_at')),\n    jsonb_build_object('name','valid_contract',\n      'sql','SELECT rvbbit.triples_valid((rvbbit.clover_triples(''Maria Lopez owns Bluebird Bakery in Portland'', ''all''))::text)::text',\n      'expect', jsonb_build_object('type','contains','value','true')),\n    jsonb_build_object('name','empty_input',\n      'sql','SELECT (rvbbit.clover_triples('''', ''all''))::text',\n      'expect', jsonb_build_object('type','exact','value','[]'))\n  ));",
               "CREATE OR REPLACE FUNCTION rvbbit.bind_triples_to_clover()\nRETURNS text\nLANGUAGE plpgsql\nAS $btc$\nBEGIN\n    -- Route the built-in triples operator through Clover's hosted gemma4.\n    -- Every KG system (data_crawl, Document Brain, Scry data layer) calls\n    -- the operator NAME, so this one change makes them all work on installs\n    -- with no local LLM provider configured. Reversible: unbind_triples_clover().\n    UPDATE rvbbit.operators\n    SET steps = (SELECT steps FROM rvbbit.operators WHERE name = 'clover_triples'),\n        updated_at = clock_timestamp()\n    WHERE name = 'triples';\n    IF NOT FOUND THEN\n        RETURN 'triples operator not found — is pg_rvbbit installed?';\n    END IF;\n    IF (SELECT steps FROM rvbbit.operators WHERE name = 'triples') IS NULL THEN\n        RETURN 'clover_triples is not installed — install the Clover capability first';\n    END IF;\n    RETURN 'rvbbit.triples now runs on Clover (gemma4). Revert: SELECT rvbbit.unbind_triples_clover();';\nEND\n$btc$;",
@@ -582,7 +660,7 @@
               "DO $clover_default$\nDECLARE cur text; ok boolean;\nBEGIN\n    -- Adopt clover_llm as the default LLM provider ONLY when the\n    -- current default can't authenticate (virgin boxes ship\n    -- default_provider=openrouter with no key, which strands every\n    -- core LLM operator on a model this key can't reach). Boxes\n    -- with a working provider are left exactly as they are.\n    SELECT trim(both '\"' from value::text) INTO cur\n      FROM rvbbit.settings WHERE key = 'default_provider';\n    SELECT (b.auth_header_env IS NULL\n            OR rvbbit.env_present(b.auth_header_env)\n            OR coalesce(rvbbit.get_secret(b.auth_header_env), '') <> '')\n      INTO ok FROM rvbbit.backends b WHERE b.name = cur;\n    IF cur IS DISTINCT FROM 'clover_llm' AND NOT coalesce(ok, false) THEN\n        PERFORM rvbbit.set_default_provider('clover_llm');\n        UPDATE rvbbit.operators SET model = ''\n         WHERE model LIKE 'openai/%';\n    END IF;\nEND $clover_default$;"
             ]
           },
-          "tagline": "Semantic SQL, batteries included: 53 operators — calibrated ML and web specialists unmetered on every tier, and a pinned LLM priced by speed, not per call.",
+          "tagline": "Semantic SQL, batteries included: 62 operators — calibrated ML, structured document and time-series specialists unmetered on every tier, plus pinned LLMs and evidence-first web research priced by speed, not per call.",
           "value_props": [
             {
               "title": "Lane-priced LLM",
@@ -610,7 +688,10 @@
             "cta_url": "https://rvbbit.ai/buy/clover-free"
           },
           "highlights": [
-            "53 operators, one flat sub: match, classify with scores, NLI, sentiment, extract, PII, OCR, transcribe, forecast, cluster, fit/predict/explain, relations, safe web/document-to-Markdown extraction — plus LLM entity resolution, golden records, timelines, consensus, and general reasoning",
+            "62 operators, one flat sub: match, classify with scores, NLI, sentiment, extract, PII, structured document parsing, transcribe, multivariate forecasting with business drivers, time-series anomaly/imputation/similarity, cluster, fit/predict/explain, relations, safe web extraction, and bounded cited web research — plus LLM entity resolution, golden records, timelines, consensus, and general reasoning",
+            "Granite-Docling turns PDFs and images into Markdown plus evidence-linked blocks, tables, cells and page geometry; plain-text OCR remains compatible",
+            "Chronos-2 forecasts related metrics together and can incorporate historical and known-future drivers such as promotions, holidays, weather or staffing",
+            "TSPulse adds CPU-side anomaly scoring, missing-point reconstruction and semantic time-series similarity without consuming L4 VRAM",
             "clover_llm_make_operator: an operator that BUILDS operators — plain English in, a created + battery-tested SQL operator out",
             "ML specialists are unmetered on every tier, including Free — lanes only pace the LLM",
             "clover_llm_implies passes the quantifier cases (all -> some) that fast NLI models miss — same battery, documented side by side",
