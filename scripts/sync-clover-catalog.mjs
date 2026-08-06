@@ -1,6 +1,7 @@
-// Refresh only the managed/clover entry in the public subscription catalog
-// from rvbbit-sql's extension seed. Other managed entries (for example Hare)
-// have independent release lifecycles and are deliberately preserved.
+// Refresh release-controlled entries in the public subscription/integration
+// catalog from rvbbit-sql's extension seed. Other managed entries (for
+// example Hare) have independent release lifecycles and are deliberately
+// preserved.
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -10,6 +11,7 @@ const seedPath =
   process.env.CAPABILITY_CATALOG_SEED ??
   path.resolve(root, "../rvbbit-sql/crates/pg_rvbbit/src/capability_catalog_seed.json");
 const publicPath = path.join(root, "public", "catalog.json");
+const syncedIds = ["managed/clover", "integrations/google-meet-brain"];
 
 const seed = JSON.parse(fs.readFileSync(seedPath, "utf8"));
 const baseRef = process.env.CLOVER_SYNC_BASE_REF;
@@ -20,31 +22,40 @@ const currentText = baseRef
     })
   : fs.readFileSync(publicPath, "utf8");
 const current = JSON.parse(currentText);
-const source = (seed.capabilities ?? []).find(
-  (item) => (item.catalog_entry?.id ?? item.id) === "managed/clover"
-);
-if (!source) throw new Error("managed/clover not found in capability seed");
+const replacements = [];
+for (const id of syncedIds) {
+  const source = (seed.capabilities ?? []).find(
+    (item) => (item.catalog_entry?.id ?? item.id) === id
+  );
+  if (!source) throw new Error(`${id} not found in capability seed`);
 
-const index = (current.capabilities ?? []).findIndex(
-  (item) => item.id === "managed/clover"
-);
-if (index < 0) throw new Error("managed/clover not found in public catalog");
+  const entry = source.catalog_entry ?? source;
+  const index = (current.capabilities ?? []).findIndex((item) => item.id === id);
+  const previous = index >= 0 ? current.capabilities[index] : null;
+  // Preserve the intentionally compact, stable Clover document shape. New
+  // integration entries publish their complete catalog metadata plus the
+  // install manifest required by DataRabbit's URL importer.
+  const sourcePublic = previous && id === "managed/clover"
+    ? Object.fromEntries(
+        Object.keys(previous).map((key) => [
+          key,
+          key === "capability_manifest" ? source.capability_manifest ?? {} : entry[key]
+        ])
+      )
+    : { ...entry, capability_manifest: source.capability_manifest ?? {} };
+  const replacement = previous
+    ? mergePreservingShape(previous, sourcePublic)
+    : sourcePublic;
 
-const entry = source.catalog_entry ?? source;
-const previous = current.capabilities[index];
-const sourcePublic = Object.fromEntries(
-  Object.keys(previous).map((key) => [
-    key,
-    key === "capability_manifest" ? source.capability_manifest ?? {} : entry[key]
-  ])
-);
-const replacement = mergePreservingShape(previous, sourcePublic);
-current.capabilities[index] = replacement;
+  if (index >= 0) current.capabilities[index] = replacement;
+  else current.capabilities.push(replacement);
+  replacements.push(replacement);
+}
 current.generated_at = new Date().toISOString();
 
 fs.writeFileSync(publicPath, `${JSON.stringify(current, null, 2)}\n`);
 console.log(
-  `synced managed/clover (${replacement.operators?.length ?? 0} operators) to ${path.relative(root, publicPath)}`
+  `synced ${replacements.map((entry) => entry.id).join(", ")} to ${path.relative(root, publicPath)}`
 );
 
 function mergePreservingShape(previousValue, nextValue) {
