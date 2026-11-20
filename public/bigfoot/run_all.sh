@@ -6,7 +6,12 @@ set -euo pipefail
 # any notebook SQL file not sitting next to it is fetched on first run.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_URL="${BIGFOOT_BASE_URL:-https://rvbbit.ai/bigfoot}"
-DSN="${RVBBIT_DSN:-postgresql://postgres:rvbbit@localhost:55433/bench}"
+if [ -z "${RVBBIT_DSN:-}" ]; then
+  echo "Set RVBBIT_DSN to your Calliope Postgres (localhost installs bind SQL on 127.0.0.1, database rvbbit)." >&2
+  echo "The old localhost:55433 / password rvbbit default is retired." >&2
+  exit 1
+fi
+DSN="$RVBBIT_DSN"
 SAMPLE_ROWS="${BIGFOOT_SAMPLE_ROWS:-500}"
 CLASSIFY_ROWS="${BIGFOOT_CLASSIFY_ROWS:-250}"
 EXTRACT_ROWS="${BIGFOOT_EXTRACT_ROWS:-12}"

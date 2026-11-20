@@ -1,290 +1,38 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SqlCode } from "@/components/SqlCode";
-import catalog from "../../../content/clover-operators.json";
 
 export const metadata: Metadata = {
-  title: "Clover operators — every clover_* function, with its cascade",
+  title: "Clover operators — what the self-hosted gateway runs",
   description:
-    "All 49 hosted Clover operators for Postgres: signatures, descriptions, and the exact model cascade each one runs (encoder specialists, LLM steps, code gates)."
+    "Which clover_* SQL functions a Calliope 1.2.1 CPU install serves, which stay off until you enable a worker, and which are not in this package."
 };
 
-type Step = {
-  name: string;
-  kind: string;
-  label: string;
-  model: string | null;
-  argIn: string[];
-  stepIn: string[];
-};
+const on = [
+  ["clover_classify(text, labels)", "Winning label. 2–16 labels use one choice question; other counts score labels independently."],
+  ["clover_classify_scores(text, labels)", "All label scores for that call."],
+  ["clover_entails(premise, hypothesis)", "Entailment vs not. Threshold stays 0.5. This is not three-way NLI."],
+  ["clover_sentiment(text)", "positive, neutral, or negative."],
+  ["clover_sentiment_score(text)", "P(positive) − P(negative)."],
+  ["clover_toxic(text) / clover_moderate(text)", "Six independent moderation scores. Toxic threshold stays 0.5."],
+  ["clover_language(text) / clover_language_info(text)", "Lingua 2.1.1 compact mode. ISO code and a native confidence. Zero model-provider cost."],
+  ["clover_transcribe(audio)", "Public HTTP(S) URL, base64, or a data URI. OpenRouter openai/gpt-transcribe unless you change --transcription-model."],
+  ["clover_web_scrape(url) / clover_web_markdown(url)", "Bundled Clover Web extractor. No JavaScript browser. cache_policy stays never."],
+  ["clover_llm_* , clover_extract_json, summarize, extract", "SQL LLM route clover, default model openai/gpt-6-luna. An operator step can still ask for model calliope."]
+];
 
-type Op = {
-  name: string;
-  args: string[];
-  returns: string;
-  description: string;
-  steps: Step[];
-};
+const optional = [
+  ["clover_extract, clover_pii", "GLiNER medium v2.1. Off until COMPOSE_PROFILES includes specialists (or you deploy builtin/clover-gliner)."],
+  ["clover_series_embed, clover_series_anomalies, clover_series_similarity, clover_series_impute", "TSPulse. Same specialists profile, or builtin/clover-tspulse. Anomaly detection wants at least 1536 points."],
+  ["clover_gliner_extract(text, labels), clover_tspulse(operation, payload)", "Direct worker helpers. Gateway clover_* calls are the ones that hit the ledger."],
+  ["clover_cluster, clover_anomaly_fit, clover_anomaly_score", "builtin/clover-analytics. CPU, no GPU. Not started by the default bundle."],
+  ["clover_web_research, clover_web_research_deep, clover_web_watch", "Clover Research. The release compose includes the service; --research is how a from-source config turns the route on. SQL cache policy is never."]
+];
 
-const OPS: Op[] = (catalog as { operators: Op[] }).operators;
-
-const KIND_COLOR: Record<string, string> = {
-  llm: "#a78bfa",
-  specialist: "#5eead4",
-  code: "#fbbf24"
-};
-
-const KIND_LABEL: Record<string, string> = {
-  llm: "LLM (gemma-4)",
-  specialist: "encoder model",
-  code: "code gate"
-};
-
-// Layered layout: args column → one column per step → return column.
-function OpDag({ op }: { op: Op }) {
-  const rowH = 34;
-  const argW = 104;
-  const stepW = 132;
-  const outW = 84;
-  const gap = 44;
-  const pad = 8;
-
-  const rows = Math.max(op.args.length, 1);
-  const midY = (rows * rowH) / 2 + pad;
-  const width =
-    pad + argW + gap + op.steps.length * (stepW + gap) + outW + pad;
-  const height = rows * rowH + pad * 2 + 14;
-
-  const argY = (i: number) => pad + i * rowH + rowH / 2 + 7;
-  const stepX = (i: number) => pad + argW + gap + i * (stepW + gap);
-  const outX = pad + argW + gap + op.steps.length * (stepW + gap);
-
-  const edges: { x1: number; y1: number; x2: number; y2: number }[] = [];
-  op.steps.forEach((s, si) => {
-    s.argIn.forEach((a) => {
-      const ai = op.args.indexOf(a);
-      if (ai >= 0)
-        edges.push({
-          x1: pad + argW,
-          y1: argY(ai),
-          x2: stepX(si),
-          y2: midY + 7
-        });
-    });
-    s.stepIn.forEach((prev) => {
-      const pi = op.steps.findIndex((p) => p.name === prev);
-      if (pi >= 0)
-        edges.push({
-          x1: stepX(pi) + stepW,
-          y1: midY + 7,
-          x2: stepX(si),
-          y2: midY + 7
-        });
-    });
-  });
-  // final step → return
-  if (op.steps.length > 0) {
-    edges.push({
-      x1: stepX(op.steps.length - 1) + stepW,
-      y1: midY + 7,
-      x2: outX,
-      y2: midY + 7
-    });
-  }
-
-  return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      width="100%"
-      style={{ maxWidth: width, display: "block" }}
-      role="img"
-      aria-label={`${op.name} cascade: ${op.steps.map((s) => s.label).join(" then ")}`}
-    >
-      {edges.map((e, i) => {
-        const mx = (e.x1 + e.x2) / 2;
-        return (
-          <path
-            key={i}
-            d={`M ${e.x1} ${e.y1} C ${mx} ${e.y1}, ${mx} ${e.y2}, ${e.x2} ${e.y2}`}
-            fill="none"
-            stroke="rgba(148,163,184,0.45)"
-            strokeWidth={1.2}
-          />
-        );
-      })}
-      {op.args.map((a, i) => (
-        <g key={a}>
-          <rect
-            x={pad}
-            y={argY(i) - 12}
-            width={argW}
-            height={24}
-            rx={12}
-            fill="rgba(148,163,184,0.08)"
-            stroke="rgba(148,163,184,0.4)"
-          />
-          <text
-            x={pad + argW / 2}
-            y={argY(i) + 4}
-            textAnchor="middle"
-            fontSize={11}
-            fontFamily="var(--font-mono, ui-monospace, monospace)"
-            fill="#cbd5e1"
-          >
-            {a}
-          </text>
-        </g>
-      ))}
-      {op.steps.map((s, i) => (
-        <g key={s.name}>
-          <rect
-            x={stepX(i)}
-            y={midY - 10}
-            width={stepW}
-            height={34}
-            rx={8}
-            fill="rgba(15,23,42,0.6)"
-            stroke={KIND_COLOR[s.kind] ?? "#94a3b8"}
-            strokeWidth={1.3}
-          />
-          <text
-            x={stepX(i) + stepW / 2}
-            y={midY + 4}
-            textAnchor="middle"
-            fontSize={11}
-            fontFamily="var(--font-mono, ui-monospace, monospace)"
-            fill={KIND_COLOR[s.kind] ?? "#94a3b8"}
-          >
-            {s.label}
-          </text>
-          <text
-            x={stepX(i) + stepW / 2}
-            y={midY + 17}
-            textAnchor="middle"
-            fontSize={8.5}
-            fill="rgba(148,163,184,0.75)"
-          >
-            {s.kind === "llm"
-              ? "hosted LLM"
-              : s.kind === "code"
-                ? "deterministic gate"
-                : (s.model ?? "").split("/").pop() || "hosted encoder"}
-          </text>
-        </g>
-      ))}
-      <g>
-        <rect
-          x={outX}
-          y={midY - 5}
-          width={outW}
-          height={24}
-          rx={12}
-          fill="rgba(244,114,182,0.07)"
-          stroke="rgba(244,114,182,0.45)"
-        />
-        <text
-          x={outX + outW / 2}
-          y={midY + 11}
-          textAnchor="middle"
-          fontSize={11}
-          fontFamily="var(--font-mono, ui-monospace, monospace)"
-          fill="#f9a8d4"
-        >
-          {op.returns}
-        </text>
-      </g>
-    </svg>
-  );
-}
-
-/* The fit → blob → predict family: fit operators RETURN the trained model
- * (base64, in your result set — nothing persists server-side); the
- * consumers take that blob back. The cards cross-link and point at the
- * worked example in the "Client-held models" band above the groups. */
-const MODEL_FLOW: Record<string, { role: "produces" | "consumes"; pairs: string[] }> = {
-  clover_fit: { role: "produces", pairs: ["clover_predict", "clover_explain"] },
-  clover_anomaly_fit: { role: "produces", pairs: ["clover_anomaly_score", "clover_explain"] },
-  clover_predict: { role: "consumes", pairs: ["clover_fit"] },
-  clover_anomaly_score: { role: "consumes", pairs: ["clover_anomaly_fit"] },
-  clover_explain: { role: "consumes", pairs: ["clover_fit", "clover_anomaly_fit"] }
-};
-
-function ModelFlowNote({ op }: { op: Op }) {
-  const flow = MODEL_FLOW[op.name];
-  if (!flow) return null;
-  const links = flow.pairs.map((p, i) => (
-    <span key={p}>
-      {i > 0 ? " / " : ""}
-      <Link href={`#${p}`}>
-        <code>{p}</code>
-      </Link>
-    </span>
-  ));
-  return (
-    <p
-      style={{
-        fontSize: "0.8rem",
-        lineHeight: 1.5,
-        padding: "0.45rem 0.7rem",
-        borderRadius: 8,
-        border: "1px solid rgba(167,139,250,0.35)",
-        background: "rgba(167,139,250,0.06)"
-      }}
-    >
-      {flow.role === "produces" ? (
-        <>
-          <strong>Returns your model.</strong> The fitted model comes back IN the
-          result — <code>result-&gt;&gt;&apos;blob_b64&apos;</code> — nothing is stored
-          server-side. Hand that string to {links}, usually via a CTE (
-          <a href="#client-held-models">worked example ↑</a>), or save the row in a
-          table to reuse it forever.
-        </>
-      ) : (
-        <>
-          <strong>model_blob_b64 = a model you fitted earlier.</strong> It&apos;s the{" "}
-          <code>blob_b64</code> field returned by {links} — chain them in one
-          statement with a CTE (<a href="#client-held-models">worked example ↑</a>) or
-          read it back from wherever you stored it.
-        </>
-      )}
-    </p>
-  );
-}
-
-function OpCard({ op }: { op: Op }) {
-  return (
-    <article className="feature-card" id={op.name} style={{ overflow: "hidden" }}>
-      <h3 style={{ fontFamily: "var(--font-mono, ui-monospace, monospace)", fontSize: "0.95rem" }}>
-        {op.name}({op.args.join(", ")}) → {op.returns}
-      </h3>
-      <p>{op.description}</p>
-      <ModelFlowNote op={op} />
-      <div style={{ overflowX: "auto" }}>
-        <OpDag op={op} />
-      </div>
-    </article>
-  );
-}
-
-const GROUPS: { title: string; blurb: string; filter: (o: Op) => boolean }[] = [
-  {
-    title: "Encoder specialists",
-    blurb:
-      "Single hosted encoder models — embeddings, rerank, sentiment, NLI, OCR, transcription, forecasting, tabular prediction. Unmetered on every tier.",
-    filter: (o) => o.steps.length === 1 && o.steps[0].kind === "specialist"
-  },
-  {
-    title: "Composite cascades",
-    blurb:
-      "Multi-step operators: encoder output flows through a deterministic code gate (or a second encoder) before it becomes SQL. The DAG is the documentation.",
-    filter: (o) => o.steps.length > 1
-  },
-  {
-    title: "LLM operators",
-    blurb:
-      "Prompt-engineered gemma-4 steps with strict output contracts — extraction to your schema, repair, translation, judgment, logic. Metered by lanes, never tokens.",
-    filter: (o) => o.steps.length === 1 && o.steps[0].kind === "llm"
-  }
+const absent = [
+  "clover_contradicts and the three-way nli3 route — the adapter exists, and a fresh CPU install leaves it unconfigured because Jev and Luna Decisions do not match the old contradiction test.",
+  "Forecasting (Chronos), OCR / Granite-Docling, NuExtract as a specialist, SigLIP2 image embeddings, REBEL relations, and TabPFN fit/predict/SHAP. The docs name these as still needing a compatible worker. Do not point them at a chat model.",
+  "The Qwen/Cua action scorer. Optional GPU worker, not in the 1.2.1 bundle. choose() stays on Jev."
 ];
 
 export default function CloverOperatorsPage() {
@@ -292,132 +40,64 @@ export default function CloverOperatorsPage() {
     <main className="clover-page">
       <section className="band">
         <div className="section-header">
-          <p className="eyebrow">
-            <Link href="/clover">Clover</Link> · operator reference ·{" "}
-            <Link href="/semantic-sql">new to the term?</Link>
-          </p>
-          <h2>
-            All {OPS.length} operators, <em>with the cascade each one runs.</em>
-          </h2>
+          <p className="eyebrow">Operator notes · Calliope 1.2.1</p>
+          <h2>Names that exist, and the ones that answer.</h2>
           <span>
-            Every <code>clover_*</code> function below is plain SQL after{" "}
-            <code>curl -fsSL https://rvbbit.ai/clover-install.sql | psql</code>.
-            The diagrams are the real execution DAGs from the installer —
-            arguments flow into hosted model steps (and deterministic code
-            gates), and out as a typed SQL value. Receipts record the exact
-            model version for every call.
-          </span>
-          <div
-            style={{
-              marginTop: "0.8rem",
-              fontSize: "0.85rem",
-              opacity: 0.8,
-              display: "flex",
-              gap: "1.5rem",
-              flexWrap: "wrap"
-            }}
-          >
-            {(["specialist", "llm", "code"] as const).map((k) => (
-              <span key={k} style={{ whiteSpace: "nowrap" }}>
-                <span style={{ color: KIND_COLOR[k] }}>■</span> {KIND_LABEL[k]}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* The one genuinely confusing argument on this page, explained once,
-          anchored, and linked from every card that touches it. */}
-      <section className="band" id="client-held-models">
-        <div className="section-header">
-          <p>Before the list — the one weird argument</p>
-          <h2>
-            <code style={{ fontSize: "0.8em" }}>model_blob_b64</code> — you hold the
-            model, not us.
-          </h2>
-          <span>
-            <code>clover_fit</code> and <code>clover_anomaly_fit</code> train a model
-            on your rows and <strong>return it to you</strong> as a base64 blob inside
-            the JSON result (<code>-&gt;&gt;&apos;blob_b64&apos;</code>). Nothing is
-            stored server-side — the model is just data in your database, like any
-            other value. Operators that take <code>model_blob_b64</code> are asking
-            for that string back. The usual shape is one statement, fit feeding
-            predict through a CTE:
+            These are the SQL functions{" "}
+            <a href="https://github.com/ryrobes/calliope/blob/main/docs/CLOVER_SELF_HOSTED.md">
+              CLOVER_SELF_HOSTED.md
+            </a>{" "}
+            documents for the self-hosted gateway. A function can be installed
+            and still return <code>capability_unavailable</code> until its
+            worker is up. This is not a price list.{" "}
+            <Link href="/clover">Back to Clover</Link>.
           </span>
         </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
-            gap: "1rem",
-            maxWidth: 1100
-          }}
-        >
-          <article className="feature-card code-quiet">
-            <h3>Fit → predict, one statement</h3>
-            <SqlCode ariaLabel="Fit then predict via a CTE">{`WITH model AS (
-  SELECT rvbbit.clover_fit(
-    'classifier',
-    '[[1,1],[2,1],[1,2],[8,9],[9,8],[9,9]]',  -- features
-    '["small","small","small",
-      "big","big","big"]'                     -- labels
-  ) AS m
-)
-SELECT rvbbit.clover_predict(
-         m->>'blob_b64',   -- the model, straight back in
-         '[[9,9]]'         -- rows to classify
-       )->'predictions'->>0
-FROM model;                -- → big`}</SqlCode>
-          </article>
-          <article className="feature-card code-quiet">
-            <h3>Or keep the model — it&apos;s yours</h3>
-            <SqlCode ariaLabel="Store the fitted model and reuse it">{`-- Train once, store the blob like any value:
-CREATE TABLE churn_model AS
-SELECT now() AS trained_at,
-       rvbbit.clover_fit('classifier',
-         f.features, f.labels) AS m
-FROM   my_training_set f;
 
--- Reuse it anywhere, forever, no refitting:
-SELECT rvbbit.clover_predict(
-         (SELECT m->>'blob_b64' FROM churn_model
-          ORDER BY trained_at DESC LIMIT 1),
-         c.features)
-FROM   new_customers c;`}</SqlCode>
-            <p style={{ fontSize: "0.85rem", opacity: 0.8 }}>
-              Same pattern for <code>clover_anomaly_fit</code> →{" "}
-              <code>clover_anomaly_score</code>, and <code>clover_explain</code> takes
-              the same blob (plus its <code>sha256</code>, also in the fit result) to
-              produce SHAP attributions.
-            </p>
-          </article>
+        <h3>Served by the default CPU gateway</h3>
+        <div className="capability-grid">
+          {on.map(([name, text]) => (
+            <article className="feature-card" key={name}>
+              <p className="clover-ops">{name}</p>
+              <p>{text}</p>
+            </article>
+          ))}
         </div>
-      </section>
 
-      {GROUPS.map((g) => {
-        const ops = OPS.filter(g.filter);
-        if (ops.length === 0) return null;
-        return (
-          <section className="band" key={g.title}>
-            <div className="section-header">
-              <p>{g.title}</p>
-              <h2>{ops.length} operators</h2>
-              <span>{g.blurb}</span>
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-                gap: "1rem"
-              }}
-            >
-              {ops.map((op) => (
-                <OpCard key={op.name} op={op} />
-              ))}
-            </div>
-          </section>
-        );
-      })}
+        <h3 style={{ marginTop: "2rem" }}>Off until you enable the worker</h3>
+        <div className="capability-grid">
+          {optional.map(([name, text]) => (
+            <article className="feature-card" key={name}>
+              <p className="clover-ops">{name}</p>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+
+        <h3 style={{ marginTop: "2rem" }}>Not in this CPU package</h3>
+        <ul>
+          {absent.map((line) => (
+            <li key={line} style={{ marginBottom: "0.6rem" }}>
+              {line}
+            </li>
+          ))}
+        </ul>
+
+        <div style={{ maxWidth: 860, marginTop: "1.5rem" }}>
+          <SqlCode ariaLabel="Probe Clover routes and a default operator">{`-- Local service key, from the install's generated client.env.
+-- GET /v1/capabilities?probe=true
+-- reports disabled | missing_credentials | configured | ready | unavailable.
+
+SELECT rvbbit.clover_sentiment_score('Excellent repair and quick service');`}</SqlCode>
+        </div>
+        <p style={{ marginTop: "1rem" }}>
+          Built-in operators that are not <code>clover_*</code> —{" "}
+          <code>means</code>, <code>about</code>, <code>classify</code>,{" "}
+          <code>extract</code>, <code>knn_text</code>, <code>synth_sql</code> —
+          are the extension itself. See <Link href="/docs/semantic-functions">semantic functions</Link> and{" "}
+          <Link href="/docs/semantic-sql">semantic SQL</Link>.
+        </p>
+      </section>
     </main>
   );
 }

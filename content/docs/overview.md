@@ -24,7 +24,7 @@ Think about RVBBIT in four layers:
 | --- | --- |
 | Postgres heap | The durable source of truth and universal fallback. |
 | Semantic SQL | Operators, embeddings, KG helpers, MCP calls, model costs, and receipts. |
-| Acceleration registry | Optional: registered heap tables get rebuildable columnar files beside them - Parquet, Vortex, Lance, hot memory, layout variants, and time travel - plus multi-engine routing (DataFusion, Duck, [GPU GQE](/docs/gqe)). |
+| Acceleration registry | Optional: registered heap tables get rebuildable columnar files beside them - Parquet, Vortex, Lance, hot memory, layout variants, and time travel - plus multi-engine routing (DataFusion, Duck). The old [GPU GQE](/docs/gqe) image is archived and is not in Calliope 1.2.1. |
 | Warren | Capability/runtime nodes for managed sidecars and workflow execution. |
 
 You can use semantic SQL without registering a single table for acceleration.
@@ -33,13 +33,13 @@ are designed to compose, not to force one deployment shape.
 
 Two more pieces round out the product:
 
-- **The Docker ensemble.** For v1, RVBBIT is distributed as a Docker Compose
-  stack - Postgres 18 with the extension preinstalled, the Duck/Vortex worker,
-  Data Rabbit, and a Warren agent. Treat it like a database, not like software
-  you install into Postgres by hand. See [Quickstart](/docs/quickstart).
-- **[Data Rabbit](/docs/data-rabbit)**, the desktop UI. A fast SQL desktop for
-  any Postgres that lights up with cockpits for the whole rvbbit surface -
-  operators, receipts, routing, the knowledge graph, cubes, metrics, and more.
+- **Calliope.** RVBBIT ships as the SQL engine inside Calliope 1.2.1, one
+  Compose project (Postgres 18 with the extension, the Duck worker, Data
+  Rabbit, Warren, and the Hutch / Clover gateway). See
+  [Quickstart](/docs/quickstart). There is no separate hosted Clover.
+- **[Data Rabbit](/docs/data-rabbit)**, the SQL desktop in that install
+  (`calliope-datarabbit`). It lights up on an rvbbit database: operators,
+  receipts, routing, the knowledge graph, cubes, metrics.
 
 ## What Is Novel
 
@@ -54,8 +54,10 @@ cost accounting can share one SQL-visible control plane:
   novelty detection, extraction, and evidence snippets. The core extension seeds
   LLM-backed `means()`, `about()`, `classify()`, and `extract()`, while
   [capability packs](/docs/capability-packs) add local-specialist versions of
-  those names plus pack-only operators like `extract_pii()` (for example,
-  reranker-backed `means()` / `about()` ship from the BGE reranker packs).
+  those names. `extract_pii()` is not a core function. PII spans, when the
+  optional GLiNER worker is enabled, are `clover_pii`. Reranker-backed
+  `means()` / `about()` still come from the BGE reranker packs, which you
+  deploy; they are not a substitute for the seeded LLM operators.
 - Receipts and cost ledgers make semantic calls inspectable after the fact.
 - The acceleration registry can accelerate analytical tables without changing
   the heap fallback contract.
@@ -72,7 +74,7 @@ users should only need the first screen of a page to get moving.
 ## Good First Reads
 
 1. [Positioning](/docs/positioning) for the product shape and mental model.
-2. [Quickstart](/docs/quickstart) for the Docker ensemble, semantic SQL, and
+2. [Quickstart](/docs/quickstart) for the Calliope install, semantic SQL, and
    your first accelerated table.
 3. [Examples](/docs/examples) for compact SQL snippets across the system.
 4. [Semantic SQL](/docs/semantic-sql) for user-defined model-backed operators.

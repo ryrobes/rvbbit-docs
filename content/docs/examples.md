@@ -65,7 +65,7 @@ SELECT rvbbit.create_operator(
   op_return_type => 'text',
   op_system      => 'Classify renewal risk as low, medium, or high.',
   op_user        => E'Tier: {{ tier }}\nMessage: {{ message }}\nRisk:',
-  op_model       => 'openai/gpt-5.4-mini',
+  op_model       => 'openai/gpt-6-luna',
   op_max_tokens  => 8,
   op_temperature => 0.0
 );

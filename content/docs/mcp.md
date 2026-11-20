@@ -131,7 +131,7 @@ SELECT rvbbit.create_operator(
     {
       "name": "summarize",
       "kind": "llm",
-      "model": "openai/gpt-5.4-mini",
+      "model": "openai/gpt-6-luna",
       "system": "Summarize in one sentence.",
       "user": "Repo: {{ steps.fetch.output.items.0.full_name }}"
     }

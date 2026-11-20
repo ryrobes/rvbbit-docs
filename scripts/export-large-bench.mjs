@@ -2,10 +2,12 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-const dsn =
-  process.env.BENCHMARK_DSN ??
-  process.env.RVBBIT_DSN ??
-  "postgresql://postgres:rvbbit@localhost:55433/bench";
+const dsn = process.env.BENCHMARK_DSN ?? process.env.RVBBIT_DSN;
+if (!dsn) {
+  throw new Error(
+    "Set BENCHMARK_DSN or RVBBIT_DSN. The old localhost:55433 stack is retired."
+  );
+}
 
 const testName = process.env.BENCHMARK_TEST_NAME ?? "gpu_bench_test12";
 const testNameLiteral = `'${testName.replaceAll("'", "''")}'`;

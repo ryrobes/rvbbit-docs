@@ -108,7 +108,7 @@ SELECT rvbbit.create_operator(
     op_arg_types   => ARRAY['text', 'text'],
     op_return_type => 'text',
     op_steps       => $steps$[
-        {"name": "classify", "kind": "llm",  "model": "openai/gpt-5.4-mini",
+        {"name": "classify", "kind": "llm",  "model": "openai/gpt-6-luna",
          "system": "...", "user": "..."},
         {"name": "check",    "kind": "code", "fn": "validate_one_of",
          "inputs": {"value": "{{ steps.classify.output }}"}}

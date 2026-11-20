@@ -1,169 +1,100 @@
 ---
 title: Quickstart
-description: Start the Docker ensemble, run semantic SQL, and accelerate your first table.
+description: Install Calliope 1.2.1, connect to its Postgres, and run semantic SQL.
 section: Start
 navOrder: 20
 sourceDocs:
-  - ../rvbbit-sql/PACKAGING.md
-  - ../rvbbit-sql/docs/OPERATORS.md
-  - ../rvbbit-sql/docs/RVBBIT_PRODUCTION_SHAPE.md
-  - ../rvbbit-sql/docs/DIAGNOSTICS.md
-  - ../rvbbit-sql/docs/COSTS_AND_RECEIPTS.md
+  - ../calliope/deploy/README.md
+  - ../calliope/docs/RVBBIT_ENGINE.md
+  - ../calliope/docs/CLOVER_SELF_HOSTED.md
 ---
 
-RVBBIT is technically a Postgres extension plus a few helper processes, but
-for v1 you should treat it like a database: one Docker Compose file brings up
-Postgres 18 with the extension preinstalled, the Duck/Vortex query worker, the
-[Data Rabbit](/docs/data-rabbit) desktop UI, and a [Warren](/docs/warren)
-agent for deploying capability sidecars.
+RVBBIT is the Postgres extension inside [Calliope](https://usecalliope.com).
+You do not install a separate rvbbit-postgres / Lens / Warren stack. Calliope
+1.2.1 is one Compose project: Postgres 18 with the extension, the Duck worker,
+Data Rabbit, Warren, Hutch (Clover), and the Calliope app.
 
-> **Already run Postgres?** The Docker ensemble is the simplest way in, but
-> RVBBIT is additive onto a Postgres 18 you already have — start with just the
-> extension and add the query worker and self-hosted models only as you need
-> them. See [Existing Postgres](/docs/existing-postgres). If you have used
-> TimescaleDB or similar "it's really an extension" databases, the shape is
-> the same.
+`deploy/compose.yaml` in the Calliope repo defines 22 services. A default
+start does not run the `computer` desktop or the `specialists` profile
+(GLiNER and TSPulse).
 
-## Start The Stack
+## Install
 
-Requirements: Docker with Compose, and about 4 GB of free RAM for the base
-stack. One line:
+Linux x86-64, Docker Engine, Compose 2.30 or newer. Budget roughly 16 GB RAM
+and 50 GB disk for a first machine. You need an OpenRouter key. You do not
+need a GPU, and you do not need an account with us.
 
-```bash
-curl -fsSL https://rvbbit.ai/install.sh | bash
-```
-
-The installer currently pins the coordinated `4.2.6` release. To pin a
-different published release explicitly, set `RVBBIT_VERSION` before running it.
-Re-running the installer keeps an existing Compose file intact; upgrade an
-existing install by pulling the updated file (after preserving any local
-changes) and recreating the services:
+Read the installer, then run it:
 
 ```bash
-cd rvbbit
-curl -fsSL https://rvbbit.ai/docker-compose.yml -o docker-compose.yml
-RVBBIT_VERSION=4.2.6 docker compose pull
-RVBBIT_VERSION=4.2.6 docker compose up -d
+curl -fsSL https://usecalliope.com/install.sh | bash
 ```
 
-The script is short and readable - it checks for Docker, downloads
-[docker-compose.yml](https://rvbbit.ai/docker-compose.yml) into `./rvbbit/`,
-runs `docker compose up -d`, and waits for Postgres to report healthy. If you
-prefer to do exactly that by hand:
+It asks for the OpenRouter key, an administrator login, and how people will
+reach Calliope. The localhost choice binds the web UI, Data Rabbit, and
+Postgres to 127.0.0.1. Re-running the script upgrades (it backs up the
+database first).
 
-```bash
-# Optional: export provider keys first so LLM-backed operators work.
-export OPENROUTER_API_KEY=sk-or-...
+`https://rvbbit.ai/install.sh` only prints that pointer. It does not install
+the old stack and it does not run the Calliope installer for you.
+`https://rvbbit.ai/docker-compose.yml` defines no services.
 
-mkdir rvbbit && cd rvbbit
-curl -fsSL https://rvbbit.ai/docker-compose.yml -o docker-compose.yml
-docker compose up -d
-```
-
-That starts everything from published images:
-
-| Service | Image | What it is |
-| --- | --- | --- |
-| `postgres` | `ghcr.io/ryrobes/rvbbit-postgres` | Postgres 18 + `pg_rvbbit`, on host port `55433`. Migrations apply automatically on every `up`, so image upgrades are safe. |
-| `duck` | (same image) | The shared Duck/Vortex query worker pool. |
-| `lens` | `ghcr.io/ryrobes/rvbbit-lens` | The Data Rabbit desktop UI on host port `3000`. |
-| `warren` | `ghcr.io/ryrobes/rvbbit-warren-agent` | Deploys capability sidecars (local models, runtimes, MCP gateways) via the mounted Docker socket. |
-| `bootstrap` | (one-shot) | Deploys and verifies the baseline capabilities on first start, then exits. |
-| `doc-extract` | `ghcr.io/ryrobes/rvbbit-doc-extract` | Parses staged documents for the document brain. |
-| `warehouse-mcp` | opt-in | The [Warehouse MCP server](/docs/warehouse-mcp), published-artifact hub, Artifact Lens, and optional Hermes-backed Calliope notebook. Configure OAuth or `WAREHOUSE_MCP_KEY`, then start with `docker compose --profile warehouse up -d`. |
-| `gdrive-connector` | opt-in | Google Drive ingestion for the document brain; start with the `gdrive` profile after configuring its service-account key. |
-
-Provider API keys (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`,
-`ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, …) are passed through from your shell
-environment into the containers. None are required to boot - local CPU
-embeddings work out of the box - but LLM-backed operators need at least one.
-
-If you only want the database (no UI, no Warren), the single container works
-too:
-
-```bash
-docker run -d --name rvbbit \
-    -p 55433:5432 \
-    -e POSTGRES_PASSWORD=rvbbit \
-    ghcr.io/ryrobes/rvbbit-postgres:latest
-```
-
-For NVIDIA hosts there is a GPU overlay
-([docker-compose.gqe.yml](https://rvbbit.ai/docker-compose.gqe.yml)) that
-pulls the prebuilt [GQE engine](/docs/gqe) image (~9GB, covers every CUDA
-CC 8.0+ card from RTX 30-series to Blackwell) - see the GPU host preflight
-on that page first.
+To install by hand from a release bundle instead, see
+[deploy/README.md](https://github.com/ryrobes/calliope/blob/main/deploy/README.md).
+Current images are tagged `1.2.1`, including
+`ghcr.io/ryrobes/calliope-postgres:1.2.1` and
+`ghcr.io/ryrobes/calliope-datarabbit:1.2.1`.
 
 ## Connect
 
+The database name is `rvbbit`. The SQL password is `POSTGRES_PASSWORD` in the
+install's private `.env`. It is not the web login, and this site does not
+publish a default. On a localhost install the port is whatever the installer
+bound (5432 if it was free).
+
 ```bash
-psql postgresql://postgres:rvbbit@localhost:55433/rvbbit
+psql 'host=127.0.0.1 port=5432 dbname=rvbbit user=postgres sslmode=verify-full sslrootcert=./state/postgres-tls/ca.crt'
 ```
 
-And open the UI: [http://localhost:3000](http://localhost:3000) - it comes
-**pre-connected** to the stack's own Postgres (a seeded "rvbbit (this stack)"
-connection; lens ≥ 3.0.5). Add more connections to any Postgres you like -
-remember they resolve from the lens *server*, so inside the ensemble the
-stack's database is `postgres:5432`, not `localhost`. Against an
-rvbbit-enabled database the whole rvbbit surface lights up. The extension is
-already created; you never run `CREATE EXTENSION` yourself on the Docker
-path.
+Use the host, port, and user your install actually wrote. Copy only
+`state/postgres-tls/ca.crt` to other clients. A public URL publishes Postgres
+on 5432 with the same TLS rule; see the deploy guide for
+`CALLIOPE_SQL_BIND`.
+
+Data Rabbit is on the port in `CALLIOPE_DATA_URL` (3001 if it was free) and,
+on a public hostname, at `https://YOUR_SERVER:3001` and `/datarabbit` on the
+Calliope origin. The old Lens container on port 3000 is not this stack.
 
 ## Check The Install
 
-Cheap diagnostics should work before you run paid or live-provider calls:
-
 ```sql
+SELECT rvbbit.rvbbit_version();
 SELECT * FROM rvbbit.doctor(false);
 SELECT * FROM rvbbit.provider_doctor(false);
 ```
 
-Use live mode only when you intentionally want active provider probes:
+`provider_doctor(true)` probes providers for real. Use it when you mean to.
+
+Clover is already the local Hutch gateway. A few calls the default CPU
+package serves:
 
 ```sql
-SELECT * FROM rvbbit.provider_doctor(true);
+SELECT rvbbit.clover_classify(
+  'The rooftop unit is leaking refrigerant',
+  'repair, billing, installation, scheduling'
+);
+SELECT rvbbit.clover_sentiment_score('Excellent repair and quick service');
 ```
 
-## Install Clover (Hosted Operators, No UI Needed)
-
-Clover is RVBBIT's managed capability: ~50 semantic operators (`clover_*`
-specialists + `clover_llm_*` generalist functions) whose inference runs on
-hosted GPUs under a flat subscription — the free tier costs $0 and issues one
-key at [rvbbit.ai/buy/clover-free](https://rvbbit.ai/buy/clover-free).
-
-With `RVBBIT_CLOVER_KEY` set in the Postgres server's environment, install
-from plain `psql` — no browser, no desktop app:
-
-```bash
-curl -fsSL https://rvbbit.ai/clover-install.sql | psql "$DSN"
-```
-
-The script is generated from the same catalog the Data Rabbit UI imports,
-and it is idempotent — re-run it any time the catalog updates. The
-`rvbbit-postgres` Docker image also applies it automatically on first boot
-whenever `RVBBIT_CLOVER_KEY` is present. Verify with:
-
-```sql
-SELECT rvbbit.clover_means('apple pie recipe', 'dessert recipes');  -- true
-```
-
-Setting things up for an AI agent instead? There's a dedicated page:
-[Setup for Agents](/docs/agents).
+There is no Clover key to buy and no `clover-install.sql` to apply. The file
+at `/clover-install.sql` is a comment that says so.
 
 ## Create A Semantic Operator
 
-Semantic operators are SQL functions backed by model calls or other capability
-nodes. They are stored as catalog rows (`rvbbit.operators`) and can be edited at
-runtime.
-
-You don't have to write every operator from scratch. The core extension already
-seeds LLM-backed `means()`, `about()`, `classify()`, and `extract()`, and
-installing a capability pack adds local-specialist versions of those names plus
-pack-only operators - for example reranker-backed `means()` / `about()` from the
-BGE reranker packs and `extract_pii()` from the GLiNER pack. See
-[Capability Packs](/docs/capability-packs#where-the-familiar-operators-come-from)
-for which name comes from where. The example below defines your own LLM-backed
-operator.
+Operators are rows in `rvbbit.operators`. The extension already seeds
+`means()`, `about()`, `classify()`, and `extract()`. `extract_pii()` is not
+one of them. The example below defines your own. The default model, if you
+omit `op_model`, is `openai/gpt-6-luna`.
 
 ```sql
 SELECT rvbbit.create_operator(
@@ -172,14 +103,11 @@ SELECT rvbbit.create_operator(
     op_return_type => 'text',
     op_system      => 'Classify the tone. Reply with one lowercase word.',
     op_user        => E'MESSAGE: {{ text }}\n\nTone:',
-    op_model       => 'openai/gpt-5.4-mini',
     op_max_tokens  => 8,
     op_temperature => 0.0,
     op_description => 'Classify message tone.'
 );
 ```
-
-Then call it like any other function:
 
 ```sql
 SELECT id, rvbbit.tone(body) AS tone
@@ -187,15 +115,10 @@ FROM support_tickets
 LIMIT 20;
 ```
 
-Inspect the receipt trail:
+Receipts:
 
 ```sql
-SELECT receipt_id,
-       operator,
-       model,
-       latency_ms,
-       error,
-       invocation_at
+SELECT receipt_id, operator, model, latency_ms, error, invocation_at
 FROM rvbbit.receipts
 ORDER BY invocation_at DESC
 LIMIT 10;
@@ -209,8 +132,6 @@ SELECT rvbbit.cost_audit_summary();
 SELECT rvbbit.embed('refund request from angry customer');
 ```
 
-For table search:
-
 ```sql
 SELECT *
 FROM rvbbit.knn_text(
@@ -221,48 +142,28 @@ FROM rvbbit.knn_text(
 );
 ```
 
-## Accelerate A Table
+The Calliope default text embedding is Voyage 4 (1,024 dimensions) through
+the local gateway, not a model downloaded into `$PGDATA` on first call.
 
-Acceleration is a registry: any ordinary heap table can be added to it, and
-RVBBIT then maintains rebuildable columnar files beside the heap. Register a
-table and build its first files:
+## Accelerate A Table
 
 ```sql
 SELECT rvbbit.enable_table('support_tickets'::regclass);
 SELECT rvbbit.refresh_acceleration('support_tickets'::regclass);
 ```
 
-That refresh:
-
-- scans rows that are newer than the stored watermark,
-- writes accelerator files,
-- updates the acceleration metadata,
-- leaves the heap intact for fallback, dump, and restore.
-
-New tables can opt in at creation time with the `USING rvbbit` sugar - it
-produces a plain heap table that is auto-registered:
+New tables can opt in at creation:
 
 ```sql
 CREATE TABLE events (id bigint, payload jsonb) USING rvbbit;
 ```
 
-`refresh_acceleration` also refreshes layout variants by default. To skip that
-work on a fast incremental refresh, pass `refresh_variants => false`:
-
-```sql
-SELECT rvbbit.refresh_acceleration(
-  'support_tickets'::regclass,
-  refresh_variants => false
-);
-```
-
-For a from-scratch rebuild (drop and re-derive every row group), use
-`rvbbit.rebuild_acceleration(...)` instead. See
-[Storage Acceleration](/docs/acceleration) for the full registry API.
+Skip layout-variant work on a fast refresh with
+`refresh_variants => false`. For a full rebuild use
+`rvbbit.rebuild_acceleration(...)`. See
+[Storage Acceleration](/docs/acceleration).
 
 ## Query Normally
-
-The point is that ordinary SQL remains ordinary SQL:
 
 ```sql
 SELECT account_id, count(*)
@@ -273,50 +174,15 @@ ORDER BY count(*) DESC
 LIMIT 20;
 ```
 
-The heap stays the source of truth. When acceleration is enabled, conservative,
-rule-based routing decides whether that query should use heap, native execution,
-DataFusion, Duck/Vortex, hot memory, [GPU GQE](/docs/gqe) on NVIDIA hosts, or
-another available path. Learned routing runs in shadow/observation mode only -
-it does not take over default routing. See
-[Routing And Training](/docs/routing-training) for the details.
-
-## Check Status
-
-```sql
-SELECT *
-FROM rvbbit.acceleration_status
-ORDER BY table_name;
-```
-
-Worker path:
-
-```sql
-SELECT *
-FROM rvbbit.duck_sidecar_latest
-ORDER BY last_heartbeat_at DESC;
-```
-
-Costs:
-
-```sql
-SELECT rvbbit.cost_audit_summary();
-```
+The heap stays the source of truth. Routing across native execution,
+DataFusion, and Duck/Vortex is the acceleration path. The NVIDIA GQE image
+this site used to publish is not part of Calliope 1.2.1 — see
+[GPU Execution](/docs/gqe), which is archived.
 
 ## Next Steps
 
-- Use [Data Rabbit](/docs/data-rabbit) - already running at
-  [localhost:3000](http://localhost:3000) - to browse, query, and watch the
-  system work.
-- Use [Semantic SQL](/docs/semantic-sql) to design robust model-backed
-  operators.
-- Use [Semantic Functions](/docs/semantic-functions) for retrieval,
-  classification, clustering, extraction, and evidence snippets.
-- Use [Retrieval](/docs/retrieval) and [Knowledge Graph](/docs/knowledge-graph)
-  for SQL-native RAG and durable semantic memory.
-- Use [Receipts And Costs](/docs/receipts-costs) before exposing paid model
-  calls to users.
-- Use [MCP Servers](/docs/mcp) when external tool results should join with SQL.
-- Use [Storage Acceleration](/docs/acceleration) before enabling acceleration
-  for larger reporting tables.
-- Use [Routing And Training](/docs/routing-training) before adding trained
-  profiles or forced engine paths.
+- [Clover](/clover) for the gateway, optional GLiNER/TSPulse, and adding MCP servers.
+- [Semantic SQL](/docs/semantic-sql) and [Semantic Functions](/docs/semantic-functions).
+- [MCP Servers](/docs/mcp) and [Receipts And Costs](/docs/receipts-costs).
+- [Data Rabbit](/docs/data-rabbit).
+- [Existing Postgres](/docs/existing-postgres) if you expected a standalone extension tarball. There isn't one on this site.

@@ -1,24 +1,25 @@
 # RVBBIT
 
-> Open-source Postgres extension: semantic operators in plain SQL (means, summarize, extract, triples), table time travel, columnar acceleration with adaptive engine routing, and receipts for every model-backed answer. With a Clover key, per-row inference runs on hosted GPUs under a flat subscription — agents orchestrate in SQL without spending their own tokens.
-
-Everything is reachable over a normal Postgres connection; discovery is SQL
-(`rvbbit.operators`, `rvbbit.capability_catalog`, `rvbbit.capability_search(text)`).
+> RVBBIT is the open-source Postgres extension inside Calliope: semantic operators in plain SQL (means, classify, knn_text, semantic_case, triples_rows, synth_sql), MCP calls (mcp_call, mcp_rows, register_mcp_server), metrics and alerts, columnar acceleration, and receipts for model-backed answers. Calliope 1.2.1 is self-hosted. Clover is the local Hutch model gateway in that install, backed by your OpenRouter key. There is no Clover account, free tier, or paid subscription.
 
 ## Setup
 
-- [Setup for Agents](https://rvbbit.ai/agents.md): install, get a key, verify, example queries — written for agents
-- [Clover install SQL](https://rvbbit.ai/clover-install.sql): idempotent psql script registering the hosted operators
-- [Quickstart](https://rvbbit.ai/docs/quickstart): the Docker ensemble and first semantic queries
-- [install.sh](https://rvbbit.ai/install.sh): full-stack one-liner (Postgres 18 + RVBBIT + Data Rabbit desktop)
+- [Calliope install](https://usecalliope.com): `curl -fsSL https://usecalliope.com/install.sh | bash` (read it first; Linux x86-64, Docker Compose 2.30+)
+- [Quickstart](https://rvbbit.ai/docs/quickstart): what that install gives you, then the first SQL
+- [Setup for Agents](https://rvbbit.ai/agents.md): the same path, written for agents
+- [install.sh on this site](https://rvbbit.ai/install.sh): prints the move. It does not install the old stack and it does not run the Calliope installer
+- [Clover, self-hosted](https://rvbbit.ai/clover): Hutch, OpenRouter-backed operators, optional GLiNER and TSPulse, your own MCP servers and operators
 
 ## Reference
 
-- [Capability catalog (JSON)](https://rvbbit.ai/catalog.json): machine-readable list of operators, models, and install statements
-- [Clover](https://rvbbit.ai/clover): hosted operator sets and industry kits — pricing, install, design partners
-- [Docs index](https://rvbbit.ai/docs): human documentation
-- [Benchmarks](https://rvbbit.ai/benchmarks): ClickBench / TPC-H route-by-route results
+- [Docs index](https://rvbbit.ai/docs)
+- [MCP from SQL](https://rvbbit.ai/docs/mcp)
+- [Semantic SQL](https://rvbbit.ai/docs/semantic-sql)
+- [Existing Postgres](https://rvbbit.ai/docs/existing-postgres): no published extension tarball; build `crates/pg_rvbbit` from the Calliope repo, or use the Calliope Postgres image
+- [Capability catalog (JSON)](https://rvbbit.ai/catalog.json): operator names that ship with the engine. It is not a checkout catalog
+- [Benchmarks](https://rvbbit.ai/benchmarks): older standalone-engine snapshot, not a Calliope 1.2.1 run
+- Engine source: https://github.com/ryrobes/calliope/tree/main/crates/pg_rvbbit
 
 ## Optional
 
-- [Data Rabbit](https://datarabbit.com): the SQL desktop for the humans you work with
+- [Data Rabbit](https://rvbbit.ai/docs/data-rabbit): the SQL desktop inside Calliope (`calliope-datarabbit`), also described at https://datarabbit.com

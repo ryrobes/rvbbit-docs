@@ -336,24 +336,25 @@ ORDER BY 2 DESC;`}</Sql>
           <p>A working implementation</p>
           <h2>This site ships one.</h2>
           <span>
-            RVBBIT implements semantic SQL as a Postgres extension —{" "}
-            <Link href="/clover/operators">49 operators</Link> across encoder,
-            composite, and LLM cascades, hosted or{" "}
-            <Link href="/docs/existing-postgres">self-hosted</Link>, with
-            receipts on every call. Runnable in about five lines:
+            RVBBIT implements semantic SQL as the Postgres extension inside
+            Calliope. Clover is the{" "}
+            <Link href="/clover">self-hosted gateway</Link> in that install,
+            not a subscription. Receipts stay on every model call.
           </span>
         </div>
         <div style={{ maxWidth: 860 }}>
-          <Sql>{`-- any Postgres 18 (tarball: rvbbit.ai/existing-postgres)
-CREATE EXTENSION pg_rvbbit;  SELECT rvbbit.migrate();
-\\! curl -fsSL https://rvbbit.ai/clover-install.sql | psql
-SELECT rvbbit.set_secret('RVBBIT_CLOVER_KEY', 'rvb_…');  -- free key: rvbbit.ai/free
+          <Sql>{`-- Calliope 1.2.1 already loads the extension.
+-- Read the installer, then run it:
+--   curl -fsSL https://usecalliope.com/install.sh | bash
 
-SELECT means('this blanket is cozy wool', 'warm bedding');   -- t`}</Sql>
+SELECT rvbbit.means(
+  'this blanket is cozy wool',
+  'warm bedding'
+);`}</Sql>
           <p style={{ marginTop: "0.8rem" }}>
             <Link href="/quickstart">Quickstart</Link> ·{" "}
-            <Link href="/clover/operators">the operator reference</Link> ·{" "}
-            <Link href="/free">free key</Link>
+            <Link href="/clover">Clover, self-hosted</Link> ·{" "}
+            <Link href="/clover/operators">what the gateway serves</Link>
           </p>
         </div>
       </section>

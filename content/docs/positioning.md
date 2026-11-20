@@ -31,10 +31,9 @@ heap tables without registering anything for acceleration. A team can
 accelerate fast read-heavy tables without putting model calls in those
 queries.
 
-One deployment note: for v1, RVBBIT ships as a single Docker ensemble
-(Postgres + extension + workers + UI) rather than as separately installable
-pieces - see [Quickstart](/docs/quickstart). The subsystems above are still
-opt-in at the SQL level; the ensemble just removes install friction.
+One deployment note: RVBBIT ships inside Calliope, not as a separate
+rvbbit-postgres / Lens compose file. See [Quickstart](/docs/quickstart).
+The subsystems above are still opt-in at the SQL level.
 
 ## Why SQL-Native AI
 

@@ -1,180 +1,99 @@
 ---
 title: Existing Postgres
-description: Add RVBBIT to a Postgres 18 you already run. Start with just the extension, then opt into the query worker and self-hosted models as you need them.
+description: There is no published extension tarball. Use the Calliope Postgres image, or build crates/pg_rvbbit from the Calliope repo.
 section: Start
 navOrder: 25
 sourceDocs:
-  - ../rvbbit-sql/docs/INSTALL_TIERS.md
+  - ../calliope/PACKAGING.md
+  - ../calliope/docs/RVBBIT_ENGINE.md
 ---
 
-The [Quickstart](/docs/quickstart) Docker ensemble is the turnkey path — one
-Compose file brings up everything at once. But RVBBIT is **additive onto a
-Postgres 18 you already run**, and the moving parts are opt-in. You can start
-with nothing but the extension and add the rest only when a workload asks for
-it.
+The old download on this site,
+`https://rvbbit.ai/dist/pg_rvbbit-4.1.6-pg18-amd64.tar.gz`, is gone. So is
+`ghcr.io/ryrobes/rvbbit-postgres` as a product install. Copying a `.so` out
+of that image is not a supported path.
 
-This is the piecemeal path: install the layers you want.
+What works today:
 
-> RVBBIT is a normal Postgres extension. Like TimescaleDB, `pg_cron`, or
-> `pg_stat_statements`, it needs one entry in `shared_preload_libraries` and a
-> restart — that is the only invasive step, and it is standard for any
-> extension that hooks the planner.
+1. **Calliope**, which is the product. The installer starts
+   `ghcr.io/ryrobes/calliope-postgres:1.2.1` with `pg_rvbbit` already loaded.
+   See [Quickstart](/docs/quickstart). The release asset
+   `calliope-1.2.1-linux-amd64.tar.gz` is that Compose bundle, not an
+   extension package.
+2. **Build the extension from source** in
+   [github.com/ryrobes/calliope](https://github.com/ryrobes/calliope), crate
+   `crates/pg_rvbbit`. This is a development build. It is not a tested
+   "drop in beside production Postgres" installer, and Calliope's own
+   `PACKAGING.md` still describes older image names. The compile steps below
+   are the ones that file currently gives for a from-source build. If they
+   drift, trust the repo, not this page.
 
-## What each layer gives you
+Supported server version for the extension is PostgreSQL 18. Hosted Postgres
+without superuser (RDS, Cloud SQL, Supabase, Neon) cannot load it.
+`shared_preload_libraries` has to include `pg_rvbbit` or planner hooks never
+register.
 
-| Layer | Add | Unlocks |
-| --- | --- | --- |
-| **0** | the extension | Semantic SQL (against any LLM/embedding API), columnar acceleration, [receipts](/docs/receipts-costs), operators, [cubes](/docs/cubes), [metrics](/docs/metrics-kpis) |
-| **1** | the query worker | Vectorized engines for large scans (Duck / DataFusion / Vortex) |
-| **2** | local models | Run embedding, rerank, classify, and LLM models on your **own** hardware — no external API |
+## Build from the Calliope repo
 
-Each layer is strictly additive. Nothing you skip is load-bearing.
+Requirements named in `PACKAGING.md`:
 
-## Layer 0 — the extension
-
-### Get the artifacts
-
-Grab the extension tarball (linux amd64, PG 18) — no Docker needed:
-
-```bash
-curl -fsSLO https://rvbbit.ai/dist/pg_rvbbit-4.1.6-pg18-amd64.tar.gz
-curl -fsSL  https://rvbbit.ai/dist/pg_rvbbit-4.1.6-pg18-amd64.tar.gz.sha256 | sha256sum -c
-tar xzf pg_rvbbit-4.1.6-pg18-amd64.tar.gz
-sudo pg_rvbbit-4.1.6-pg18-amd64/install.sh    # copies into pg_config paths
-```
-
-<details>
-<summary>Alternative: extract the same three files from the published image</summary>
+- Rust stable 1.95+
+- `cargo-pgrx` 0.18.0 (`cargo install --locked cargo-pgrx --version 0.18.0`)
+- PostgreSQL 18 development headers (`postgresql-server-dev-18` on Debian)
+- `libzstd-dev`, `libclang-dev`, `pkg-config`, `build-essential`
 
 ```bash
-cid=$(docker create ghcr.io/ryrobes/rvbbit-postgres:latest)
-docker cp "$cid":/usr/lib/postgresql/18/lib/pg_rvbbit.so ./
-mkdir -p extension && docker cp "$cid":/usr/share/postgresql/18/extension/. ./extension/
-docker cp "$cid":/usr/local/bin/rvbbit-duck ./
-docker rm "$cid"
-
-cp pg_rvbbit.so "$(pg_config --pkglibdir)/"
-cp extension/pg_rvbbit*.control extension/pg_rvbbit*.sql "$(pg_config --sharedir)/extension/"
-cp rvbbit-duck /usr/local/bin/            # the query worker (Layer 1) uses this; it need not run yet
+git clone https://github.com/ryrobes/calliope.git
+cd calliope
+cargo pgrx init --pg18 $(which pg_config)
+cargo pgrx install --release --pg-config $(which pg_config)
+cargo build --release --locked --manifest-path crates/rvbbit_duck/Cargo.toml
+sudo cp crates/rvbbit_duck/target/release/rvbbit-duck /usr/local/bin/
 ```
 
-</details>
-
-Built for **PostgreSQL 18**. The `.so` is self-contained — there are no extra
-system libraries to install.
-
-### Enable it
+Then, as superuser, after a restart with the preload library set:
 
 ```sql
-ALTER SYSTEM SET shared_preload_libraries = 'pg_rvbbit';   -- add pg_cron for scheduled maintenance
--- restart Postgres, then:
 CREATE EXTENSION pg_rvbbit;
-SELECT rvbbit.migrate();
+SELECT rvbbit.rvbbit_version();
 ```
 
-`rvbbit.migrate()` is a required second step, every time — `CREATE EXTENSION`
-installs the base version, and `migrate()` brings it up to date with
-everything shipped since. It's idempotent (safe to run again any time; it
-reports "up to date" once there's nothing pending), and it's per-database —
-if you add rvbbit to another database on the same Postgres instance later,
-run both lines again there too.
+`PACKAGING.md` also says `CREATE EXTENSION` installs a base version and that
+upgrades from 2.0.14 onward use `ALTER EXTENSION pg_rvbbit UPDATE`. Confirm
+that against the checkout you built. This site is not going to invent a
+migration command the file does not stand behind.
 
-### What works at Layer 0
+The Duck/Vortex worker is the `rvbbit-duck` binary. If it is absent, the
+router skips those candidates. Calliope runs it as the `duck` service; a
+from-source build has to install the binary itself.
 
-- **Acceleration** — the in-process columnar engine. Create a table with the
-  RVBBIT [table access method](/docs/acceleration) and compact it:
+## What you do not get from a bare extension
 
-  ```sql
-  CREATE TABLE events (id bigint, kind text, amount numeric) USING rvbbit;
-  -- INSERT your data, then:
-  SELECT rvbbit.compact('events'::regclass);
-  ```
+A bare `CREATE EXTENSION` does not start Hutch, Data Rabbit, Warren, or the
+OpenRouter gateway. Clover operators that the Calliope appliance registers
+are part of that install, not of the `.so` alone. There is no hosted Clover
+to point at.
 
-  Aggregates and scans route to the in-process native reader — no worker
-  process required.
-
-- **Semantic SQL** — point a [provider](/docs/providers) at any
-  OpenAI-compatible endpoint (OpenRouter, OpenAI, or a self-hosted vLLM /
-  Ollama). The key lives in an environment variable on the Postgres host; the
-  extension only stores its *name*:
-
-  ```sql
-  SELECT rvbbit.register_backend(
-    'llm',
-    'https://openrouter.ai/api/v1/chat/completions',
-    'openai_chat', 32, 4, 120000,
-    'OPENROUTER_API_KEY'          -- env var name, not the key itself
-  );
-  ```
-
-  LLM-backed operators now work; embedding operators point at an embeddings
-  API the same way. See [Operators & Semantic SQL](/docs/providers).
-
-- **Receipts, cache, cubes, metrics** — all extension-resident, all at Layer 0.
-
-So Layer 0 alone gives you semantic SQL and columnar acceleration on data you
-already have, using an inference API you already have — with no self-hosted
-infrastructure at all.
-
-## Layer 1 — the query worker
-
-The vectorized scan engines (Duck, DataFusion, Vortex) that RVBBIT reaches for
-on **large** scans come from the `rvbbit-duck` binary you already copied in
-Layer 0. There is nothing to start and nothing to configure:
-
-- Detection is **presence-based** — if `rvbbit-duck` is on `PATH` (or at
-  `/usr/local/bin`), the [router](/docs/routing-training) adds the vectorized
-  candidates to its options automatically.
-- The extension **forks the binary on demand** — a child process spun up
-  exactly when the router picks a vectorized candidate, for scans where the
-  in-process engine is the slower choice. There is no daemon you *have* to run.
-- Small scans stay in-process; large ones spill to the worker by measured
-  cost. If the binary is absent, the router simply never picks it — graceful
-  degradation, not an error.
-
-In other words, Layer 1 is usually already on: copying the binary in Layer 0
-is the whole install.
-
-### Optional: shared broker (daemon) mode
-
-Forking per query ("local per-call" mode) is the simplest shape and fine for
-interactive use. Under **sustained** analytical load, you can instead run one
-long-running worker pool that all queries share — the *shared broker* mode —
-to cut process-launch churn:
+For semantic SQL against an API you already have, the extension can register
+a backend by env-var name (the key stays in the server environment):
 
 ```sql
-ALTER SYSTEM SET rvbbit.duck_backend_persistent = on;   -- or env RVBBIT_DUCK_BACKEND_SHARED=1
-SELECT pg_reload_conf();
+SELECT rvbbit.register_backend(
+  'llm',
+  'https://openrouter.ai/api/v1/chat/completions',
+  'openai_chat', 32, 4, 120000,
+  'OPENROUTER_API_KEY'
+);
 ```
 
-The router uses the broker when it is up and falls back to per-call forking if
-it is not, so enabling it is safe and reversible. Worker count and socket
-location are tunable via the `RVBBIT_DUCK_BACKEND_SHARED_*` settings — see
-[Duck/Vortex Worker](/docs/duck-vortex-worker) for the full mode comparison.
+That is a DIY provider, not Clover. The paved road is still the Calliope
+install, which wires Hutch for you.
 
-## Layer 2 — local models
+## Layers, briefly
 
-To run models on your **own** hardware instead of an external API, add a
-[Warren](/docs/warren) — RVBBIT's model-deployment agent. The only host
-requirement is **Docker**.
-
-- The Warren agent is a small binary that needs Docker access and a connection
-  string to your Postgres. Install it with the agent script (see
-  [Warren](/docs/warren)).
-- Deploying a model [capability](/docs/capability-packs) renders a Compose
-  project and brings it up. The model and its dependencies live **inside the
-  container** — nothing gets installed on your host.
-
-With a Warren attached, embedding, reranker, classifier, and LLM models answer
-on your own metal, and Layer 0's semantic SQL no longer needs any external
-inference API.
-
-## Which layer do I want?
-
-- **Kicking the tires** on data you already have → Layer 0.
-- **Large analytical scans** → Layer 1 is already installed; it just starts
-  getting picked.
-- **Keep inference in-house**, no external API → add Layer 2.
-- **Want it all, turnkey** → the [Quickstart](/docs/quickstart) Docker ensemble
-  brings up every layer at once, plus the [Data Rabbit](/docs/data-rabbit)
-  desktop UI.
+| Layer | Where it is in Calliope | On a from-source build |
+| --- | --- | --- |
+| Extension | Inside `calliope-postgres` | `cargo pgrx install` |
+| Query worker | `duck` service | `rvbbit-duck` on `PATH` |
+| Local models | Warren, plus optional `specialists` | You run Warren yourself. Not documented as a one-liner here. |
+| Model gateway | `clover` (Hutch) and its workers | Not part of the extension binary. See [Clover](/clover). |

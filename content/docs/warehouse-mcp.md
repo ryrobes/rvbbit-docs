@@ -9,6 +9,12 @@ sourceDocs:
   - ../rvbbit-sql/docs/MCP.md
 ---
 
+> **Not the Calliope 1.2.1 install.** The `rvbbit-warehouse-mcp:4.2.6` image
+> and the `warehouse` compose profile below are the retired standalone stack.
+> Calliope serves an MCP endpoint on the same origin as the app, at `/mcp`,
+> with that origin's OAuth discovery. Outbound MCP (SQL calling tools) is
+> [MCP Servers](/docs/mcp). Do not start the 4.2.6 container.
+
 The [MCP page](/docs/mcp) is about rvbbit calling **out** to MCP servers as
 [capabilities](/docs/capability-packs). This is the opposite direction: rvbbit
 *becomes* an MCP server so an assistant - Claude Cowork, Claude Code, Claude
@@ -127,30 +133,19 @@ FROM   rvbbit.data_search('customers who churned in europe', k => 8);
 
 ## Run It
 
-The `4.2.6` server ships as its own Docker image, wired into the opt-in `warehouse`
-compose profile, speaking remote **streamable-HTTP**. Auth is either a single
-shared key (`WAREHOUSE_MCP_KEY`) or a self-contained OAuth flow
-(`WAREHOUSE_PUBLIC_URL` + `WAREHOUSE_LOGIN_PASSWORD` + `WAREHOUSE_JWT_SECRET`,
-for native connectors):
+Do not start `rvbbit-warehouse-mcp:4.2.6` or `docker compose --profile warehouse`.
+That profile was the standalone stack.
 
-```bash
-make warehouse-up          # start warehouse-mcp ('warehouse' profile)
-make warehouse-tunnel-up   # optional: add a Cloudflare quick-tunnel for instant HTTPS
-make warehouse-url         # print the current tunnel URL (changes per restart)
-```
+On Calliope 1.2.1, remote MCP clients use the Calliope origin's `/mcp`
+endpoint, including its OAuth discovery. The deploy guide is
+[deploy/README.md](https://github.com/ryrobes/calliope/blob/main/deploy/README.md).
+Plain HTTP is only for localhost, and that listener stays on 127.0.0.1.
 
-With the downloadable Compose file:
+The tool table above is the older warehouse-mcp design. It is not
+re-verified against the 1.2.1 server in this refresh. Outbound tool calls
+from SQL are [MCP Servers](/docs/mcp).
 
-```bash
-export RVBBIT_VERSION=4.2.6
-export WAREHOUSE_PUBLIC_URL="https://warehouse.example.com"
-export WAREHOUSE_LOGIN_PASSWORD="$(openssl rand -hex 16)"
-export WAREHOUSE_JWT_SECRET="$(openssl rand -hex 32)"
-export WAREHOUSE_MCP_KEY="$(openssl rand -hex 24)"
-docker compose --profile warehouse up -d
-```
-
-Point a client at it:
+Point a client at the Calliope origin, not at the retired image:
 
 - **Claude Desktop / Code** - add it as a remote MCP server (URL + the
   `Authorization: Bearer <key>` header). Note for hand-rolled clients: the server speaks
