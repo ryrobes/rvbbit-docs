@@ -1,6 +1,8 @@
 # RVBBIT Docs Site
 
-Standalone Next.js documentation and marketing site for RVBBIT.
+Documentation site for RVBBIT, the SQL engine inside [Calliope](https://usecalliope.com).
+The product install is `curl -fsSL https://usecalliope.com/install.sh | bash`.
+This site does not sell hosted Clover.
 
 The site is markdown-first. Curated docs live in `content/docs`, and each page
 can point back to upstream source docs in `../rvbbit-sql/docs` through the

@@ -1,12 +1,17 @@
 ---
-title: GPU Execution (NVIDIA GQE)
-description: The gpu_gqe route - running accelerated scans on NVIDIA GPUs through the RAPIDS GQE engine, with soft fallback everywhere.
+title: GPU Execution (NVIDIA GQE) — archived
+description: Archived notes for the old gpu_gqe image. Calliope 1.2.1 does not ship it.
 section: Execution
 navOrder: 52
 sourceDocs:
-  - ../rvbbit-sql/docker/Dockerfile.rvbbit-gqe
-  - ../rvbbit-sql/crates/rvbbit_duck
+  - ../calliope/docker/docker-compose.gqe-host.yml
 ---
+
+> **Archived.** Calliope 1.2.1 does not start a GQE service, and this site
+> no longer publishes `ghcr.io/ryrobes/rvbbit-postgres-gqe` or a compose
+> overlay that pulls it. `public/docker-compose.gqe.yml` defines no
+> services. The notes below describe the older engine bridge. Do not treat
+> the image tags or the curl install as something you can run.
 
 RVBBIT can execute accelerated analytical queries on an NVIDIA GPU through
 [GQE](https://github.com/rapidsai/gqe), the RAPIDS GPU Query Engine built on
@@ -119,10 +124,14 @@ or why not.
 
 ## Deployment
 
-The GPU image is **prebuilt and published** -
-`ghcr.io/ryrobes/rvbbit-postgres-gqe` (~9GB) - so a GPU deployment is a pull,
-not a compile. It is the standard image plus the GQE runtime, and one image
-covers every CUDA compute-capability 8.0+ GPU:
+Do not pull `ghcr.io/ryrobes/rvbbit-postgres-gqe`. That image is not part of
+the Calliope 1.2.1 release (`deploy/compose.yaml` has no GQE service, and
+`docs/RELEASE_IMAGES.md` does not list one). The development compose files
+still in the Calliope repo (`docker/docker-compose.gqe-host.yml`,
+`docker/docker-compose.gqe-image.yml`, `docker/docker-compose.release-gqe.yml`)
+are not a supported install path from this site.
+
+The older image claimed one build covered these CUDA architectures:
 
 | GPU | Covered by |
 | --- | --- |
@@ -134,36 +143,15 @@ covers every CUDA compute-capability 8.0+ GPU:
 Turing (RTX 20-series) and older are not supported - cudf 26.x dropped them.
 On such hosts the plain image behaves identically (the route self-gates).
 
-Start it with the GPU overlay on top of the standard compose:
-
-```bash
-curl -fsSL https://rvbbit.ai/docker-compose.yml -o docker-compose.yml
-curl -fsSL https://rvbbit.ai/docker-compose.gqe.yml -o docker-compose.gqe.yml
-docker compose -f docker-compose.yml -f docker-compose.gqe.yml up -d
-```
-
-The overlay sets the GPU-specific runtime pieces (`gpus: all`, shared memory
-and memlock limits, `NVIDIA_VISIBLE_DEVICES`). Everything else - the
-ensemble, ports, volumes - matches the standard
-[quickstart](/docs/quickstart) stack.
-
-Building from source instead (custom GQE/cudf refs or arch lists) remains
-supported: `Dockerfile.rvbbit-gqe` builds the full toolchain image on the GPU
-box (one-time, ~2h on 48 cores), and `Dockerfile.rvbbit-gqe-runtime` extracts
-the slim runtime image from it. The dev overlays
-(`docker-compose.gqe-image.yml`, `docker-compose.gqe-host.yml`) cover
-build-from-source and host-mounted GQE trees.
-
 ### GPU host preflight
 
-Before first start, make sure the *host* is actually GPU-ready -
-"GPU instance" does not mean drivers are installed:
+This was the old preflight, against an image this site no longer tells you
+to run. It is left so the failure mode is recognizable, not as a current
+install:
 
 ```bash
-nvidia-smi -L   # if missing: install the driver, then REBOOT
-                # (modprobe alone leaves "Driver/library version mismatch")
-docker info --format '{{json .Runtimes}}' | grep nvidia   # nvidia-container-toolkit
-docker run --rm --gpus all ghcr.io/ryrobes/rvbbit-postgres:latest nvidia-smi -L
+nvidia-smi -L
+docker info --format '{{json .Runtimes}}' | grep nvidia
 ```
 
 ### Hardware notes

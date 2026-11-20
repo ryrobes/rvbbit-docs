@@ -52,7 +52,7 @@ SELECT rvbbit.create_operator(
     op_system      => 'Reply YES if this support message needs escalation.',
     op_user        => '{{ message }}',
     op_parser      => 'yes_no',
-    op_model       => 'openai/gpt-5.4-mini',
+    op_model       => 'openai/gpt-6-luna',
     op_max_tokens  => 4
 );
 ```
@@ -73,8 +73,8 @@ local-specialist-backed versions of some of those same names (a reranker behind
 pack-only names like `extract_pii()` and `semantic_score()` that exist only after
 the pack is installed. See
 [Capability Packs](/docs/capability-packs#where-the-familiar-operators-come-from)
-for which name comes from where. The default `op_model` literal is
-`'openai/gpt-5.4-mini'`.
+for which name comes from where. The default `op_model` in
+`rvbbit.create_operator` is `'openai/gpt-6-luna'`.
 
 ## Flow Control
 

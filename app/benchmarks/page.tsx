@@ -29,20 +29,20 @@ export default function BenchmarksPage() {
   return (
     <main className="benchmark-page">
       <section className="benchmark-hero">
-        <p className="eyebrow">Acceleration benchmarks</p>
-        <h1>Current WIP performance snapshot.</h1>
+        <p className="eyebrow">Acceleration benchmarks · older snapshot</p>
+        <h1>Not a Calliope 1.2.1 run.</h1>
         <p>
           These numbers are from <code>{benchmarks.testName}</code>, recorded
-          from local benchmark history
-          {latestRun ? <> on {formatDate(latestRun.startedAt)}</> : null}.
-          RVBBIT is the default auto-router path, not a per-query hand-picked
-          best path.
+          on the standalone engine
+          {latestRun ? <> ({formatDate(latestRun.startedAt)})</> : null}. The
+          bench file is <code>web_bench_2026_07_14.json</code>. RVBBIT in that
+          run is the default auto-router path, not a per-query hand-picked best
+          path. Do not read them as the current shipping stack.
         </p>
         <div className="benchmark-note">
-          <strong>Work in progress:</strong> the storage layer, router rules,
-          worker transport, and benchmark harness are still being tuned. Treat
-          this as a transparent engineering snapshot rather than final marketing
-          certification.
+          <strong>Older version.</strong> Storage, routing, and the harness
+          have moved on inside Calliope. Kept here so the old measurements stay
+          visible, not as a certification of 1.2.1.
         </div>
       </section>
 

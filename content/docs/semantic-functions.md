@@ -22,7 +22,7 @@ search, branching - deterministically in Rust. `rvbbit.extract(...)` is the
 exception: it is a seeded LLM-backed operator, and `rvbbit.text_evidence(...)`
 is purely lexical (no model at all). All of them compose with ordinary SQL.
 
-> Building operators yourself is the point of this page — but if you'd rather start from ~50 pre-built, hosted, receipt-backed operators, that's [Clover](/clover). One `curl | psql` and `WHERE rvbbit.clover_means(...)` works.
+> The seeded operators on this page are part of the extension. [Clover](/clover) is the self-hosted Hutch gateway inside Calliope — OpenRouter-backed `clover_*` functions, not a hosted subscription and not a SQL script you curl.
 
 Semantic scalar work runs tuple-at-a-time today, so embedding a large result set
 inline (for example clustering every row of a big table) is bounded by how fast

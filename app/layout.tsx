@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | RVBBIT"
   },
   description:
-    "RVBBIT documentation for semantic SQL, storage acceleration, routing, and operational workflows."
+    "RVBBIT is the SQL engine inside Calliope: semantic SQL, MCP, receipts, and acceleration on Postgres you run yourself."
 };
 
 export const viewport: Viewport = {

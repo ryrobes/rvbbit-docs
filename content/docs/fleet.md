@@ -7,6 +7,10 @@ sourceDocs:
   - ../rvbbit-sql/docs/READ_FLEET_PLAN.md
 ---
 
+The worker image in the example is `ghcr.io/ryrobes/calliope-postgres:1.2.1`.
+The retired `rvbbit-postgres` tag is not a current install. The `--serve-tcp`
+flags below were not re-tested against 1.2.1 for this refresh.
+
 The read fleet lets one Postgres - **the brain** - offload analytical queries
 to lightweight worker processes on other machines - **the muscles** - without
 replicating Postgres, without a distributed query planner, and without ever
@@ -87,7 +91,7 @@ docker run -d --name rvbbit-duck-worker --restart unless-stopped \
   -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... \
   -e AWS_ENDPOINT=https://storage.googleapis.com \
   --entrypoint /usr/local/bin/rvbbit-duck \
-  ghcr.io/ryrobes/rvbbit-postgres:latest \
+  ghcr.io/ryrobes/calliope-postgres:1.2.1 \
   --serve-tcp 0.0.0.0:9464 --workers 4 \
   --dsn "host=<brain-host> port=5432 user=... dbname=..." --engine duck
 ```

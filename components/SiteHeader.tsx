@@ -63,10 +63,10 @@ export function SiteHeader() {
       <div className="header-actions">
         <a
           className="icon-link"
-          href="https://github.com/ryrobes/rvbbit-sql"
+          href="https://github.com/ryrobes/calliope"
           target="_blank"
           rel="noreferrer"
-          aria-label="RVBBIT on GitHub"
+          aria-label="Calliope on GitHub"
         >
           <GithubIcon />
         </a>

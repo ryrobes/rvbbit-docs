@@ -22,46 +22,16 @@ metrics, capability deployment, and more.
 
 ## Get it
 
-Three ways to run the same app:
+Data Rabbit in the current product is the `datarabbit` service in Calliope
+1.2.1, image `ghcr.io/ryrobes/calliope-datarabbit:1.2.1`. Install Calliope
+([quickstart](/docs/quickstart)). On a public URL it is
+`https://YOUR_SERVER:3001` and also `/datarabbit` on the Calliope origin. A
+localhost install binds it to `127.0.0.1` on the port the installer chose
+(3001 if that port was free).
 
-- **Native macOS app** (Apple silicon) — signed and notarized, no Docker
-  required:
-
-  ```
-  https://rvbbit.ai/dist/mac/DataRabbit-4.1.6-arm64.dmg
-  sha256: f5926145edb52b9648747e96cd117ef2b009c0d6850a897e9c1035afbf081552
-  ```
-
-  The `.app` bundles its own Node runtime and serves the desktop on a
-  stable private origin (`127.0.0.1:43129`), so scenes, saved views, and
-  assistant history survive relaunches. Connections and homebase state
-  live in `~/Library/Application Support/Data Rabbit/`. All you need is a
-  reachable Postgres; Docker is used only if you install capabilities
-  that launch containers. Requirements and architecture notes live in
-  the repo's `docs/MACOS.md`.
-
-- **Native Linux app** (x86_64) — AppImage (`chmod +x` and run) or `.deb`:
-
-  ```
-  https://rvbbit.ai/dist/linux/DataRabbit-4.1.6-x86_64.AppImage
-  https://rvbbit.ai/dist/linux/DataRabbit-4.1.6-amd64.deb
-  ```
-
-  Checksums sit beside each artifact (`.sha256`). Same architecture as the
-  Mac app — bundled runtime, stable private origin, state under
-  `~/.config/Data Rabbit/`.
-
-- **The [Docker ensemble](/docs/quickstart)** — ships alongside the
-  warehouse and serves on port `3000`; "install" is opening
-  `http://localhost:3000`.
-
-- **Bare web app** — it is a Next.js app at heart; the container image is
-  published as `ghcr.io/ryrobes/rvbbit-lens` (the project's earlier name;
-  the image name follows the rename later).
-
-The macOS shell keeps Node fully isolated from the renderer and drives the
-same product actions as the in-canvas menu bar, so browser and `.app`
-behavior cannot drift.
+The 4.1.6 macOS and Linux artifacts and the `ghcr.io/ryrobes/rvbbit-lens`
+image were the standalone Lens desktop. This site does not publish them
+anymore. Lens was the earlier name of Data Rabbit.
 
 ![Data Rabbit - a desktop over any Postgres, lit up on an RVBBIT database: adaptive routing, model deploys, the operator canvas, the knowledge graph, and live receipts.](/shots/data-rabbit-desktop.png)
 
@@ -70,9 +40,9 @@ behavior cannot drift.
 Connections are managed in the **Connections** window (Database menu →
 `Connections…`). Data Rabbit connects server-side through a pooled `pg`
 driver, so credentials never reach the browser; they are stored in a config
-file on the server (`connections.json` under the app's data directory - a
-Docker volume in the ensemble, `~/.config/rvbbit-lens/` on a bare install)
-with passwords redacted from every API response.
+file on the server (`connections.json` in the Calliope install, or the
+desktop config directory on a native build) with passwords redacted from
+every API response.
 
 - Discrete fields (host, port, database, user, password, SSL mode) or a full
   `postgres://` connection string.
@@ -89,10 +59,9 @@ runaway dashboard can't starve your query.
 
 > **Hostnames are resolved by the Data Rabbit *server*, not your browser.**
 > Because connections are made server-side, the host you type is answered
-> from wherever the lens process runs. In the Docker ensemble that means
-> `localhost` points at the lens container itself - use the compose service
-> name instead: host **`postgres`**, port **`5432`** (not the host-published
-> `55433`). Conversely, if Data Rabbit runs directly on your machine and
+> from wherever the Data Rabbit process runs. Inside Calliope, `localhost`
+> is the Data Rabbit container — the database service is host **`postgres`**,
+> port **`5432`**. Conversely, if Data Rabbit runs directly on your machine and
 > you're reaching a remote database through an SSH tunnel, then
 > `localhost:<tunnel-port>` is exactly right - the tunnel lives where the
 > server lives.

@@ -53,6 +53,25 @@ for (const id of syncedIds) {
 }
 current.generated_at = new Date().toISOString();
 
+// Hosted Clover (checkout, clover.rvbb.it, subscription copy) must not be
+// republished. Calliope wires Hutch itself; this catalog is not an installer.
+for (const cap of current.capabilities ?? []) {
+  if (cap.id !== "managed/clover") continue;
+  cap.description =
+    "Self-hosted Clover operators inside Calliope. Hutch routes model calls through your OpenRouter key. There is no Clover account or subscription.";
+  const managed = cap.capability_manifest?.managed;
+  if (!managed) continue;
+  for (const key of ["pricing", "key_env", "endpoint", "free_tier", "value_props", "highlights", "privacy", "tagline"]) {
+    delete managed[key];
+  }
+  managed.install = {
+    ...(managed.install ?? {}),
+    sql: [
+      "-- Hosted Clover is retired. Calliope registers operators during install. See https://rvbbit.ai/clover"
+    ]
+  };
+}
+
 fs.writeFileSync(publicPath, `${JSON.stringify(current, null, 2)}\n`);
 console.log(
   `synced ${replacements.map((entry) => entry.id).join(", ")} to ${path.relative(root, publicPath)}`

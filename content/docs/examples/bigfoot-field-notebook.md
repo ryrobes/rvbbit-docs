@@ -40,7 +40,7 @@ every line before and after it executes:
 mkdir bigfoot && cd bigfoot
 curl -fsSL https://rvbbit.ai/bigfoot/run_all.sh -o run_all.sh && chmod +x run_all.sh
 
-RVBBIT_DSN=postgresql://postgres:rvbbit@localhost:55433/rvbbit ./run_all.sh
+RVBBIT_DSN='host=127.0.0.1 port=5432 dbname=rvbbit user=postgres' ./run_all.sh
 ```
 
 Each numbered script is plain SQL - browse them at

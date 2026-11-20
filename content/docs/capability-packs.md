@@ -39,7 +39,7 @@ capabilities/tools/rvbbit-capability scaffold \
 Install a pack from the shell during development:
 
 ```bash
-RVBBIT_DSN=postgresql://postgres:rvbbit@localhost:55433/bench \
+RVBBIT_DSN=postgresql://postgres@127.0.0.1:5432/rvbbit \
 capabilities/tools/rvbbit-capability install \
   capabilities/packs/extract/gliner-medium-v2.1 \
   --gpu

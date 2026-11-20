@@ -137,19 +137,27 @@ export default function Home() {
         <RabbitHero />
         <div className="hero-content hero-split">
           <div className="hero-lede">
-            <p className="eyebrow">Open-source Postgres extension</p>
+            <p className="eyebrow">The SQL engine inside Calliope</p>
             <h1 className="hero-title">
-              Keep Postgres boring.{" "}
-              <span className="accent">Put the exciting parts around it.</span>
+              Semantic SQL,{" "}
+              <span className="accent">in the Postgres you run.</span>
             </h1>
             <p className="hero-copy">
-              RVBBIT keeps Postgres as the source of truth while routing
-              analytical queries across specialized engines, exposing models
-              and tools through SQL, and writing down every decision it makes.
+              RVBBIT is the Postgres extension inside{" "}
+              <a href="https://usecalliope.com">Calliope</a>. It keeps ordinary
+              tables as the source of truth, calls models from SQL, and writes
+              a receipt for every answer. Calliope 1.2.1 is self-hosted.
             </p>
-            <p className="hero-beats">
-              Route queries. Call models. Rewind tables. Keep receipts.
-            </p>
+            <div className="clover-install" style={{ marginTop: 22 }}>
+              <pre>
+                <code>curl -fsSL https://usecalliope.com/install.sh | bash</code>
+              </pre>
+              <p className="clover-install-note">
+                Read the script before you run it. Linux x86-64, Docker Compose
+                2.30+. The localhost choice binds to 127.0.0.1.{" "}
+                <code>rvbbit.ai/install.sh</code> only prints this pointer.
+              </p>
+            </div>
             <div className="hero-actions">
               <Link className="button primary" href="/docs/quickstart">
                 <TerminalSquare aria-hidden="true" size={18} />
@@ -159,18 +167,18 @@ export default function Home() {
                 Read the docs
                 <ArrowRight aria-hidden="true" size={18} />
               </Link>
-              <Link className="button secondary" href="/agents">
-                Setup for Agents
+              <Link className="button secondary" href="/clover">
+                Self-hosted Clover
                 <ArrowRight aria-hidden="true" size={18} />
               </Link>
             </div>
-            <p className="hero-foot">Your hardware · your data · no lock-in.</p>
+            <p className="hero-foot">Your hardware · your OpenRouter key · no Clover account.</p>
             <ul className="hero-teasers" aria-label="A few of the exciting parts">
-              <li>GPU query routing</li>
+              <li>models in a WHERE clause</li>
               <li>time-travel tables</li>
-              <li>a router that learns</li>
-              <li>LLMs in a WHERE clause</li>
-              <li>distributed read fleet</li>
+              <li>MCP from SQL</li>
+              <li>operators you define</li>
+              <li>columnar acceleration</li>
               <li>every call receipted</li>
             </ul>
           </div>
@@ -280,8 +288,9 @@ WHERE  created_at > now() - interval '1 day'
             cloud. RVBBIT hands you the building blocks: compose hosted models,
             your own Hugging Face deployments, tools, retries, and receipts into
             operators you define - open source, on Postgres, over your own data.
-            {" "}Prefer outcomes to assembly?{" "}
-            <Link href="/clover">Clover ships the operators pre-built &rarr;</Link>
+            {" "}The model gateway is{" "}
+            <Link href="/clover">self-hosted Clover</Link>
+            , already in the Calliope install.
           </span>
         </div>
         <div className="capability-grid">
@@ -418,12 +427,12 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
           <h2>Ships with 40+ model packs. Add any Hugging Face model in a paste.</h2>
           <span>
             Every operator is backed by a model, and RVBBIT comes with a catalog
-            of curated packs - local specialists (GLiNER, DeBERTa, BGE
-            rerankers), embeddings, summarizers, even MCP servers like Brave and
-            Apollo - each exposing ready-made SQL operators. That&apos;s where{" "}
-            <code>means()</code>, <code>about()</code>, <code>extract_pii()</code>,
-            and <code>classify()</code> come from: they work on day one, no
-            prompt-wiring.
+            of packs - local specialists (GLiNER, DeBERTa, BGE rerankers),
+            embeddings, summarizers, and MCP servers. The extension itself seeds{" "}
+            <code>means()</code>, <code>about()</code>, <code>classify()</code>,
+            and <code>extract()</code>. <code>extract_pii()</code> is not one of
+            them; PII spans are <code>clover_pii</code>, and only after the
+            optional GLiNER worker is on.
           </span>
         </div>
         <div className="mcp-showcase">
@@ -432,9 +441,10 @@ ORDER  BY cost_usd DESC;`}</SqlCode>
               <Layers3 aria-hidden="true" size={20} />
               <h3>Batteries included</h3>
               <p>
-                40+ curated packs: classification, extraction, embeddings,
-                reranking, summarization, web search. Day one,{" "}
-                <code>means()</code> and <code>classify()</code> just work.
+                Capability packs for classification, extraction, embeddings,
+                reranking, and summarization. The seeded operators are{" "}
+                <code>means()</code> and <code>classify()</code>; packs are
+                deployed, not assumed.
               </p>
             </article>
             <article>
@@ -750,9 +760,10 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
           <p>Acceleration benchmark snapshot</p>
           <h2>When a fast path fits, the router takes it.</h2>
           <span>
-            Work-in-progress runs compare the default RVBBIT router against
-            Postgres, Hydra, Citus, AlloyDB, and ClickHouse. Not final, audited
-            numbers - but real end-to-end measurements, and directionally honest.
+            These figures are from an older standalone engine snapshot (the
+            bench file is dated 2026-07-14), not a Calliope 1.2.1 run. They
+            compare that router against Postgres, Hydra, Citus, AlloyDB, and
+            ClickHouse. Directionally honest, and not a current certification.
           </span>
         </div>
         <div className="home-benchmark-grid">
@@ -803,11 +814,10 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
           <p>Data Rabbit</p>
           <h2>A Postgres desktop that gets superpowers on RVBBIT.</h2>
           <span>
-            Data Rabbit is a fast desktop for any Postgres - browse, query,
-            explore. Point it at an RVBBIT database and it lights up: watch the
-            planner pick an engine, deploy a specialist model, build operators on
-            a canvas, and read live receipts. Works without the extension;
-            unmissable with it. It now has a home of its own at{" "}
+            Data Rabbit ships in Calliope as <code>calliope-datarabbit</code>.
+            Point it at the RVBBIT database and the operator, receipt, and
+            routing surfaces light up. The old Lens image on port 3000 is not
+            this install. Notes also live at{" "}
             <a href="https://datarabbit.com">datarabbit.com</a>.
           </span>
         </div>
@@ -862,12 +872,11 @@ SELECT rvbbit.check_metric('daily_revenue', '{}'::jsonb,
       <section className="band release-band" id="get-started">
         <div>
           <TerminalSquare aria-hidden="true" size={20} />
-          <h2>docker compose up -d</h2>
+          <h2>Install Calliope. The engine is in it.</h2>
           <p>
-            One compose file brings up the whole thing - Postgres 18 with the
-            extension preinstalled, the query workers, Data Rabbit, and a
-            Warren agent. Start with a single SQL snippet and go as deep as
-            you want - heap stays the source of truth.
+            <code>curl -fsSL https://usecalliope.com/install.sh | bash</code>
+            . Postgres 18 with <code>pg_rvbbit</code>, Data Rabbit, Warren, and
+            the Hutch gateway. Heap stays the source of truth.
           </p>
         </div>
         <div className="hero-actions">

@@ -26,10 +26,9 @@ Warren is runtime capability management.
 ## Capability Packs
 
 A capability pack is a portable bundle that can register model backends,
-operators, or runtime services. Built-in operators like `means()`, `about()`,
-`classify()`, and `extract_pii()` come from packs, not from the engine itself -
-see [Capability Packs](/docs/capability-packs) for the full catalog and operator
-provenance.
+operators, or runtime services. `means()`, `about()`, `classify()`, and
+`extract()` are seeded by the extension. `extract_pii()` is not. Pack-only
+names are listed in [Capability Packs](/docs/capability-packs).
 
 The `capabilities/tools/rvbbit-capability` CLI operates on pack manifests
 (`capability.yaml`). Its subcommands are `render`, `scaffold`, `install`,
@@ -49,7 +48,7 @@ Install locally (scaffold, run the sidecar, then apply the generated
 `register.sql` / `operator.sql` / `smoke.sql`):
 
 ```bash
-RVBBIT_DSN=postgresql://postgres:rvbbit@localhost:55433/bench \
+RVBBIT_DSN=postgresql://postgres@127.0.0.1:5432/rvbbit \
 capabilities/tools/rvbbit-capability install \
   capabilities/packs/extract/gliner-medium-v2.1 \
   --gpu
